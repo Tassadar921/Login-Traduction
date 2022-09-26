@@ -15,7 +15,10 @@ export class SigninComponent implements OnInit {
 
   public username = '';
   public password = '';
+
   public output = '';
+
+  public waiting = false;
 
   private retour;
 
@@ -30,7 +33,7 @@ export class SigninComponent implements OnInit {
 
   ngOnInit() {}
 
-  submit = async () => {
+  signIn = async () => {
     this.retour = await this.api.signIn(this.username, this.password);
     if(this.retour.status){
       await this.cookies.setCookie('username', this.username);

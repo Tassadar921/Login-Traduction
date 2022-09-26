@@ -227,13 +227,13 @@ module.exports.checkResetPasswordToken = function (token, language, res) {
 module.exports.resetPassword = function (token, password, language, con, res){
     for(const line of resetPasswordQueue) {
         if (line.token === token) {
-            const dictionnary = require('../files/json/translation/' + language + '.json');
             con.query('UPDATE users SET password = ? WHERE email = ?', [ash(password), line.email], (err) => {
                 if (err) {
                     throw err;
                 } else {
+                    const dictionnary = require('../files/json/translation/' + language + '.json');
                     clearResetPasswordQueue(token);
-                    res.json({message: dictionnary.mail[11].data, output: 1});
+                    res.json({status: 1, message:dictionnary.mail[11].data});
                 }
             });
         }

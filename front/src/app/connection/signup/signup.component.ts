@@ -46,7 +46,10 @@ export class SignupComponent implements OnInit {
 
   checkUsername = () => this.outputUsername = this.loginService.updateUsername(this.username);
 
-  checkEmail = () => this.outputEmail = this.loginService.updateEmail(this.email);
+  checkEmail = () => {
+    this.outputEmail = this.loginService.updateEmail(this.email);
+    console.log(this.outputEmail = this.loginService.updateEmail(this.email));
+  };
 }
 
 

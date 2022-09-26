@@ -1,5 +1,5 @@
 <ion-content>
-  <ion-img src="./assets/icon/favicon.png" id="logo"></ion-img>
+<!--  <ion-img src="./assets/icon/favicon.png" id="logo"></ion-img>-->
   <ion-fab horizontal="end" vertical="bottom">
     <app-language></app-language>
   </ion-fab>
@@ -30,11 +30,12 @@
         </ion-button>
       </ion-col>
     </ion-row>
-    <ion-row>
-      <ion-col>
-        <ion-button color="success" shape="round" *ngIf="username&&password" (click)="submit()">
-          {{translate.dictionnary.shared ? translate.dictionnary.shared[1].data : ''}}
-        </ion-button>
+    <ion-row *ngIf="username&&password">
+      <ion-col *ngIf="!waiting">
+        <ion-icon name="send" color="success" size="large" (click)="signIn()"></ion-icon>
+      </ion-col>
+      <ion-col *ngIf="waiting">
+        <ion-spinner name="lines"></ion-spinner>
       </ion-col>
     </ion-row>
     <ion-row>

@@ -1,5 +1,5 @@
 <ion-content>
-  <ion-img src="./assets/icon/favicon.png" id="logo"></ion-img>
+<!--  <ion-img src="./assets/icon/favicon.png" id="logo"></ion-img>-->
   <ion-fab horizontal="end" vertical="bottom">
     <app-language></app-language>
   </ion-fab>
@@ -76,13 +76,11 @@
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col push="3" *ngIf="username&&email&&loginService.password&&loginService.confPassword
-                        &&loginService.password===loginService.confPassword
-                        &&!waiting&&!outputUsername&&!loginService.outputPassword
-                        &&!loginService.outputConfPassword&&!outputEmail">
-        <ion-button color="clear" shape="round" (click)="signUp()">
-          <ion-icon name="send" slot="icon-only" color="secondary" style="border: solid 2px #3dc2ff; border-radius:15px; padding:5px"></ion-icon>
-        </ion-button>
+      <ion-col *ngIf="username&&email&&loginService.password&&loginService.confPassword
+               &&loginService.password===loginService.confPassword
+               &&!waiting&&!outputUsername&&!loginService.outputPassword
+               &&!loginService.outputConfPassword&&!outputEmail">
+        <ion-icon name="send" color="success" size="large" (click)="signUp()"></ion-icon>
       </ion-col>
       <ion-col *ngIf="waiting">
         <ion-spinner name="lines"></ion-spinner>

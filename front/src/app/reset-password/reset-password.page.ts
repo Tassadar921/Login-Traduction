@@ -10,7 +10,7 @@ import {ToastService} from '../shared/services/toast.service';
 @Component({
   selector: 'app-reset-password',
   templateUrl: './reset-password.page.html',
-  styleUrls: ['./reset-password.page.scss'],
+  styleUrls: ['./reset-password.page.scss', '../shared.scss'],
 })
 export class ResetPasswordPage implements OnInit {
 
@@ -43,7 +43,9 @@ export class ResetPasswordPage implements OnInit {
 
   submit = async () => {
     this.waiting = true;
-    this.retour = await this.api.resetPassword(this.loginService.password, this.token);
+    this.retour = await this.api.resetPassword(this.token, this.loginService.password);
     await this.toastService.presentToast(this.retour.message, 5000, 'Bottom');
+    this.waiting = false;
+    await this.router.navigateByUrl('/connection');
   };
 }
