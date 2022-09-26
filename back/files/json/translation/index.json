@@ -1,0 +1,12 @@
+{
+  "list": [
+    {
+      "id": "fr",
+      "name": "Français"
+    },
+    {
+      "id": "uk",
+      "name": "Anglo-English"
+    }
+  ]
+}

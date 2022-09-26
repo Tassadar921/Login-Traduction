@@ -1,0 +1,46 @@
+$imgWidth : 650px;
+
+ion-grid{
+  margin-top:50px;
+  --ion-grid-columns: 13;
+  width:80%;
+}
+
+ion-item{
+  background: rgba(56, 54, 54, 0.82);
+  border: solid 1px #615c5c;
+  border-radius:15px;
+  margin:auto;
+  width:250px;
+  text-align:center;
+}
+
+ion-input{
+  border-radius:15px;
+}
+
+ion-row{
+  margin-top:0px;
+}
+
+ion-icon{
+  margin-top:12px;
+  font-size:1.8em;
+}
+
+#logo{
+  position:absolute;
+  width:$imgWidth;
+  margin:auto;
+  top:30px;
+  left: 0;
+  right: 0;
+}
+
+#infoIcon{
+  margin-bottom:10px;
+}
+
+ion-icon:hover{
+  cursor:pointer;
+}

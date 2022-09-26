@@ -1,0 +1,54 @@
+<ion-content>
+  <ion-img src="./assets/icon/favicon.png" id="logo"></ion-img>
+  <ion-fab horizontal="end" vertical="bottom">
+    <app-language></app-language>
+  </ion-fab>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-item color="none" shape="round">
+          <ion-label color="secondary" position="floating">{{translate.dictionnary.account ? translate.dictionnary.account[8].data : ''}}</ion-label>
+          <ion-input clearInput="true" color="secondary" placeholder="{{translate.dictionnary.account ? translate.dictionnary.account[8].data : ''}}" [(ngModel)]="username"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item color="none" shape="round">
+          <ion-label color="secondary" position="floating">{{translate.dictionnary.account ? translate.dictionnary.account[6].data : ''}}</ion-label>
+          <ion-input clearInput="true" color="secondary" placeholder="{{translate.dictionnary.account ? translate.dictionnary.account[6].data : ''}}"
+                     [type]="loginService.showPassword?'text':'password'" [(ngModel)]="password">
+          </ion-input>
+          <ion-icon [name]="loginService.showPassword?'eye':'eye-off'" (click)="loginService.toggleShowPassword()" slot="end"></ion-icon>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button color="warning" shape="round" size="small" id="forgotPassword">
+          {{translate.dictionnary.connection ? translate.dictionnary.connection[9].data : ''}}
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button color="success" shape="round" *ngIf="username&&password" (click)="submit()">
+          {{translate.dictionnary.shared ? translate.dictionnary.shared[1].data : ''}}
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <p>{{output}}</p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ion-modal trigger="forgotPassword">
+  <ng-template>
+    <ion-content>
+      <app-forgot-password></app-forgot-password>
+    </ion-content>
+  </ng-template>
+</ion-modal>
