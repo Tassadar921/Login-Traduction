@@ -33,13 +33,13 @@ const con = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'oc'
+    database: 'test'
 });
 
 function preventDisconnect() {
     con.connect(err => {
         if (err) {
-            console.log('error when connecting to db:', err);
+            console.log('Error when connecting to db:', err);
             setTimeout(preventDisconnect, 5000);
         } else {
             console.log('Connected to db');

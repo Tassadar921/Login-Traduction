@@ -8,6 +8,8 @@ To launch it, run those commands in a terminal (make sure you've got Node JS ins
 ```
 
 - import the SQL file from /back/sql_file into your server and make sure you can connect from a local server
+  (don't forget to replace the table name in /back/server.js line 36)
+
 
 - go in the /back folder:
 
