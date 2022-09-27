@@ -166,7 +166,7 @@ module.exports.signIn = function (identifier, password, language, con, res) {
                       throw er;
                   }else{
                       if(re.length){
-                          res.json({status: 1, message: ''});
+                          res.json({status: 1, message: '', username: re[0].username});
                       }else{
                           res.json({status: 0, message: dictionnary.mail[7].data});
                       }

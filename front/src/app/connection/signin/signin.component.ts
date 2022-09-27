@@ -34,12 +34,14 @@ export class SigninComponent implements OnInit {
   ngOnInit() {}
 
   signIn = async () => {
+    this.waiting = true;
     this.retour = await this.api.signIn(this.username, this.password);
     if(this.retour.status){
-      await this.cookies.setCookie('username', this.username);
-      await this.toastService.presentToast('Connected as ' + this.username, '5000', 'bottom');
+      await this.cookies.setCookie('username', this.retour.username);
+      await this.toastService.presentToast('Connected as ' + this.retour.username, '5000', 'bottom');
       await this.router.navigateByUrl('/home');
     }
+    this.waiting = false;
     this.output = this.retour.message;
   };
 }
