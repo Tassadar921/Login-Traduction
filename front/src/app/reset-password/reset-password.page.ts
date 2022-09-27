@@ -4,7 +4,6 @@ import {ApiService} from '../shared/services/api.service';
 import {TranslationService} from '../shared/services/translation.service';
 import {LoginService} from '../shared/services/login.service';
 import {SignupComponent} from '../connection/signup/signup.component';
-import {CookiesService} from '../shared/services/cookies.service';
 import {ToastService} from '../shared/services/toast.service';
 
 @Component({
