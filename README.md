@@ -7,13 +7,15 @@ To launch it, run those commands in a terminal (make sure you've got Node JS ins
 
 - import the SQL file from /back/sql_file into your server and make sure you can connect from a local server
 
-- go in the /back folder
+- go in the /back folder:
 
 	- npm i
 	- node server.js
 
-- in another terminal, go in the /front folder
+- in another terminal, go in the /front folder:
 
 	- npm i
 	- ionic serve
+
+Enjoy !
 
