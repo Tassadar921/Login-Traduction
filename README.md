@@ -9,13 +9,15 @@ To launch it, run those commands in a terminal (make sure you've got Node JS ins
 
 - go in the /back folder:
 
+	```
 	- npm i
 	- node server.js
 
 - in another terminal, go in the /front folder:
 
-	```- npm i
-	- ionic serve```
+	```
+	- npm i
+	- ionic serve
 
 Enjoy !
 
