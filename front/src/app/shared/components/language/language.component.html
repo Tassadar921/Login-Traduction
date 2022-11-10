@@ -9,7 +9,7 @@
         <img
           class="flag"
           [id]="translate.dictionnary.header?translate.dictionnary.header[0].tag===line.id?'selected':'':''"
-          [src]="'./assets/img/flags/png/'+line.id+'.png'"
+          [src]="urlBack + 'files/img/flags/png/'+line.id+'.png'"
           title="{{line.name}}"
           (click)="translate.updateLanguage(line.id)">
       </div>

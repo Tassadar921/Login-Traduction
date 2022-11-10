@@ -4,6 +4,7 @@ const logger = require('morgan');
 const methodOverride = require('method-override');
 const cors = require('cors');
 const mysql = require('mysql');
+const express = require('express');
 
 const session = require('express-session')({
     secret: 'eb8fcc253281389225b4f7872f2336918ddc7f689e1fc41b64d5c4f378cdc438',
@@ -20,6 +21,7 @@ app.use(bodyParser.json());
 app.use(methodOverride());
 app.use(cors());
 app.use(session);
+app.use('/files', express.static('files'));
 
 const languages = require('./modules/languages.js');
 const account = require('./modules/account.js');
@@ -33,7 +35,7 @@ const con = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'test'
+    database: 'oc'
 });
 
 function preventDisconnect() {
@@ -50,6 +52,10 @@ function preventDisconnect() {
 
             app.post('/getTranslation', function (req, res) {
                 languages.getTranslation(req.body.language, res);
+            });
+
+            app.post('/getFlag', function (req, res) {
+                languages.getFlag(req.body.language, res);
             });
 
             app.post('/userExists', function (req, res) {

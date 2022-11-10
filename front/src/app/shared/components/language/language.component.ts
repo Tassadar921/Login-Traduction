@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {TranslationService} from '../../services/translation.service';
 import {CookiesService} from '../../services/cookies.service';
 import {ModalController} from '@ionic/angular';
+import {environment} from '../../../../environments/environment';
 
 @Component({
   selector: 'app-language',
@@ -9,6 +10,8 @@ import {ModalController} from '@ionic/angular';
   styleUrls: ['./language.component.scss', '../../../shared.scss'],
 })
 export class LanguageComponent implements OnInit {
+
+  public urlBack = environment.urlBack;
 
   constructor(
     public translate: TranslationService,
