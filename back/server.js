@@ -1,100 +1,71 @@
-const app = require('express')();
-const bodyParser = require('body-parser');
-const logger = require('morgan');
-const methodOverride = require('method-override');
-const cors = require('cors');
-const mysql = require('mysql');
-const express = require('express');
+import express from 'express';
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import * as dotenv from 'dotenv';
+import * as edgedb from 'edgedb';
 
-const session = require('express-session')({
-    secret: 'eb8fcc253281389225b4f7872f2336918ddc7f689e1fc41b64d5c4f378cdc438',
-    resave: true,
-    saveUninitialized: true,
-    cookie: {
-        maxAge: 2 * 60 * 60 * 1000,
-        secure: false
-    }
-});
+import * as languages from './modules/languages.js';
+import * as account from './modules/account.js';
 
-app.use(logger('dev'));
+dotenv.config();
+
+const app = express();
+
 app.use(bodyParser.json());
-app.use(methodOverride());
-app.use(cors());
-app.use(session);
+app.use(cors({origin: 'http://localhost:8100'}));
 app.use('/files', express.static('files'));
-
-const languages = require('./modules/languages.js');
-const account = require('./modules/account.js');
 
 if (app.get('env') === 'production') {
     app.set('trust proxy', 1);
-    session.cookie.secure = true;
 }
 
-const con = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'oc'
-});
+// app.get('/getLanguagesList', async function (req, res) {
+//     await languages.getLanguagesList(res);
+// });
+//
+// app.post('/getTranslation', async function (req, res) {
+//     await languages.getTranslation(req.body.language, res);
+// });
+//
+// app.post('/userExists', function (req, res) {
+//     account.userExists(req.body.username, req.body.email, req.body.language, res);
+// });
+//
+// app.post('/mailCreateAccount', function (req, res) {
+//     account.mailCreateAccount(req.body.username, req.body.password, req.body.email, req.body.language, res);
+// });
+//
+// app.post('/checkSignUpToken', function (req, res) {
+//     account.checkSignUpToken(req.body.token, req.body.language, res);
+// });
+//
+// app.post('/createAccount', function (req, res) {
+//     account.createAccount(req.body.token, req.body.language, res);
+// });
+//
+// app.post('/signIn', function (req, res) {
+//     account.signIn(req.body.identifier, req.body.password, req.body.language, res);
+// });
+//
+// app.post('/mailResetPassword', function (req, res) {
+//     account.mailResetPassword(req.body.email, req.body.language, con, res);
+// });
+//
+// app.post('/checkResetPasswordToken', function (req, res) {
+//     account.checkResetPasswordToken(req.body.token, req.body.language, res);
+// });
+//
+// app.post('/resetPassword', function (req, res) {
+//     account.resetPassword(req.body.token, req.body.password, req.body.language, con, res);
+// });
 
-function preventDisconnect() {
-    con.connect(err => {
-        if (err) {
-            console.log('Error when connecting to db:', err);
-            setTimeout(preventDisconnect, 5000);
-        } else {
-            console.log('Connected to db');
-
-            app.get('/getLanguagesList', function (req, res) {
-                languages.getLanguagesList(res);
-            });
-
-            app.post('/getTranslation', function (req, res) {
-                languages.getTranslation(req.body.language, res);
-            });
-
-            app.post('/getFlag', function (req, res) {
-                languages.getFlag(req.body.language, res);
-            });
-
-            app.post('/userExists', function (req, res) {
-                account.userExists(req.body.username, req.body.email, req.body.language, con, res);
-            });
-
-            app.post('/mailCreateAccount', function (req, res) {
-                account.mailCreateAccount(req.body.username, req.body.password, req.body.email, req.body.language, res);
-            });
-
-            app.post('/checkSignUpToken', function (req, res) {
-                account.checkSignUpToken(req.body.token, req.body.language, res);
-            });
-
-            app.post('/createAccount', function (req, res) {
-                account.createAccount(req.body.token, req.body.language, con, res);
-            });
-
-            app.post('/signIn', function (req, res) {
-                account.signIn(req.body.identifier, req.body.password, req.body.language, con, res);
-            });
-
-            app.post('/mailResetPassword', function (req, res) {
-                account.mailResetPassword(req.body.email, req.body.language, con, res);
-            });
-
-            app.post('/checkResetPasswordToken', function (req, res) {
-                account.checkResetPasswordToken(req.body.token, req.body.language, res);
-            });
-
-            app.post('/resetPassword', function (req, res) {
-                account.resetPassword(req.body.token, req.body.password, req.body.language, con, res);
-            });
-        }
-    });
-}
-
-preventDisconnect();
+const connection = edgedb.createClient({});
+// console.log(await connection.querySingle(");
+console.log(await connection.query("SELECT User {username, email, password}"));
+// console.log(await connection.query("INSERT User {username := 'test', email := 'coucou@coucou', password := '123'}"));
+console.log('finito');
 
 if (app.listen(process.env.PORT || 8080)) {
-    console.log('Serveur lancé sur le port 8080');
+    console.log('=========== SERVER STARTED FOR HTTP RQ ===========');
+    console.log('    =============   PORT: 8080   =============');
 }
