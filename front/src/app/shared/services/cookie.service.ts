@@ -17,7 +17,7 @@ export class CookieService {
   ){}
 
   //returns cookie data from cookie key
-  getFromCookies = async (key: string) => Object(await Preferences.get({key})).data;
+  getCookie = async (key: string) => Object(await Preferences.get({key})).data;
 
   //sets cookie from key and value, erasing previous cookie if exists
   setCookie = async (key: string, value: any) => await Preferences.set({key, value});

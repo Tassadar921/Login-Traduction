@@ -1,10 +1,12 @@
 {
-  "name": "tikal",
-  "version": "1.0.0",
-  "description": "",
+  "name": "login-traduction",
+  "version": "3.0.0",
+  "description": "replaced mysql with edgedb",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "esbuild ./src/server.ts --platform=node --bundle --outfile=dist/out.js",
+    "start": "npm run build && node dist/out.js"
   },
   "author": "Tassadar921",
   "type": "module",
@@ -16,6 +18,7 @@
     "crypto": "^1.0.1",
     "dotenv": "^16.0.3",
     "edgedb": "^1.0.2",
+    "esbuild": "^0.17.5",
     "express": "^4.17.2",
     "fs": "0.0.1-security",
     "moment": "^2.29.3",

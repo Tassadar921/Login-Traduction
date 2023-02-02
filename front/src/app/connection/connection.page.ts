@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Platform} from '@ionic/angular';
+import {LanguageService} from '../shared/services/language.service';
 
 @Component({
   selector: 'app-connection',
@@ -11,11 +12,13 @@ export class ConnectionPage implements OnInit {
   public hasAnAccount: boolean = true;
   public currentPlatform: string | undefined;
   constructor(
-    private platform: Platform
+    private platform: Platform,
+    private languageService: LanguageService
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.updateCurrentPlatform();
+    await this.languageService.init();
   }
 
   updateCurrentPlatform() {
