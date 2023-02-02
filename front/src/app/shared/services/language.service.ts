@@ -19,10 +19,14 @@ export class LanguageService {
   async init(){
     if(!await this.cookieService.getCookie('language')){
       await this.cookieService.setCookie('language', 'uk');
+      console.log('ici');
+      console.log(await this.cookieService.getCookie('language'));
     }
     this.languagesList = await this.requestService.getLanguagesList();
-    console.log(this.languagesList)
-    // this.dictionary = await this.requestService.getTranslation(await this.cookieService.getCookie('language'));
+    console.log(this.languagesList);
+    console.log(await this.cookieService.getCookie('language'));
+    this.dictionary = await this.requestService.getTranslation(await this.cookieService.getCookie('language'));
+    console.log(this.dictionary);
   }
   async updateLanguage(languageID: string) {}
 

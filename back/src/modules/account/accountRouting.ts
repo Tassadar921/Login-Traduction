@@ -1,4 +1,4 @@
-import { Request, Response } from "express-serve-static-core";
+import { Request, Response } from "express";
 // import { account } from "./account";
 
 module accountRouting {
@@ -29,6 +29,7 @@ module accountRouting {
         });
 
         console.log('Account routing initialized');
+        return;
     }
 }
 
