@@ -3,8 +3,8 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import * as dotenv from 'dotenv';
 
-import { languagesRouting } from './modules/languages/languagesRouting';
-//import * as account from './modules/account/account';
+import languagesRouting from './modules/languages/languagesRouting';
+import accountRouting from './modules/account/accountRouting';
 
 dotenv.config();
 
@@ -19,6 +19,7 @@ if (app.get('env') === 'production') {
 }
 
 languagesRouting.init(app);
+accountRouting.init(app);
 
 if (app.listen(process.env.PORT || 8080)) {
     console.log('=========== SERVER STARTED FOR HTTP RQ ===========');

@@ -1,11 +1,12 @@
 import { Request, Response } from "express-serve-static-core";
+import { account } from "./account";
 
 export default accountRouting;
 
 module accountRouting {
-    export function init(app : any) {
+    export function init(app : any) {        
         app.post('/userExists', function (req : Request, res : Response) {
-            
+            account.userExists(req.body.username, req.body.email, res);
         });
         app.post('/mailCreateAccount', function (req : Request, res : Response) {
 

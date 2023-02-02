@@ -1,18 +1,10 @@
 import * as nodemailer from 'nodemailer';
 import * as crypto from 'crypto';
 import * as edgedb from 'edgedb';
+import { accountRequest } from './accountRequest';
 
-module account { 
-    //queue for pending creation accounts
-    const creatingAccountQueue = [];
-    
-    //queue for reset password accounts
-    const resetPasswordQueue = [];
-
-    const connection = edgedb.createClient({});
-    
-    //url to send by email, replace it by domain name
-    const urlFront = 'http://localhost:8100/'; //URL DE DEV
+export module account { 
+    const client = edgedb.createClient({});
     
     //init of the mail sender
     const transporter = nodemailer.createTransport({
@@ -30,32 +22,10 @@ module account {
         subject: '',
         text: ''
     };
-    
 
     //asks if an account containing username or email is in db, priority to username
-    module.exports.userExists = function (username, email, language, con, res) {
-        const dictionnary = require('../files/json/translation/' + language + '.json');
-        con.query('SELECT username FROM users WHERE username = ?', username, (e, r) => {
-            if (e) {
-                throw e;
-            } else {
-                if (r.length) {
-                    res.json({status: 0, message: dictionnary.server[0].data});
-                } else {
-                    con.query('SELECT username FROM users WHERE email = ?', email, (er, re) => {
-                        if (er) {
-                            throw er;
-                        } else {
-                            if (re.length) {
-                                res.json({status: 0, message: dictionnary.server[1].data});
-                            } else {
-                                res.json({status: 1, message: ''});
-                            }
-                        }
-                    });
-                }
-            }
-        });
+    export function userExists(username, email, res) {
+        accountRequest.checkUser(username, email, client);
     };
     
     //sends the creating account email, containing a unique token, effective for 5 minutes,

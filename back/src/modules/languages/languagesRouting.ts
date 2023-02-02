@@ -1,7 +1,8 @@
 import { Request, Response } from "express-serve-static-core";
 import { languages } from "./languages";
 
-export module languagesRouting {
+export default languagesRouting;
+module languagesRouting {
     export function init(app : any) {
         app.get('/languages/list', function(req : Request, res : Response) {
             languages.getLanguagesList(res);
