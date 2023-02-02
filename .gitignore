@@ -20,6 +20,7 @@ npm-debug.log*
 /.idea
 
 /back/node_modules
+/test/node_modules
 
 /front/.angular
 /front/.ionic
