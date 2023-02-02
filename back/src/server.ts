@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import * as dotenv from 'dotenv';
 
-import languagesRouting from './modules/languages/languagesRouting';
+import { languagesRouting } from './modules/languages/languagesRouting';
 //import * as account from './modules/account/account';
 
 dotenv.config();

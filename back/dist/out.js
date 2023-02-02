@@ -1,4 +1,3 @@
-"use strict";
 var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -464,7 +463,7 @@ var require_content_type = __commonJS({
         throw new TypeError("argument string is required to be a string");
       }
       var index = header.indexOf(";");
-      var type = index !== -1 ? header.substr(0, index).trim() : header.trim();
+      var type = index !== -1 ? header.slice(0, index).trim() : header.trim();
       if (!TYPE_REGEXP.test(type)) {
         throw new TypeError("invalid media type");
       }
@@ -481,8 +480,11 @@ var require_content_type = __commonJS({
           index += match[0].length;
           key = match[1].toLowerCase();
           value = match[2];
-          if (value[0] === '"') {
-            value = value.substr(1, value.length - 2).replace(QESC_REGEXP, "$1");
+          if (value.charCodeAt(0) === 34) {
+            value = value.slice(1, -1);
+            if (value.indexOf("\\") !== -1) {
+              value = value.replace(QESC_REGEXP, "$1");
+            }
           }
           obj.parameters[key] = value;
         }
@@ -5162,9 +5164,9 @@ var require_ee_first = __commonJS({
   }
 });
 
-// node_modules/body-parser/node_modules/on-finished/index.js
+// node_modules/on-finished/index.js
 var require_on_finished = __commonJS({
-  "node_modules/body-parser/node_modules/on-finished/index.js"(exports, module2) {
+  "node_modules/on-finished/index.js"(exports, module2) {
     "use strict";
     module2.exports = onFinished;
     module2.exports.isFinished = isFinished;
@@ -5777,6 +5779,10 @@ var require_db = __commonJS({
       "application/cfw": {
         source: "iana"
       },
+      "application/city+json": {
+        source: "iana",
+        compressible: true
+      },
       "application/clr": {
         source: "iana"
       },
@@ -5820,7 +5826,8 @@ var require_db = __commonJS({
       },
       "application/cpl+xml": {
         source: "iana",
-        compressible: true
+        compressible: true,
+        extensions: ["cpl"]
       },
       "application/csrattrs": {
         source: "iana"
@@ -5854,6 +5861,11 @@ var require_db = __commonJS({
         source: "iana",
         compressible: true,
         extensions: ["mpd"]
+      },
+      "application/dash-patch+xml": {
+        source: "iana",
+        compressible: true,
+        extensions: ["mpp"]
       },
       "application/dashdelta": {
         source: "iana"
@@ -6395,7 +6407,8 @@ var require_db = __commonJS({
       },
       "application/media-policy-dataset+xml": {
         source: "iana",
-        compressible: true
+        compressible: true,
+        extensions: ["mpf"]
       },
       "application/media_control+xml": {
         source: "iana",
@@ -6551,6 +6564,9 @@ var require_db = __commonJS({
       "application/oauth-authz-req+jwt": {
         source: "iana"
       },
+      "application/oblivious-dns-message": {
+        source: "iana"
+      },
       "application/ocsp-request": {
         source: "iana"
       },
@@ -6643,7 +6659,8 @@ var require_db = __commonJS({
         extensions: ["pgp"]
       },
       "application/pgp-keys": {
-        source: "iana"
+        source: "iana",
+        extensions: ["asc"]
       },
       "application/pgp-signature": {
         source: "iana",
@@ -8174,6 +8191,10 @@ var require_db = __commonJS({
       "application/vnd.ecip.rlp": {
         source: "iana"
       },
+      "application/vnd.eclipse.ditto+json": {
+        source: "iana",
+        compressible: true
+      },
       "application/vnd.ecowin.chart": {
         source: "iana",
         extensions: ["mag"]
@@ -8331,6 +8352,10 @@ var require_db = __commonJS({
       "application/vnd.etsi.tsl.der": {
         source: "iana"
       },
+      "application/vnd.eu.kasparian.car+json": {
+        source: "iana",
+        compressible: true
+      },
       "application/vnd.eudora.data": {
         source: "iana"
       },
@@ -8360,6 +8385,10 @@ var require_db = __commonJS({
       },
       "application/vnd.f-secure.mobile": {
         source: "iana"
+      },
+      "application/vnd.familysearch.gedcom+zip": {
+        source: "iana",
+        compressible: false
       },
       "application/vnd.fastcopy-disk-image": {
         source: "iana"
@@ -8650,6 +8679,16 @@ var require_db = __commonJS({
       "application/vnd.hhe.lesson-player": {
         source: "iana",
         extensions: ["les"]
+      },
+      "application/vnd.hl7cda+xml": {
+        source: "iana",
+        charset: "UTF-8",
+        compressible: true
+      },
+      "application/vnd.hl7v2+xml": {
+        source: "iana",
+        charset: "UTF-8",
+        compressible: true
       },
       "application/vnd.hp-hpgl": {
         source: "iana",
@@ -9063,6 +9102,10 @@ var require_db = __commonJS({
       "application/vnd.mason+json": {
         source: "iana",
         compressible: true
+      },
+      "application/vnd.maxar.archive.3tz+zip": {
+        source: "iana",
+        compressible: false
       },
       "application/vnd.maxmind.maxmind-db": {
         source: "iana"
@@ -10684,6 +10727,10 @@ var require_db = __commonJS({
         source: "iana",
         compressible: true
       },
+      "application/vnd.syft+json": {
+        source: "iana",
+        compressible: true
+      },
       "application/vnd.symbian.install": {
         source: "apache",
         extensions: ["sis", "sisx"]
@@ -11074,7 +11121,8 @@ var require_db = __commonJS({
       },
       "application/watcherinfo+xml": {
         source: "iana",
-        compressible: true
+        compressible: true,
+        extensions: ["wif"]
       },
       "application/webpush-options+json": {
         source: "iana",
@@ -12494,10 +12542,12 @@ var require_db = __commonJS({
         extensions: ["apng"]
       },
       "image/avci": {
-        source: "iana"
+        source: "iana",
+        extensions: ["avci"]
       },
       "image/avcs": {
-        source: "iana"
+        source: "iana",
+        extensions: ["avcs"]
       },
       "image/avif": {
         source: "iana",
@@ -16614,115 +16664,6 @@ var require_escape_html = __commonJS({
   }
 });
 
-// node_modules/finalhandler/node_modules/on-finished/index.js
-var require_on_finished2 = __commonJS({
-  "node_modules/finalhandler/node_modules/on-finished/index.js"(exports, module2) {
-    "use strict";
-    module2.exports = onFinished;
-    module2.exports.isFinished = isFinished;
-    var asyncHooks = tryRequireAsyncHooks();
-    var first = require_ee_first();
-    var defer = typeof setImmediate === "function" ? setImmediate : function(fn) {
-      process.nextTick(fn.bind.apply(fn, arguments));
-    };
-    function onFinished(msg, listener) {
-      if (isFinished(msg) !== false) {
-        defer(listener, null, msg);
-        return msg;
-      }
-      attachListener(msg, wrap(listener));
-      return msg;
-    }
-    function isFinished(msg) {
-      var socket = msg.socket;
-      if (typeof msg.finished === "boolean") {
-        return Boolean(msg.finished || socket && !socket.writable);
-      }
-      if (typeof msg.complete === "boolean") {
-        return Boolean(msg.upgrade || !socket || !socket.readable || msg.complete && !msg.readable);
-      }
-      return void 0;
-    }
-    function attachFinishedListener(msg, callback) {
-      var eeMsg;
-      var eeSocket;
-      var finished = false;
-      function onFinish(error) {
-        eeMsg.cancel();
-        eeSocket.cancel();
-        finished = true;
-        callback(error);
-      }
-      eeMsg = eeSocket = first([[msg, "end", "finish"]], onFinish);
-      function onSocket(socket) {
-        msg.removeListener("socket", onSocket);
-        if (finished)
-          return;
-        if (eeMsg !== eeSocket)
-          return;
-        eeSocket = first([[socket, "error", "close"]], onFinish);
-      }
-      if (msg.socket) {
-        onSocket(msg.socket);
-        return;
-      }
-      msg.on("socket", onSocket);
-      if (msg.socket === void 0) {
-        patchAssignSocket(msg, onSocket);
-      }
-    }
-    function attachListener(msg, listener) {
-      var attached = msg.__onFinished;
-      if (!attached || !attached.queue) {
-        attached = msg.__onFinished = createListener(msg);
-        attachFinishedListener(msg, attached);
-      }
-      attached.queue.push(listener);
-    }
-    function createListener(msg) {
-      function listener(err) {
-        if (msg.__onFinished === listener)
-          msg.__onFinished = null;
-        if (!listener.queue)
-          return;
-        var queue = listener.queue;
-        listener.queue = null;
-        for (var i = 0; i < queue.length; i++) {
-          queue[i](err, msg);
-        }
-      }
-      listener.queue = [];
-      return listener;
-    }
-    function patchAssignSocket(res, callback) {
-      var assignSocket = res.assignSocket;
-      if (typeof assignSocket !== "function")
-        return;
-      res.assignSocket = function _assignSocket(socket) {
-        assignSocket.call(this, socket);
-        callback(socket);
-      };
-    }
-    function tryRequireAsyncHooks() {
-      try {
-        return require("async_hooks");
-      } catch (e) {
-        return {};
-      }
-    }
-    function wrap(fn) {
-      var res;
-      if (asyncHooks.AsyncResource) {
-        res = new asyncHooks.AsyncResource(fn.name || "bound-anonymous-fn");
-      }
-      if (!res || !res.runInAsyncScope) {
-        return fn;
-      }
-      return res.runInAsyncScope.bind(res, fn, null);
-    }
-  }
-});
-
 // node_modules/parseurl/index.js
 var require_parseurl = __commonJS({
   "node_modules/parseurl/index.js"(exports, module2) {
@@ -16808,7 +16749,7 @@ var require_finalhandler = __commonJS({
     var debug = require_src()("finalhandler");
     var encodeUrl = require_encodeurl();
     var escapeHtml = require_escape_html();
-    var onFinished = require_on_finished2();
+    var onFinished = require_on_finished();
     var parseUrl = require_parseurl();
     var statuses = require_statuses();
     var unpipe = require_unpipe();
@@ -18353,115 +18294,6 @@ var require_ms2 = __commonJS({
   }
 });
 
-// node_modules/send/node_modules/on-finished/index.js
-var require_on_finished3 = __commonJS({
-  "node_modules/send/node_modules/on-finished/index.js"(exports, module2) {
-    "use strict";
-    module2.exports = onFinished;
-    module2.exports.isFinished = isFinished;
-    var asyncHooks = tryRequireAsyncHooks();
-    var first = require_ee_first();
-    var defer = typeof setImmediate === "function" ? setImmediate : function(fn) {
-      process.nextTick(fn.bind.apply(fn, arguments));
-    };
-    function onFinished(msg, listener) {
-      if (isFinished(msg) !== false) {
-        defer(listener, null, msg);
-        return msg;
-      }
-      attachListener(msg, wrap(listener));
-      return msg;
-    }
-    function isFinished(msg) {
-      var socket = msg.socket;
-      if (typeof msg.finished === "boolean") {
-        return Boolean(msg.finished || socket && !socket.writable);
-      }
-      if (typeof msg.complete === "boolean") {
-        return Boolean(msg.upgrade || !socket || !socket.readable || msg.complete && !msg.readable);
-      }
-      return void 0;
-    }
-    function attachFinishedListener(msg, callback) {
-      var eeMsg;
-      var eeSocket;
-      var finished = false;
-      function onFinish(error) {
-        eeMsg.cancel();
-        eeSocket.cancel();
-        finished = true;
-        callback(error);
-      }
-      eeMsg = eeSocket = first([[msg, "end", "finish"]], onFinish);
-      function onSocket(socket) {
-        msg.removeListener("socket", onSocket);
-        if (finished)
-          return;
-        if (eeMsg !== eeSocket)
-          return;
-        eeSocket = first([[socket, "error", "close"]], onFinish);
-      }
-      if (msg.socket) {
-        onSocket(msg.socket);
-        return;
-      }
-      msg.on("socket", onSocket);
-      if (msg.socket === void 0) {
-        patchAssignSocket(msg, onSocket);
-      }
-    }
-    function attachListener(msg, listener) {
-      var attached = msg.__onFinished;
-      if (!attached || !attached.queue) {
-        attached = msg.__onFinished = createListener(msg);
-        attachFinishedListener(msg, attached);
-      }
-      attached.queue.push(listener);
-    }
-    function createListener(msg) {
-      function listener(err) {
-        if (msg.__onFinished === listener)
-          msg.__onFinished = null;
-        if (!listener.queue)
-          return;
-        var queue = listener.queue;
-        listener.queue = null;
-        for (var i = 0; i < queue.length; i++) {
-          queue[i](err, msg);
-        }
-      }
-      listener.queue = [];
-      return listener;
-    }
-    function patchAssignSocket(res, callback) {
-      var assignSocket = res.assignSocket;
-      if (typeof assignSocket !== "function")
-        return;
-      res.assignSocket = function _assignSocket(socket) {
-        assignSocket.call(this, socket);
-        callback(socket);
-      };
-    }
-    function tryRequireAsyncHooks() {
-      try {
-        return require("async_hooks");
-      } catch (e) {
-        return {};
-      }
-    }
-    function wrap(fn) {
-      var res;
-      if (asyncHooks.AsyncResource) {
-        res = new asyncHooks.AsyncResource(fn.name || "bound-anonymous-fn");
-      }
-      if (!res || !res.runInAsyncScope) {
-        return fn;
-      }
-      return res.runInAsyncScope.bind(res, fn, null);
-    }
-  }
-});
-
 // node_modules/range-parser/index.js
 var require_range_parser = __commonJS({
   "node_modules/range-parser/index.js"(exports, module2) {
@@ -18558,7 +18390,7 @@ var require_send = __commonJS({
     var fs = require("fs");
     var mime = require_mime();
     var ms = require_ms2();
-    var onFinished = require_on_finished3();
+    var onFinished = require_on_finished();
     var parseRange = require_range_parser();
     var path = require("path");
     var statuses = require_statuses();
@@ -20829,7 +20661,7 @@ var require_negotiator = __commonJS({
       var set = this.languages(available);
       return set && set[0];
     };
-    Negotiator.prototype.languages = function languages(available) {
+    Negotiator.prototype.languages = function languages2(available) {
       return preferredLanguages(this.request.headers["accept-language"], available);
     };
     Negotiator.prototype.mediaType = function mediaType(available) {
@@ -20910,17 +20742,17 @@ var require_accepts = __commonJS({
       return this.negotiator.charsets(charsets)[0] || false;
     };
     Accepts.prototype.lang = Accepts.prototype.langs = Accepts.prototype.language = Accepts.prototype.languages = function(languages_) {
-      var languages = languages_;
-      if (languages && !Array.isArray(languages)) {
-        languages = new Array(arguments.length);
-        for (var i = 0; i < languages.length; i++) {
-          languages[i] = arguments[i];
+      var languages2 = languages_;
+      if (languages2 && !Array.isArray(languages2)) {
+        languages2 = new Array(arguments.length);
+        for (var i = 0; i < languages2.length; i++) {
+          languages2[i] = arguments[i];
         }
       }
-      if (!languages || languages.length === 0) {
+      if (!languages2 || languages2.length === 0) {
         return this.negotiator.languages();
       }
-      return this.negotiator.languages(languages)[0] || false;
+      return this.negotiator.languages(languages2)[0] || false;
     };
     function extToMime(type) {
       return type.indexOf("/") === -1 ? mime.lookup(type) : type;
@@ -21102,115 +20934,6 @@ var require_request = __commonJS({
   }
 });
 
-// node_modules/express/node_modules/on-finished/index.js
-var require_on_finished4 = __commonJS({
-  "node_modules/express/node_modules/on-finished/index.js"(exports, module2) {
-    "use strict";
-    module2.exports = onFinished;
-    module2.exports.isFinished = isFinished;
-    var asyncHooks = tryRequireAsyncHooks();
-    var first = require_ee_first();
-    var defer = typeof setImmediate === "function" ? setImmediate : function(fn) {
-      process.nextTick(fn.bind.apply(fn, arguments));
-    };
-    function onFinished(msg, listener) {
-      if (isFinished(msg) !== false) {
-        defer(listener, null, msg);
-        return msg;
-      }
-      attachListener(msg, wrap(listener));
-      return msg;
-    }
-    function isFinished(msg) {
-      var socket = msg.socket;
-      if (typeof msg.finished === "boolean") {
-        return Boolean(msg.finished || socket && !socket.writable);
-      }
-      if (typeof msg.complete === "boolean") {
-        return Boolean(msg.upgrade || !socket || !socket.readable || msg.complete && !msg.readable);
-      }
-      return void 0;
-    }
-    function attachFinishedListener(msg, callback) {
-      var eeMsg;
-      var eeSocket;
-      var finished = false;
-      function onFinish(error) {
-        eeMsg.cancel();
-        eeSocket.cancel();
-        finished = true;
-        callback(error);
-      }
-      eeMsg = eeSocket = first([[msg, "end", "finish"]], onFinish);
-      function onSocket(socket) {
-        msg.removeListener("socket", onSocket);
-        if (finished)
-          return;
-        if (eeMsg !== eeSocket)
-          return;
-        eeSocket = first([[socket, "error", "close"]], onFinish);
-      }
-      if (msg.socket) {
-        onSocket(msg.socket);
-        return;
-      }
-      msg.on("socket", onSocket);
-      if (msg.socket === void 0) {
-        patchAssignSocket(msg, onSocket);
-      }
-    }
-    function attachListener(msg, listener) {
-      var attached = msg.__onFinished;
-      if (!attached || !attached.queue) {
-        attached = msg.__onFinished = createListener(msg);
-        attachFinishedListener(msg, attached);
-      }
-      attached.queue.push(listener);
-    }
-    function createListener(msg) {
-      function listener(err) {
-        if (msg.__onFinished === listener)
-          msg.__onFinished = null;
-        if (!listener.queue)
-          return;
-        var queue = listener.queue;
-        listener.queue = null;
-        for (var i = 0; i < queue.length; i++) {
-          queue[i](err, msg);
-        }
-      }
-      listener.queue = [];
-      return listener;
-    }
-    function patchAssignSocket(res, callback) {
-      var assignSocket = res.assignSocket;
-      if (typeof assignSocket !== "function")
-        return;
-      res.assignSocket = function _assignSocket(socket) {
-        assignSocket.call(this, socket);
-        callback(socket);
-      };
-    }
-    function tryRequireAsyncHooks() {
-      try {
-        return require("async_hooks");
-      } catch (e) {
-        return {};
-      }
-    }
-    function wrap(fn) {
-      var res;
-      if (asyncHooks.AsyncResource) {
-        res = new asyncHooks.AsyncResource(fn.name || "bound-anonymous-fn");
-      }
-      if (!res || !res.runInAsyncScope) {
-        return fn;
-      }
-      return res.runInAsyncScope.bind(res, fn, null);
-    }
-  }
-});
-
 // node_modules/cookie-signature/index.js
 var require_cookie_signature = __commonJS({
   "node_modules/cookie-signature/index.js"(exports) {
@@ -21236,9 +20959,9 @@ var require_cookie_signature = __commonJS({
   }
 });
 
-// node_modules/express/node_modules/cookie/index.js
+// node_modules/cookie/index.js
 var require_cookie = __commonJS({
-  "node_modules/express/node_modules/cookie/index.js"(exports) {
+  "node_modules/cookie/index.js"(exports) {
     "use strict";
     exports.parse = parse;
     exports.serialize = serialize;
@@ -21463,7 +21186,7 @@ var require_response = __commonJS({
     var escapeHtml = require_escape_html();
     var http = require("http");
     var isAbsolute = require_utils2().isAbsolute;
-    var onFinished = require_on_finished4();
+    var onFinished = require_on_finished();
     var path = require("path");
     var statuses = require_statuses();
     var merge = require_utils_merge();
@@ -22624,31 +22347,35 @@ var require_translation = __commonJS({
 });
 
 // src/server.ts
-var import_express = __toESM(require_express2(), 1);
-var import_body_parser = __toESM(require_body_parser(), 1);
-var import_cors = __toESM(require_lib3(), 1);
-var dotenv = __toESM(require_main(), 1);
+var import_express = __toESM(require_express2());
+var import_body_parser = __toESM(require_body_parser());
+var import_cors = __toESM(require_lib3());
+var dotenv = __toESM(require_main());
 
 // src/modules/languages/languages.ts
-async function getLanguagesList(res) {
-  const index = await Promise.resolve().then(() => __toESM(require_translation(), 1));
-  res.json({ list: index });
-}
-async function getLanguagesOf(language, res) {
-  const translation = await import("../../files/json/translation/" + language + ".json", { assert: { type: "json" } });
-  res.json({ list: translation });
-}
+var languages;
+((languages2) => {
+  async function getLanguagesList(res) {
+    const index = await Promise.resolve().then(() => __toESM(require_translation()));
+    res.json({ list: index });
+  }
+  languages2.getLanguagesList = getLanguagesList;
+  async function getLanguagesOf(language, res) {
+    const translation = await import("../../files/json/translation/" + language + ".json", { assert: { type: "json" } });
+    res.json({ list: translation });
+  }
+  languages2.getLanguagesOf = getLanguagesOf;
+})(languages || (languages = {}));
 
 // src/modules/languages/languagesRouting.ts
-var languagesRouting_default = languagesRouting;
 var languagesRouting;
 ((languagesRouting2) => {
   function init(app2) {
     app2.get("/languages/list", function(req, res) {
-      getLanguagesList(res);
+      languages.getLanguagesList(res);
     });
     app2.get("/languages/:language", function(req, res) {
-      getLanguagesOf(req.params.language, res);
+      languages.getLanguagesOf(req.params.language, res);
     });
     console.log("Languages routing initialized");
   }
@@ -22664,7 +22391,7 @@ app.use("/files", import_express.default.static("files"));
 if (app.get("env") === "production") {
   app.set("trust proxy", 1);
 }
-languagesRouting_default.init(app);
+languagesRouting.init(app);
 if (app.listen(process.env.PORT || 8080)) {
   console.log("=========== SERVER STARTED FOR HTTP RQ ===========");
   console.log("    =============   PORT: 8080   =============");
@@ -22772,6 +22499,7 @@ mime-db/index.js:
   (*!
    * mime-db
    * Copyright(c) 2014 Jonathan Ong
+   * Copyright(c) 2015-2022 Douglas Christopher Wilson
    * MIT Licensed
    *)
 
@@ -22849,14 +22577,6 @@ escape-html/index.js:
    * Copyright(c) 2012-2013 TJ Holowaychuk
    * Copyright(c) 2015 Andreas Lubbe
    * Copyright(c) 2015 Tiancheng "Timothy" Gu
-   * MIT Licensed
-   *)
-
-on-finished/index.js:
-  (*!
-   * on-finished
-   * Copyright(c) 2013 Jonathan Ong
-   * Copyright(c) 2014 Douglas Christopher Wilson
    * MIT Licensed
    *)
 
@@ -22962,14 +22682,6 @@ fresh/index.js:
    * MIT Licensed
    *)
 
-on-finished/index.js:
-  (*!
-   * on-finished
-   * Copyright(c) 2013 Jonathan Ong
-   * Copyright(c) 2014 Douglas Christopher Wilson
-   * MIT Licensed
-   *)
-
 range-parser/index.js:
   (*!
    * range-parser
@@ -23040,14 +22752,6 @@ express/lib/request.js:
    * Copyright(c) 2009-2013 TJ Holowaychuk
    * Copyright(c) 2013 Roman Shtylman
    * Copyright(c) 2014-2015 Douglas Christopher Wilson
-   * MIT Licensed
-   *)
-
-on-finished/index.js:
-  (*!
-   * on-finished
-   * Copyright(c) 2013 Jonathan Ong
-   * Copyright(c) 2014 Douglas Christopher Wilson
    * MIT Licensed
    *)
 
