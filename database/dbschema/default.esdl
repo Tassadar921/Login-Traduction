@@ -12,14 +12,14 @@ module default {
         multi link friends -> User;
     }
 
-    type accountCreation {
+    type Account_Creation {
         required property token -> str;
         required property username -> str;
         required property email -> str;
         required property password -> str;
     }
 
-    type passwordReset {
+    type Password_Reset {
         required property token -> str;
         required property email -> str;
     }
