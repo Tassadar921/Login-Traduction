@@ -22,7 +22,6 @@ npm-debug.log*
 /back/node_modules
 /back/.env
 /back/distr
-/test/node_modules
 
 /front/.angular
 /front/.ionic
