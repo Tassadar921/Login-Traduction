@@ -1,12 +1,10 @@
 import { Request, Response } from "express-serve-static-core";
-import { account } from "./account";
-
-export default accountRouting;
+// import { account } from "./account";
 
 module accountRouting {
-    export function init(app : any) {        
+    export function init(app : any): void {
         app.post('/userExists', function (req : Request, res : Response) {
-            account.userExists(req.body.username, req.body.email, res);
+            // account.userExists(req.body.username, req.body.email, res);
         });
         app.post('/mailCreateAccount', function (req : Request, res : Response) {
 
@@ -33,3 +31,5 @@ module accountRouting {
         console.log('Account routing initialized');
     }
 }
+
+export default accountRouting;

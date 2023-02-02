@@ -18,8 +18,8 @@ if (app.get('env') === 'production') {
     app.set('trust proxy', 1);
 }
 
-languagesRouting.init(app);
 accountRouting.init(app);
+languagesRouting.init(app);
 
 if (app.listen(process.env.PORT || 8080)) {
     console.log('=========== SERVER STARTED FOR HTTP RQ ===========');
