@@ -3,8 +3,9 @@ import { Response } from "express";
 export module languages{
     //sends the json index of languages
     export async function getLanguagesList(res : Response){
-        const index = await import('../../files/json/translation/index.json', {assert: {type: 'json'}});
-        res.json({list: index});
+        const index = await import('../../files/json/translation/index.json');
+        console.log(index)
+        await res.json(index);
     }
 
     //sends the json of the language id selectedLanguage
