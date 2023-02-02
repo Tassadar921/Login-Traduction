@@ -12,7 +12,7 @@ module default {
         multi link friends -> User;
     }
 
-    type Account_Creation {
+    type User_Creation {
         required property token -> str;
         required property username -> str;
         required property email -> str;
