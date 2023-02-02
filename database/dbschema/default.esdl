@@ -11,4 +11,16 @@ module default {
         link permission -> Permission;
         multi link friends -> User;
     }
+
+    type accountCreation {
+        required property token -> str;
+        required property username -> str;
+        required property email -> str;
+        required property password -> str;
+    }
+
+    type passwordReset {
+        required property token -> str;
+        required property email -> str;
+    }
 }
