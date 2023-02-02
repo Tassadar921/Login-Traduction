@@ -10,8 +10,8 @@ export module languages{
 
     //sends the json of the language id selectedLanguage
     export async function getDictionary (language : string, res : Response) {
-        const translation = await import('../../files/json/translation/' + language + '.json', {assert: {type: 'json'}})
-        await res.json({translation});
+        const translation = await import('../src/files/json/translation/' + language + '.json', {assert: {type: 'json'}})
+        await res.json(translation.default);
         return;
     }
 }
