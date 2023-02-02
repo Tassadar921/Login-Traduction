@@ -11,22 +11,6 @@ const routes: Routes = [
     redirectTo: 'home',
     pathMatch: 'full'
   },
-  {
-    path: 'connection',
-    loadChildren: () => import('./connection/connection.module').then( m => m.ConnectionPageModule)
-  },
-  {
-    path: 'about',
-    loadChildren: () => import('./about/about.module').then( m => m.AboutPageModule)
-  },  {
-    path: 'conf-account',
-    loadChildren: () => import('./conf-account/conf-account.module').then( m => m.ConfAccountPageModule)
-  },
-  {
-    path: 'reset-password',
-    loadChildren: () => import('./reset-password/reset-password.module').then( m => m.ResetPasswordPageModule)
-  },
-
 ];
 
 @NgModule({
