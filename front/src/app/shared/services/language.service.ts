@@ -28,7 +28,11 @@ export class LanguageService {
     this.languagesList = await this.requestService.getLanguagesList();
     this.dictionary = await this.requestService.getTranslation(await this.cookieService.getCookie('language'));
   }
-  async updateLanguage(languageID: string) {}
+  async updateLanguage(languageID: string) {
+    await this.cookieService.setCookie('language', languageID);
+    this.dictionary = await this.requestService.getTranslation(await this.cookieService.getCookie('language'));
+    console.log(this.dictionary)
+  }
 
 
 

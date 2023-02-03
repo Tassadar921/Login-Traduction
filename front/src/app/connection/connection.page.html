@@ -1,6 +1,7 @@
 <ion-content>
-
+<ion-fab vertical="bottom" horizontal="end">
   <app-language></app-language>
+</ion-fab>
 
   <ion-segment value="true" [id]="currentPlatform==='mobile'?'mobile':'desktop'">
     <ion-segment-button value="true" (click)="hasAnAccount=!hasAnAccount">
