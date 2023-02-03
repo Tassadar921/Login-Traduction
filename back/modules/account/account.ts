@@ -85,44 +85,6 @@ export class Account {
     }
 
 /*
-    //sends the creating account email, containing a unique token, effective for 5 minutes,
-    // temporary saving datas in the signUp queue
-    module.exports.mailCreateAccount = function (username, password, email, language, res) {
-        const dictionnary = require('../files/json/translation/' + language + '.json');
-        const token = generateToken();
-        clearCreatingAccountQueue('', email);
-        creatingAccountQueue.push({token, username, password, email});
-        setTimeout(clearCreatingAccountQueue, 300000, token);
-
-        mailOptions.to = email;
-        mailOptions.subject = dictionnary.mail[0].data;
-        mailOptions.text = dictionnary.mail[1].data.replace('username', username)
-            + urlFront
-            + 'conf-account?token='
-            + token;
-
-        transporter.sendMail(mailOptions, async function (error) {
-            if (error) {
-                res.json({status: 0, message: dictionnary.mail[2].data});
-            } else {
-                res.json({status: 1, message: dictionnary.mail[3].data});
-            }
-        });
-    };
-
-    //asks if token is in the signUp queue
-    module.exports.checkSignUpToken = function (token, language, res) {
-        const dictionnary = require('../files/json/translation/' + language + '.json');
-        for (const line of creatingAccountQueue) {
-            if (line.token === token) {
-                res.json({status: 1, message: dictionnary.mail[4].data});
-                return 1;
-            }
-        }
-        res.json({status: 0, message: dictionnary.mail[5].data});
-        return 0;
-    };
-
     //creates the account with datas in the queue linked to token
     module.exports.createAccount = function (token, language, con, res){
         const dictionnary = require('../files/json/translation/' + language + '.json');
@@ -242,36 +204,4 @@ export class Account {
         }
         return b.join("");
     }
-
-    //clears creatingAccount queue,
-    //single line including token if token or each line including email if email
-    // function clearCreatingAccountQueue(token : string, email='') {
-    //     for (let i = 0; i < creatingAccountQueue.length; i++) {
-    //         if(!email) {
-    //             if (creatingAccountQueue[i].token === token) {
-    //                 creatingAccountQueue.splice(i, 1);
-    //             }
-    //         }else{
-    //             if (creatingAccountQueue[i].email === email) {
-    //                 creatingAccountQueue.splice(i, 1);
-    //             }
-    //         }
-    //     }
-    // }
-
-    //clears resetPassword queue,
-    //single line including token if token or each line including email if email
-    // function clearResetPasswordQueue(token, email='') {
-    //     for (let i = 0; i < resetPasswordQueue.length; i++) {
-    //         if(!email) {
-    //             if (resetPasswordQueue[i].token === token) {
-    //                 resetPasswordQueue.splice(i, 1);
-    //             }
-    //         }else{
-    //             if (resetPasswordQueue[i].email === email) {
-    //                 resetPasswordQueue.splice(i, 1);
-    //             }
-    //         }
-    //     }
-    // }
 }
