@@ -20,8 +20,7 @@ export class LanguageComponent implements OnInit {
 
   async ngOnInit() {
     await this.languageService.init();
-    console.log(this.languageService.languagesList[1]);
-    console.log(Object(this.languageService.dictionary).header);
+    console.log(this.languageService.dictionary);
   }
 
 }
