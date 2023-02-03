@@ -9,7 +9,7 @@
         <img
           class="flag"
           [id]="languageService.dictionary?languageService.dictionary.header.tag===line.id?'selected':'':''"
-          [src]="apiURL + '/src/files/img/flags/png/'+line.id+'.png'"
+          [src]="apiURL + '/files/img/flags/png/'+line.id+'.png'"
           title="{{line.name}}"
           alt="{{line.name}}"
           (click)="languageService.updateLanguage(line.id)">

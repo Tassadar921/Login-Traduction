@@ -4,7 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "esbuild server.ts --platform=node --bundle --outfile=compil/out.js",
+    "deleteFilesfolder": "run-script-os",
+    "deleteFilesfolder:win32": "if exist compil rmdir compil /q /s",
+    "deleteFilesfolder:linux": "rm -rf compil",
+    "copyFilesFolder": "npm run deleteFilesfolder && run-script-os",
+    "copyFilesFolder:win32": "xcopy /E files compil\\files\\",
+    "copyFilesFolder:linux": "cp -a /files/. /compil/files/",
+    "build": "npm run copyFilesFolder && esbuild server.ts --platform=node --bundle --outfile=compil/out.js",
     "start": "npm run build && node compil/out.js"
   },
   "author": "",
@@ -22,6 +28,7 @@
     "node-fetch": "^3.3.0",
     "nodemailer": "^6.9.1",
     "nodemon": "^2.0.19",
+    "run-script-os": "^1.1.6",
     "typescript": "^4.9.5"
   },
   "devDependencies": {
