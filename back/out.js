@@ -1,3 +1,4 @@
+"use strict";
 var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -22328,61 +22329,88 @@ var require_main = __commonJS({
   }
 });
 
-// src/files/json/translation/index.json
-var require_translation = __commonJS({
-  "src/files/json/translation/index.json"(exports, module2) {
-    module2.exports = {
-      data: [
-        {
-          id: "fr",
-          name: "Fran\xE7ais"
-        },
-        {
-          id: "uk",
-          name: "Anglo-English"
-        }
-      ]
-    };
-  }
-});
-
-// src/server.ts
+// server.ts
 var import_express = __toESM(require_express2());
 var import_body_parser = __toESM(require_body_parser());
 var import_cors = __toESM(require_lib3());
 var dotenv = __toESM(require_main());
 
-// src/modules/languages/languages.ts
+// files/json/translation/languagesList.json
+var languagesList_default = {
+  data: [
+    {
+      id: "fr",
+      name: "Fran\xE7ais"
+    },
+    {
+      id: "uk",
+      name: "Anglo-English"
+    }
+  ]
+};
+
+// modules/languages/languages.ts
 var languages;
 ((languages2) => {
   async function getLanguagesList(res) {
-    const index = await Promise.resolve().then(() => __toESM(require_translation()));
-    res.json({ list: index });
+    console.log(languagesList_default);
+    await res.json(languagesList_default.data);
+    return;
   }
   languages2.getLanguagesList = getLanguagesList;
-  async function getLanguagesOf(language, res) {
-    const translation = await import("../../files/json/translation/" + language + ".json", { assert: { type: "json" } });
-    res.json({ list: translation });
+  async function getDictionary(language, res) {
+    const translation = await import("./src/files/json/translation/" + language + ".json", { assert: { type: "json" } });
+    await res.json(translation.default);
+    return;
   }
-  languages2.getLanguagesOf = getLanguagesOf;
+  languages2.getDictionary = getDictionary;
 })(languages || (languages = {}));
 
-// src/modules/languages/languagesRouting.ts
+// modules/languages/languagesRouting.ts
 var languagesRouting;
 ((languagesRouting2) => {
   function init(app2) {
-    app2.get("/languages/list", function(req, res) {
-      languages.getLanguagesList(res);
+    app2.get("/languages/list", async function(req, res) {
+      await languages.getLanguagesList(res);
     });
-    app2.get("/languages/:language", function(req, res) {
-      languages.getLanguagesOf(req.params.language, res);
+    app2.get("/languages/:language", async function(req, res) {
+      await languages.getDictionary(req.params.language, res);
     });
     console.log("Languages routing initialized");
+    return;
   }
   languagesRouting2.init = init;
 })(languagesRouting || (languagesRouting = {}));
+var languagesRouting_default = languagesRouting;
 
-// src/server.ts
+// modules/account/accountRouting.ts
+var accountRouting;
+((accountRouting2) => {
+  function init(app2) {
+    app2.post("/userExists", function(req, res) {
+    });
+    app2.post("/mailCreateAccount", function(req, res) {
+    });
+    app2.post("/checkSignUpToken", function(req, res) {
+    });
+    app2.post("/createAccount", function(req, res) {
+    });
+    app2.post("/signIn", function(req, res) {
+    });
+    app2.post("/mailResetPassword", function(req, res) {
+    });
+    app2.post("/checkResetPasswordToken", function(req, res) {
+    });
+    app2.post("/resetPassword", function(req, res) {
+    });
+    console.log("Account routing initialized");
+    return;
+  }
+  accountRouting2.init = init;
+})(accountRouting || (accountRouting = {}));
+var accountRouting_default = accountRouting;
+
+// server.ts
 dotenv.config();
 var app = (0, import_express.default)();
 app.use(import_body_parser.default.json());
@@ -22391,7 +22419,8 @@ app.use("/files", import_express.default.static("files"));
 if (app.get("env") === "production") {
   app.set("trust proxy", 1);
 }
-languagesRouting.init(app);
+accountRouting_default.init(app);
+languagesRouting_default.init(app);
 if (app.listen(process.env.PORT || 8080)) {
   console.log("=========== SERVER STARTED FOR HTTP RQ ===========");
   console.log("    =============   PORT: 8080   =============");

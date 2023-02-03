@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {environment} from '../../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {lastValueFrom} from 'rxjs';
-import {Language} from '../models/Language.model';
 import {GetResult} from '@capacitor/preferences';
 
 @Injectable({
@@ -13,8 +12,8 @@ export class RequestService {
     private http: HttpClient
   ) {}
 
-  public async getLanguagesList () : Promise<Array<Language>> {
-    return await lastValueFrom(this.http.get<Array<Language>>(environment.apiUrl + '/languages/list'));
+  public async getLanguagesList () : Promise<Array<any>> {
+    return await lastValueFrom(this.http.get<Array<any>>(environment.apiUrl + '/languages/list'));
   }
 
   //asks for the json of the language id selectedLanguage

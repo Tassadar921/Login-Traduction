@@ -35,22 +35,21 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-exports.__esModule = true;
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.languages = void 0;
+// @ts-ignore
+var languagesList_json_1 = require("../../files/json/translation/languagesList.json");
 var languages;
 (function (languages) {
     //sends the json index of languages
     function getLanguagesList(res) {
         return __awaiter(this, void 0, void 0, function () {
-            var index;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, Promise.resolve().then(function () { return require('../../files/json/translation/index.json'); })];
+                    case 0:
+                        console.log(languagesList_json_1.default);
+                        return [4 /*yield*/, res.json(languagesList_json_1.default.data)];
                     case 1:
-                        index = _a.sent();
-                        console.log(index);
-                        return [4 /*yield*/, res.json(index)];
-                    case 2:
                         _a.sent();
                         return [2 /*return*/];
                 }
@@ -59,20 +58,22 @@ var languages;
     }
     languages.getLanguagesList = getLanguagesList;
     //sends the json of the language id selectedLanguage
-    function getLanguagesOf(language, res) {
+    function getDictionary(language, res) {
         return __awaiter(this, void 0, void 0, function () {
             var translation;
             return __generator(this, function (_a) {
                 var _b;
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, (_b = '../../files/json/translation/' + language + '.json', Promise.resolve().then(function () { return require(_b); }))];
+                    case 0: return [4 /*yield*/, (_b = './src/files/json/translation/' + language + '.json', Promise.resolve().then(function () { return require(_b); }))];
                     case 1:
                         translation = _a.sent();
-                        res.json({ list: translation });
+                        return [4 /*yield*/, res.json(translation.default)];
+                    case 2:
+                        _a.sent();
                         return [2 /*return*/];
                 }
             });
         });
     }
-    languages.getLanguagesOf = getLanguagesOf;
+    languages.getDictionary = getDictionary;
 })(languages = exports.languages || (exports.languages = {}));

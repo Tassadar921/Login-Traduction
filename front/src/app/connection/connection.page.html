@@ -1,5 +1,7 @@
 <ion-content>
 
+  <app-language></app-language>
+
   <ion-segment value="true" [id]="currentPlatform==='mobile'?'mobile':'desktop'">
     <ion-segment-button value="true" (click)="hasAnAccount=!hasAnAccount">
       <ion-label>Sign in</ion-label>

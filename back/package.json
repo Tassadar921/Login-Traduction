@@ -1,11 +1,11 @@
 {
-  "name": "test",
+  "name": "backend",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "esbuild ./src/server.ts --platform=node --bundle --outfile=dist/out.js",
-    "start": "npm run build && node dist/out.js"
+    "build": "esbuild server.ts --platform=node --bundle --outfile=out.js",
+    "start": "npm run build && node out.js"
   },
   "author": "",
   "license": "ISC",

@@ -9,14 +9,16 @@ import { ConnectionPageRoutingModule } from './connection-routing.module';
 import { ConnectionPage } from './connection.page';
 import {SignInComponent} from './sign-in/sign-in.component';
 import {SignUpComponent} from './sign-up/sign-up.component';
+import {LanguageModule} from '../shared/components/language/language.module';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FormsModule,
-    IonicModule,
-    ConnectionPageRoutingModule
-  ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        IonicModule,
+        ConnectionPageRoutingModule,
+        LanguageModule
+    ],
   declarations: [ConnectionPage, SignInComponent, SignUpComponent]
 })
 export class ConnectionPageModule {}

@@ -10,14 +10,18 @@ import {ModalController} from '@ionic/angular';
 })
 export class LanguageComponent implements OnInit {
 
-  public apiURL: string | undefined;
+  public apiURL: string;
   constructor(
     public languageService: LanguageService,
     public modalController: ModalController
-  ) { }
-
-  ngOnInit() {
+  ) {
     this.apiURL = environment.apiUrl;
+  }
+
+  async ngOnInit() {
+    await this.languageService.init();
+    console.log(this.languageService.languagesList[1]);
+    console.log(Object(this.languageService.dictionary).header);
   }
 
 }
