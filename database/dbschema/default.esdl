@@ -13,7 +13,7 @@ module default {
     }
 
     type User_Creation {
-        required property token -> str;
+        required property urlToken -> str;
         required property username -> str;
         required property email -> str;
         required property password -> str;

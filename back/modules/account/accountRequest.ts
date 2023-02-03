@@ -14,13 +14,52 @@ export module accountRequest {
         });
     }
 
-    export async function checkToken(token : string, client : Client) {
+    export async function checkUrlTokenByUrlToken(urlToken : string, client : Client) {
         return new Promise<any[]>((resolve) => {
             const result = client.query(`
-                SELECT User {
+                SELECT User_Creation {
                     username,
                 }
-                FILTER .token = ${token}
+                FILTER .urlToken = ${urlToken}
+            `);
+            resolve(result);
+        });
+    }
+
+    export async function checkUrlTokenByEmail(email : string, client : Client) {
+        return new Promise<any[]>((resolve) => {
+            const result = client.query(`
+                SELECT User_Creation {
+                    urlToken,
+                }
+                FILTER .email = ${email}
+            `);
+            resolve(result);
+        });
+    }
+
+    export async function createUrlToken(urlToken : string, username : string, email : string, password : string, client : Client) {
+        return new Promise<any[]>((resolve) => {
+            const result = client.query(`
+                insert User_Creation {
+                    urlToken := ${urlToken};
+                    username := ${username};
+                    email := ${email};
+                    password := ${password};
+                }
+            `);
+            resolve(result);
+        });
+    }
+
+    export async function deleteUrlToken(urlToken : string, client : Client) {
+        return new Promise<any[]>((resolve) => {
+            const result = client.query(`
+                delete User_Creation
+                    filter .urlToken = ${urlToken};
+                insert User_Creation {
+                    urlToken := ${urlToken};
+                }
             `);
             resolve(result);
         });
