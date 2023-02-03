@@ -9,9 +9,9 @@
     "deleteFilesfolder:linux": "rm -rf compil",
     "copyFilesFolder": "npm run deleteFilesfolder && run-script-os",
     "copyFilesFolder:win32": "xcopy /E files compil\\files\\",
-    "copyFilesFolder:linux": "cp -a /files/. /compil/files/",
-    "build": "npm run copyFilesFolder && esbuild server.ts --platform=node --bundle --outfile=compil/out.js",
-    "start": "npm run build && node compil/out.js"
+    "copyFilesFolder:linux": "mkdir ./compil/files/ -p && cp -a ./files/. ./compil/files/",
+    "build": "npm run copyFilesFolder && esbuild server.ts --platform=node --bundle --outdir=compil/ '--external:/files/*'",
+    "start": "npm run build && node compil/server.js"
   },
   "author": "",
   "license": "ISC",

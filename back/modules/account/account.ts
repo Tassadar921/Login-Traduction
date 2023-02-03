@@ -2,71 +2,71 @@ import * as nodemailer from 'nodemailer';
 import * as crypto from 'crypto';
 import { Client, createClient } from 'edgedb';
 import { accountRequest } from './accountRequest';
-// import SMTPTransport from 'nodemailer/lib/smtp-transport';
+import SMTPTransport from 'nodemailer/lib/smtp-transport';
 
 export class Account {
-    // private client : Client;
-    // private transporter : nodemailer.Transporter<SMTPTransport.SentMessageInfo>;
-    // private mailOptions: { from: string | undefined;to: string;subject: string;text: string; }
-    // private tokenLength = 64;
-    //
-    // constructor() {
-    //     this.client = createClient({});
-    //
-    //     //init of the mail sender
-    //     this.transporter = nodemailer.createTransport({
-    //         service: process.env.EMAIL_SERVICE,
-    //         auth: {
-    //             user: process.env.EMAIL,
-    //             pass: process.env.EMAIL_PASSWORD
-    //         }
-    //     });
-    //
-    //     //mail options of subject, text and receiver
-    //     this.mailOptions = {
-    //         from: process.env.EMAIL,
-    //         to: '',
-    //         subject: '',
-    //         text: ''
-    //     };
-    // }
-    //
-    // //asks if an account containing username or email is in db, priority to username
-    // public async userExists(username, email, res) {
-    //     const result : any[] = await accountRequest.checkUser(username, email, this.client);
-    //     if (result.length > 0) {
-    //         res.json({status : 0});
-    //     }
-    //     res.json({status: 1});
-    // };
-    //
-    // public async mailCreateAccount(username, password, email, language, res) {
-    //     const token = this.generateToken(this.tokenLength);
-    //     const result : any[] = await accountRequest.checkToken(username, email, this.client);
-    //     if (result.length > 0) {
-    //         res.json({status: 0, message: 'User already exists'});
-    //     }
-    //
-    //
-    //     this.clearCreatingAccountQueue('', email);
-    //     creatingAccountQueue.push({token, username, password, email});
-    //     setTimeout(this.clearCreatingAccountQueue, 300000, token);
-    //
-    //     this.mailOptions.to = email;
-    //     this.mailOptions.subject = dictionnary.mail[0].data;
-    //     this.mailOptions.text = dictionnary.mail[1].data.replace('username', username)
-    //         + urlFront
-    //         + 'conf-account?token='
-    //         + token;
-    //
-    //     this.transporter.sendMail(this.mailOptions, async function (error) {
-    //         if (error) {
-    //             res.json({status: 0, message: dictionnary.mail[2].data});
-    //         } else {
-    //             res.json({status: 1, message: dictionnary.mail[3].data});
-    //         }
-    //     });
-    // };
+    private client : Client;
+    private transporter : nodemailer.Transporter<SMTPTransport.SentMessageInfo>;
+    private mailOptions: { from: string | undefined;to: string;subject: string;text: string; }
+    private tokenLength = 64;
+    
+    constructor() {
+        this.client = createClient({});
+    
+        //init of the mail sender
+        this.transporter = nodemailer.createTransport({
+            service: process.env.EMAIL_SERVICE,
+            auth: {
+                user: process.env.EMAIL,
+                pass: process.env.EMAIL_PASSWORD
+            }
+        });
+    
+        //mail options of subject, text and receiver
+        this.mailOptions = {
+            from: process.env.EMAIL,
+            to: '',
+            subject: '',
+            text: ''
+        };
+    }
+    
+    //asks if an account containing username or email is in db, priority to username
+    public async userExists(username, email, res) {
+        const result : any[] = await accountRequest.checkUser(username, email, this.client);
+        if (result.length > 0) {
+            res.json({status : 0});
+        }
+        res.json({status: 1});
+    };
+    
+    public async mailCreateAccount(username, password, email, language, res) {
+        const token = this.generateToken(this.tokenLength);
+        const result : any[] = await accountRequest.checkToken(username, email, this.client);
+        if (result.length > 0) {
+            res.json({status: 0, message: 'User already exists'});
+        }
+    
+    
+        this.clearCreatingAccountQueue('', email);
+        creatingAccountQueue.push({token, username, password, email});
+        setTimeout(this.clearCreatingAccountQueue, 300000, token);
+    
+        this.mailOptions.to = email;
+        this.mailOptions.subject = dictionnary.mail[0].data;
+        this.mailOptions.text = dictionnary.mail[1].data.replace('username', username)
+            + urlFront
+            + 'conf-account?token='
+            + token;
+    
+        this.transporter.sendMail(this.mailOptions, async function (error) {
+            if (error) {
+                res.json({status: 0, message: dictionnary.mail[2].data});
+            } else {
+                res.json({status: 1, message: dictionnary.mail[3].data});
+            }
+        });
+    };
 /*
 
     //sends the creating account email, containing a unique token, effective for 5 minutes,
