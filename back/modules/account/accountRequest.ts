@@ -1,17 +1,82 @@
 import { Client } from "edgedb";
 
 export module accountRequest {
-    export async function checkUser(username : string, email : string, client : Client) {
+    export async function checkUserByEmail(email : string, password : string, client : Client) {
         return new Promise<any[]>((resolve) => {
             const result = client.query(`
                 SELECT User {
                     username,
                     email,
                 }
-                FILTER .username = ${username} OR .email = ${email}
+                FILTER .email = ${email} AND .password = ${password}
             `);
             resolve(result);
         });
+    }
+
+    export async function checkUserByUsername(username : string, password : string, client : Client) {
+        return new Promise<any[]>((resolve) => {
+            const result = client.query(`
+                SELECT User {
+                    username,
+                    email,
+                }
+                FILTER .username = ${username} AND .password = ${password}
+            `);
+            resolve(result);
+        });
+    }
+
+    export async function checkUserByToken(username : string, token : string, client : Client) {
+        return new Promise<any[]>((resolve) => {
+            const result = client.query(`
+                SELECT User {
+                    username,
+                }
+                FILTER .token = ${token} AND .username = ${username}
+            `);
+            resolve(result);
+        });
+    }
+
+    export async function checkToken(token : string, client : Client) {
+        return new Promise<any[]>((resolve) => {
+            const result = client.query(`
+                SELECT User {
+                    password,
+                }
+                FILTER .token = ${token}
+            `);
+            resolve(result);
+        });
+    }
+
+    export async function updateUserToken(username : string, token : string, client : Client) {
+        return new Promise<any[]>((resolve) => {
+            const result = client.query(`
+                UPDATE User
+                FILTER .username = ${username}
+                SET {
+                    token := ${token},
+                }
+            `);
+            resolve(result);
+        });
+    }
+
+    export async function createUser(username : string, email : string, password : string, token : string, client : Client) {
+        return new Promise<any[]>((resolve) => {
+            const result = client.query(`
+                insert User {
+                    username := ${username};
+                    email := ${email};
+                    password := ${password};
+                    token := ${token};
+                }
+            `);
+            resolve(result);
+        });
+    
     }
 
     export async function checkUrlTokenByUrlToken(urlToken : string, client : Client) {
@@ -19,6 +84,8 @@ export module accountRequest {
             const result = client.query(`
                 SELECT User_Creation {
                     username,
+                    email,
+                    password
                 }
                 FILTER .urlToken = ${urlToken}
             `);
@@ -31,6 +98,8 @@ export module accountRequest {
             const result = client.query(`
                 SELECT User_Creation {
                     urlToken,
+                    username,
+                    password
                 }
                 FILTER .email = ${email}
             `);

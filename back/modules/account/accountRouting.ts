@@ -5,9 +5,12 @@ module accountRouting {
     export function init(app : any): void {
         const account = new Account();
 
+        //------------------------------------------A SUPPRIMER------------------------------------------
         app.post('/userExists', function (req : Request, res : Response) {
-            account.userExists(req.body.username, req.body.email, res);
+            //account.userExists(req.body.username, req.body.email, res);
         });
+        //-----------------------------------------------------------------------------------------------
+        
         app.post('/mailCreateAccount', function (req : Request, res : Response) {
             
         });
