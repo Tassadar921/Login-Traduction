@@ -1,6 +1,18 @@
 import { Client } from "edgedb";
 
 export module accountRequest {
+    export async function checkUser(username : string, email : string, client : Client) {
+        return new Promise<any[]>((resolve) => {
+            const result = client.query(`
+                SELECT User {
+                    username,
+                }
+                FILTER .email = ${email} OR .password = ${username}
+            `);
+            resolve(result);
+        });
+    }
+
     export async function checkUserByEmail(email : string, password : string, client : Client) {
         return new Promise<any[]>((resolve) => {
             const result = client.query(`

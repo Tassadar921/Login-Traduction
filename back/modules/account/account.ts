@@ -48,21 +48,27 @@ export class Account {
     */
     
     public async mailCreateUrlToken(username : string, password : string, email : string, language : string, res : Response) {
-        let result0 : any[] = await accountRequest.checkUrlTokenByEmail(email, this.client);
+        const result0 : any[] = await accountRequest.checkUrlTokenByEmail(email, this.client);
 
-        switch(result0.length) {
+        if (result0.length > 0) {
+            res.json({status: 0});
+        }
+
+        let result1 : any[] = await accountRequest.checkUrlTokenByEmail(email, this.client);
+
+        switch(result1.length) {
             case 0:
                 break;
             case 1:
-                await accountRequest.deleteUrlToken(result0[0].urlToken, this.client);
+                await accountRequest.deleteUrlToken(result1[0].urlToken, this.client);
             break;
         }
         
         let urlToken = this.generateToken(this.urlTokenLength);
-        let result1 : any[] = await accountRequest.checkUrlTokenByUrlToken(urlToken, this.client);
-        while (result1.length > 0) {
+        let result2 : any[] = await accountRequest.checkUrlTokenByUrlToken(urlToken, this.client);
+        while (result2.length > 0) {
             urlToken = this.generateToken(this.urlTokenLength);
-            result1 = await accountRequest.checkUrlTokenByUrlToken(urlToken, this.client);
+            result2 = await accountRequest.checkUrlTokenByUrlToken(urlToken, this.client);
         }
 
         await accountRequest.createUrlToken(urlToken, username, email, password, this.client);
@@ -82,9 +88,9 @@ export class Account {
 
         this.transporter.sendMail(this.mailOptions, async function (error) {
             if (error) {
-                res.json({status: 0, message: languageFile.mail[2].data});
+                res.json({status: -1});
             } else {
-                res.json({status: 1, message: languageFile.mail[3].data});
+                res.json({status: 1});
             }
         });
     };
@@ -112,7 +118,7 @@ export class Account {
             result = await accountRequest.checkUserByUsername(identifier, password, this.client);
         }
         else {
-            res.json({status: 0});
+            res.json({status: -1});
         }
 
         if (result.length > 0) {
