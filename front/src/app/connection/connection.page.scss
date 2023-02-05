@@ -1,4 +1,30 @@
-#mobile{
+#ionSegmentMobile{
   position: absolute;
   bottom:0;
+}
+
+ion-card{
+  border-radius:10%;
+}
+
+#desktopContent{
+  margin: 10% auto auto;
+  width:50%;
+}
+
+#mobileContent{
+  margin: 25% auto auto;
+}
+
+ion-item{
+  text-align:center;
+}
+
+#submitButton{
+  margin: 10% auto auto;
+  width: 50%;
+}
+
+#content ion-item {
+  font-size: 1.5em;
 }

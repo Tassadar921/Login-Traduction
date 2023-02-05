@@ -1,14 +1,21 @@
 import { Component, OnInit } from '@angular/core';
+import {DevicePlatformService} from '../../shared/services/device-platform.service';
 
 @Component({
   selector: 'app-sign-in',
   templateUrl: './sign-in.component.html',
-  styleUrls: ['./sign-in.component.scss'],
+  styleUrls: ['../connection.page.scss'],
 })
 export class SignInComponent implements OnInit {
 
-  constructor() { }
+  public showPassword = false;
+  constructor(
+      public devicePlatformService: DevicePlatformService,
+  ) { }
 
   ngOnInit() {}
 
+  public signIn() {
+
+  }
 }

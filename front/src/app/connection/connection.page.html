@@ -1,13 +1,14 @@
 <ion-content>
+  <app-moon-background></app-moon-background>
 <ion-fab vertical="bottom" horizontal="end">
   <app-language></app-language>
 </ion-fab>
 
-  <ion-segment value="true" [id]="currentPlatform==='mobile'?'mobile':'desktop'">
-    <ion-segment-button value="true" (click)="hasAnAccount=!hasAnAccount">
+  <ion-segment value="true" [id]="devicePlatformService.currentPlatform==='mobile'?'ionSegmentMobile':'ionSegmentDesktop'">
+    <ion-segment-button value="true" (click)="hasAnAccount = true">
       <ion-label>Sign in</ion-label>
     </ion-segment-button>
-    <ion-segment-button value="false" (click)="hasAnAccount=!hasAnAccount">
+    <ion-segment-button value="false" (click)="hasAnAccount = false">
       <ion-label>Sign up</ion-label>
     </ion-segment-button>
   </ion-segment>

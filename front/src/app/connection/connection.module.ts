@@ -10,15 +10,17 @@ import { ConnectionPage } from './connection.page';
 import {SignInComponent} from './sign-in/sign-in.component';
 import {SignUpComponent} from './sign-up/sign-up.component';
 import {LanguageModule} from '../shared/components/language/language.module';
+import {MoonBackgroundModule} from '../shared/components/moon-background/moon-background.module';
 
 @NgModule({
-    imports: [
-        CommonModule,
-        FormsModule,
-        IonicModule,
-        ConnectionPageRoutingModule,
-        LanguageModule
-    ],
+  imports: [
+    CommonModule,
+    FormsModule,
+    IonicModule,
+    ConnectionPageRoutingModule,
+    LanguageModule,
+    MoonBackgroundModule
+  ],
   declarations: [ConnectionPage, SignInComponent, SignUpComponent]
 })
 export class ConnectionPageModule {}

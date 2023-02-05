@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Platform} from '@ionic/angular';
+import {DevicePlatformService} from '../shared/services/device-platform.service';
 
 @Component({
   selector: 'app-connection',
@@ -9,20 +9,11 @@ import {Platform} from '@ionic/angular';
 export class ConnectionPage implements OnInit {
 
   public hasAnAccount: boolean = true;
-  public currentPlatform: string | undefined;
   constructor(
-    private platform: Platform
-  ) { }
+    public devicePlatformService: DevicePlatformService
+  ) {}
 
   ngOnInit() {
-    this.updateCurrentPlatform();
-  }
-
-  updateCurrentPlatform() {
-    if(this.platform.platforms().includes('mobile')){
-      this.currentPlatform = 'mobile';
-    }else{
-      this.currentPlatform = 'desktop';
-    }
+    // const trail = new Trail();
   }
 }
