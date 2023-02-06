@@ -9,12 +9,8 @@ import {environment} from '../../../../environments/environment';
 export class MoonBackgroundComponent implements OnInit {
 
   public apiURL = environment.apiUrl;
-  public windowWidth = window.innerWidth + 1000;
-  public windowHeight = window.innerHeight;
   constructor() {}
 
-  ngOnInit() {
-    console.log('windowWidth', this.windowWidth)
-  }
+  ngOnInit() {}
 
 }
