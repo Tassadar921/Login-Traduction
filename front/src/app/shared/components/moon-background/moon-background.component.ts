@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {environment} from '../../../../environments/environment';
 
 @Component({
   selector: 'app-moon-background',
@@ -7,8 +8,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MoonBackgroundComponent implements OnInit {
 
-  constructor() { }
+  public apiURL = environment.apiUrl;
+  public windowWidth = window.innerWidth + 1000;
+  public windowHeight = window.innerHeight;
+  constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log('windowWidth', this.windowWidth)
+  }
 
 }
