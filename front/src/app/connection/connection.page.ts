@@ -13,7 +13,5 @@ export class ConnectionPage implements OnInit {
     public devicePlatformService: DevicePlatformService
   ) {}
 
-  ngOnInit() {
-    // const trail = new Trail();
-  }
+  ngOnInit() {}
 }

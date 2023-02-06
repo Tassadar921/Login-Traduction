@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {DevicePlatformService} from '../../shared/services/device-platform.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -7,7 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SignUpComponent implements OnInit {
 
-  constructor() { }
+  public showPassword = false;
+  public showConfirmPassword = false;
+  constructor(
+    public devicePlatformService: DevicePlatformService,
+  ) {}
 
   ngOnInit() {}
 

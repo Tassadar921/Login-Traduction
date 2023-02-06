@@ -1,20 +1,65 @@
-<ion-grid>
+<ion-grid id="content">
   <ion-row>
     <ion-col>
-      <ion-card>
-        <ion-card-header>
-          <ion-card-title>Sign in</ion-card-title>
-        </ion-card-header>
+      <ion-card [id]="devicePlatformService.currentPlatform==='mobile'?'mobileContent':'desktopContent'">
+        <ion-row>
+          <ion-col>
+            <ion-card-header>
+              <ion-card-title>Sign in</ion-card-title>
+            </ion-card-header>
+          </ion-col>
+        </ion-row>
         <ion-card-content>
-          <ion-item>
-            <ion-label position="floating">Email or username</ion-label>
-            <ion-input></ion-input>
-          </ion-item>
-          <ion-item>
-            <ion-label position="floating">Password</ion-label>
-            <ion-input type="password"></ion-input>
-          </ion-item>
-          <ion-button expand="block" id="submitButton" shape="round">Sign in</ion-button>
+          <ion-row>
+            <ion-col>
+              <ion-item>
+                <ion-label position="floating">Email</ion-label>
+                <ion-input placeholder="Email"></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-item>
+                <ion-label position="floating">Username</ion-label>
+                <ion-input placeholder="Username"></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-item>
+                <ion-label position="floating">Password</ion-label>
+                <ion-input placeholder="Password" [type]="showPassword?'text':'password'"></ion-input>
+              </ion-item>
+              <ion-fab style="top:35px; right:0;">
+                <ion-fab-button color="light" size="small" (click)="showPassword = !showPassword">
+                  <ion-icon [name]="showPassword?'eye-off':'eye'"></ion-icon>
+                </ion-fab-button>
+              </ion-fab>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-item>
+                <ion-label position="floating">Confirm password</ion-label>
+                <ion-input placeholder="Confirm password" [type]="showConfirmPassword?'text':'password'"></ion-input>
+              </ion-item>
+              <ion-fab style="top:35px; right:0;">
+                <ion-fab-button color="light" size="small" (click)="showConfirmPassword = !showConfirmPassword">
+                  <ion-icon [name]="showConfirmPassword?'eye-off':'eye'"></ion-icon>
+                </ion-fab-button>
+              </ion-fab>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-button expand="block" id="submitButton" shape="round" color="success" strong="true"
+                          (click)="signUp()">
+                Sign in
+              </ion-button>
+            </ion-col>
+          </ion-row>
         </ion-card-content>
       </ion-card>
     </ion-col>

@@ -20,9 +20,6 @@ export class LanguageComponent implements OnInit {
     this.apiURL = environment.apiUrl;
   }
 
-  async ngOnInit() {
-    await this.languageService.init();
-    console.log(this.languageService.dictionary);
-  }
+  ngOnInit() {}
 
 }

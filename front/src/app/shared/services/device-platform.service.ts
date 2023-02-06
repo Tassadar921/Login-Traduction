@@ -6,11 +6,15 @@ import {Platform} from '@ionic/angular';
 })
 export class DevicePlatformService {
 
-  public currentPlatform: string
+  public currentPlatform: string = 'desktop';
   constructor(
     private platform: Platform
   ) {
-    if(this.platform.platforms().includes('mobile')){
+    this.calculatePlatform();
+  }
+
+  public calculatePlatform() {
+    if(this.platform.platforms().includes('mobile') || window.innerWidth < 600){
       this.currentPlatform = 'mobile';
     }else{
       this.currentPlatform = 'desktop';
