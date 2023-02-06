@@ -1,0 +1,12 @@
+  {
+    "header":
+      {
+        "tag": "uk",
+        "side": "backend",
+        "fullName": "Anglo-English"
+      },
+    "data": {
+      "components": {},
+      "services": {}
+    }
+  }

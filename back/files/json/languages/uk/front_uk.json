@@ -1,0 +1,25 @@
+{
+  "header": {
+    "tag": "uk",
+    "side": "frontend",
+    "fullName": "Anglo-English"
+  },
+  "data": {
+    "components": {},
+    "services": {
+      "inputChecking": {
+        "usernameTooShort": "Username is too short",
+        "usernameTooLong": "Username is too long",
+        "usernameContainsInvalidCharacters": "Username contains invalid characters",
+        "passwordTooShort": "Password is too short",
+        "passwordTooLong": "Password is too long",
+        "passwordMissesUpperCase": "Password misses upper case",
+        "passwordMissesLowerCase": "Password misses lower case",
+        "passwordMissesNumber": "Password misses number",
+        "passwordMissesSpecialCharacter": "Password misses special character",
+        "passwordContainsInvalidCharacters": "Password contains invalid characters",
+        "passwordsDoNotMatch": "Passwords do not match"
+      }
+    }
+  }
+}

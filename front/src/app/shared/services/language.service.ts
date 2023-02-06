@@ -13,7 +13,10 @@ export class LanguageService {
       {
         "tag": "uk"
       },
-    "data": []
+    "data": {
+      "components": {},
+      "services": {}
+    }
   };
 
   constructor(
