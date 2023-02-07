@@ -34,18 +34,7 @@ export class Account {
         this.urlTokenLength = parseInt(process.env.URL_TOKEN_LENGTH!);
         this.tokenLength = parseInt(process.env.TOKEN_LENGTH!);
     }
-
-    /*
-    ------------------------------------------A SUPPRIMER------------------------------------------
-    //asks if an account containing username or email is in db, priority to username
-    public async userExists(username, email, res) {
-        const result : any[] = await accountRequest.checkUser(username, email, this.client);
-        if (result.length > 0) {
-            res.json({status : 0});
-        }
-        res.json({status: 1});
-    };
-    */
+    
     
     public async mailCreateAccountCreateUrlToken(username : string, password : string, email : string, language : string, res : Response) {
         const result0 : any[] = await accountRequest.checkUser(username, email, this.client);
@@ -96,7 +85,7 @@ export class Account {
     };
 
     //creates the account with datas in the queue linked to token
-    public async createUser(urlToken : string, res : Response) {
+    public async createAccount(urlToken : string, res : Response) {
         const result : [{ username : string , email : string, password : string }] | any = await accountRequest.checkCreateAccountUrlTokenByUrlToken(urlToken, this.client);
         if (result.length > 0) {
             await accountRequest.deleteCreateAccountUrlToken(urlToken, this.client);
@@ -147,7 +136,7 @@ export class Account {
         }
     }
 
-    //sends an email containing a unique token to reset the password, effective for 5 minutes
+    //sends an email containing a unique token to reset the password, effective for 10 minutes
     //temporary linking the token and email in the resetPassword queue
     public async mailResetPasswordCreateUrlToken (email : string, language : string, res : Response){
         const result0 : any[] = await accountRequest.checkUser('', email, this.client);
