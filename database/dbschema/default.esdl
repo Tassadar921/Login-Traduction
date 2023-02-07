@@ -20,7 +20,7 @@ module default {
     }
 
     type Password_Reset {
-        required property token -> str;
+        required property urlToken -> str;
         required property email -> str;
     }
 }

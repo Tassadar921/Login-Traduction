@@ -6,8 +6,9 @@ export module accountRequest {
             const result = client.query(`
                 SELECT User {
                     username,
+                    email,
                 }
-                FILTER .email = ${email} OR .password = ${username}
+                FILTER .email = ${email} OR .username = ${username}
             `);
             resolve(result);
         });
@@ -88,10 +89,9 @@ export module accountRequest {
             `);
             resolve(result);
         });
-    
     }
 
-    export async function checkUrlTokenByUrlToken(urlToken : string, client : Client) {
+    export async function checkCreateAccountUrlTokenByUrlToken(urlToken : string, client : Client) {
         return new Promise<any[]>((resolve) => {
             const result = client.query(`
                 SELECT User_Creation {
@@ -105,7 +105,7 @@ export module accountRequest {
         });
     }
 
-    export async function checkUrlTokenByEmail(email : string, client : Client) {
+    export async function checkCreateAccountUrlTokenByEmail(email : string, client : Client) {
         return new Promise<any[]>((resolve) => {
             const result = client.query(`
                 SELECT User_Creation {
@@ -119,7 +119,7 @@ export module accountRequest {
         });
     }
 
-    export async function createUrlToken(urlToken : string, username : string, email : string, password : string, client : Client) {
+    export async function createCreateAccountUrlToken(urlToken : string, username : string, email : string, password : string, client : Client) {
         return new Promise<any[]>((resolve) => {
             const result = client.query(`
                 insert User_Creation {
@@ -133,13 +133,73 @@ export module accountRequest {
         });
     }
 
-    export async function deleteUrlToken(urlToken : string, client : Client) {
+    export async function deleteCreateAccountUrlToken(urlToken : string, client : Client) {
         return new Promise<any[]>((resolve) => {
             const result = client.query(`
                 delete User_Creation
                     filter .urlToken = ${urlToken};
-                insert User_Creation {
+            `);
+            resolve(result);
+        });
+    }
+
+    export async function checkResetPasswordUrlTokenByEmail(email : string, client : Client) {
+        return new Promise<any[]>((resolve) => {
+            const result = client.query(`
+                SELECT Reset_Password {
+                    urlToken,
+                    username,
+                    password
+                }
+                FILTER .email = ${email}
+            `);
+            resolve(result);
+        });
+    }
+    
+    export async function checkResetPasswordUrlTokenByUrlToken(urlToken : string, client : Client) {
+        return new Promise<any[]>((resolve) => {
+            const result = client.query(`
+                SELECT Reset_Password {
+                    username,
+                    email,
+                    password
+                }
+                FILTER .urlToken = ${urlToken}
+            `);
+            resolve(result);
+        });
+    }
+
+    export async function deleteResetPasswordUrlToken(email : string, client : Client) {
+        return new Promise<any[]>((resolve) => {
+            const result = client.query(`
+                delete Reset_Password
+                    filter .email = ${email};
+            `);
+            resolve(result);
+        });
+    }
+
+    export async function createResetPasswordUrlToken(urlToken : string, email : string, client : Client) {
+        return new Promise<any[]>((resolve) => {
+            const result = client.query(`
+                insert Reset_Password {
                     urlToken := ${urlToken};
+                    email := ${email};
+                }
+            `);
+            resolve(result);
+        });   
+    }
+
+    export async function resetPassword(email : string, password : string, client : Client) {
+        return new Promise<any[]>((resolve) => {
+            const result = client.query(`
+                UPDATE User
+                FILTER .email = ${email}
+                SET {
+                    password := ${password},
                 }
             `);
             resolve(result);
