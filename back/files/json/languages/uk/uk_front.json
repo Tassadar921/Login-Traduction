@@ -10,14 +10,14 @@
       "inputChecking": {
         "usernameTooShort": "Username is too short",
         "usernameTooLong": "Username is too long",
-        "usernameContainsInvalidCharacters": "Username contains invalid characters",
+        "usernameContainsInvalidCharacter": "Username contains invalid character",
         "passwordTooShort": "Password is too short",
         "passwordTooLong": "Password is too long",
         "passwordMissesUpperCase": "Password misses upper case",
         "passwordMissesLowerCase": "Password misses lower case",
         "passwordMissesNumber": "Password misses number",
         "passwordMissesSpecialCharacter": "Password misses special character",
-        "passwordContainsInvalidCharacters": "Password contains invalid characters",
+        "passwordContainsInvalidCharacter": "Password contains invalid character",
         "passwordsDoNotMatch": "Passwords do not match"
       }
     }

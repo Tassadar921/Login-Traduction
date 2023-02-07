@@ -15,7 +15,24 @@ export class LanguageService {
       },
     "data": {
       "components": {},
-      "services": {}
+      "services": {
+        "inputChecking": {
+          "usernameTooShort": "Username is too short",
+          "usernameTooLong": "Username is too long",
+          "usernameContainsInvalidCharacter": "Username contains invalid character",
+          "passwordTooShort": "Password is too short",
+          "passwordTooLong": "Password is too long",
+          "passwordContainsInvalidCharacter": "Password contains invalid character",
+          "passwordMissesUpperCase": "Password misses upper case",
+          "passwordMissesLowerCase": "Password misses lower case",
+          "passwordMissesNumber": "Password misses number",
+          "passwordMissesSpecialChar": "Password misses special character",
+          "passwordsDontMatch": "Passwords don't match",
+          "emailTooShort": "Email is too short",
+          "emailTooLong": "Email is too long",
+          "emailMissesAt": "Email misses @",
+        }
+      }
     }
   };
 

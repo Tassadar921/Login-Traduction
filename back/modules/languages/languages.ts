@@ -13,7 +13,7 @@ export class Languages{
     //sends the json of the language id selectedLanguage
     async getDictionary (language : string, res : Response) {
         // @ts-ignore
-        const translation = await import('./files/json/languages/' + language + '.json', {assert: {type: 'json'}});
+        const translation = await import('./files/json/languages/' + language + '/' + language + '_front.json', {assert: {type: 'json'}});
         await res.json(translation.default);
         return;
     }

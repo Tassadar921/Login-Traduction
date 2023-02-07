@@ -8,17 +8,7 @@ export class InputCheckingService {
   public numbers = '0123456789';
   public letters = 'azertyuiopmlkjhgfdsqwxcvbnâûîôäüïëéèêùàç';
   public specialChars = '-_.!$£€@&\\{}[]()/*+';
-
-  public password = '';
-  public outputPassword = '';
-
-  public confPassword = '';
-  public outputConfPassword = '';
-
-  public arePasswordsOK = true;
-
-  public showPassword = false;
-  public showConfPassword = false;
+  private outputPassword = '';
 
   constructor(
     private languageService: LanguageService
@@ -37,7 +27,7 @@ export class InputCheckingService {
         if (!this.numbers.includes(char)
           && !this.letters.includes(char)
           && !this.specialChars.includes(char)) {
-          return this.languageService.dictionary.data.services.inputChecking.usernameContainsInvalidCharacters;
+          return this.languageService.dictionary.data.services.inputChecking.usernameContainsInvalidCharacter;
         }
       }
       return '';
@@ -66,7 +56,7 @@ export class InputCheckingService {
           }
         }
         if (!containsNumbers) {
-          return this.languageService.dictionary.data.services.inputChecking.passwordMissesNumbers;
+          return this.languageService.dictionary.data.services.inputChecking.passwordMissesNumber;
         } else if (!containsSpecialChar) {
           return this.languageService.dictionary.data.services.inputChecking.passwordMissesSpecialChar;
         } else {
@@ -74,7 +64,7 @@ export class InputCheckingService {
             if (!this.numbers.includes(char)
               && !this.letters.includes(char)
               && !this.specialChars.includes(char)) {
-              return this.languageService.dictionary.data.services.inputChecking.passwordContainsInvalidCharacters;
+              return this.languageService.dictionary.data.services.inputChecking.passwordContainsInvalidCharacter;
             }
           }
           return '';
@@ -84,31 +74,15 @@ export class InputCheckingService {
 
     //checks conditions of password inputs, returning id of error messages in dictionary
     //triggers on keyup
-    checkPassword = (password: string, signUp: boolean) => {
-      if (!signUp) {
-        this.outputPassword = Object(this.languageService.dictionary)
-          .connection[this.checkPasswordIntermediary(password)]
-          .data;
-      } else {
-        this.outputConfPassword = Object(this.languageService.dictionary)
-          .connection[this.checkPasswordIntermediary(password)]
-          .data;
-      }
-      this.checkPasswords();
-    };
+    checkPassword = (password: string) => this.checkPasswordIntermediary(password);
 
     //checks if passwords are matching
-    //triggers on keyup
-    checkPasswords = () => {
-      this.arePasswordsOK = this.password === this.confPassword;
-      if (!this.arePasswordsOK) {
-        if (!this.outputPassword && !this.outputConfPassword) {
-          this.outputPassword = Object(this.languageService.dictionary).connection[8].data;
-          this.outputConfPassword = Object(this.languageService.dictionary).connection[8].data;
-        }
+    //triggers on keyup, before checkPassword and only in SignUpComponent
+    checkPasswords = (password: string, confPassword: string) => {
+      if (password !== confPassword) {
+          return this.languageService.dictionary.data.services.inputChecking.passwordsDontMatch;
       } else {
-        this.outputPassword = '';
-        this.outputConfPassword = '';
+        return '';
       }
     };
 
@@ -116,13 +90,13 @@ export class InputCheckingService {
     //triggers on keyup
     checkEmail = (email: string) => {
       if (email.length < 7) {
-        return 0;
+        return this.languageService.dictionary.data.services.inputChecking.emailTooShort;
       } else if (email.length > 100) {
-        return 1;
+        return this.languageService.dictionary.data.services.inputChecking.emailTooLong;
       } else if (!this.containsAt(email)) {
-        return 7;
+        return this.languageService.dictionary.data.services.inputChecking.emailMissesAt;
       } else {
-        return 10;
+        return '';
       }
     };
 
@@ -157,12 +131,8 @@ export class InputCheckingService {
     };
 
     //triggers on keyup in email input of signUp
-    updateEmail = (email: string) => Object(this.languageService.dictionary)
-      .connection[this.checkEmail(email)]
-      .data;
+    updateEmail = (email: string) => this.checkEmail(email);
 
     //triggers on keyup in username input of signUp
-    updateUsername = (username: string) => Object(this.languageService.dictionary)
-      .connection[this.checkUsername(username)]
-      .data;
+    updateUsername = (username: string) => this.checkUsername(username);
   }
