@@ -10,15 +10,17 @@
   <ion-segment value="true" color="warning"
                [id]="devicePlatformService.currentPlatform==='mobile'?'ionSegmentMobile':'ionSegmentDesktop'">
     <ion-segment-button value="true" (click)="toggle()">
-      <ion-label [id]="signIn?'selected':''">Sign in</ion-label>
+      <ion-label [id]="displayedComponent==='signIn'?'selected':''">Sign in</ion-label>
     </ion-segment-button>
     <ion-segment-button value="false" (click)="toggle()">
-      <ion-label [id]="signUp?'selected':''">Sign up</ion-label>
+      <ion-label [id]="displayedComponent==='signUp'?'selected':''">Sign up</ion-label>
     </ion-segment-button>
   </ion-segment>
 </ion-item>
 
-  <app-sign-in [@switchComponent]="displayedComponent" *ngIf="signIn"></app-sign-in>
-  <app-sign-up [@switchComponent]="displayedComponent" *ngIf="signUp"></app-sign-up>
+  <app-sign-in [@switchComponent]="displayedComponent" [hidden]="displayedComponent!=='signIn'"></app-sign-in>
+<!--  <app-sign-in [@switchComponent]="displayedComponent" *ngIf="signIn"></app-sign-in>-->
+  <app-sign-up [@switchComponent]="displayedComponent" [hidden]="displayedComponent!=='signUp'"></app-sign-up>
+<!--  <app-sign-up [@switchComponent]="displayedComponent" *ngIf="!signIn"></app-sign-up>-->
 
 </ion-content>
