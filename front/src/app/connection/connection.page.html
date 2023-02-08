@@ -18,7 +18,7 @@
   </ion-segment>
 </ion-item>
 
-  <app-sign-in [@switchComponent]="displayedComponent" [hidden]="displayedComponent!=='signIn'"></app-sign-in>
-  <app-sign-up [@switchComponent]="displayedComponent" [hidden]="displayedComponent!=='signUp'"></app-sign-up>
+  <app-sign-in [@signIn]="signInAnimationState"></app-sign-in>
+  <app-sign-up [@signIn]="signUpAnimationState" [hidden]="blockDisplaySignUpOnLoading"></app-sign-up>
 
 </ion-content>

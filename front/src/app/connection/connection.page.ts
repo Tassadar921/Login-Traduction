@@ -7,31 +7,50 @@ import {animate, state, style, transition, trigger} from '@angular/animations';
   templateUrl: './connection.page.html',
   styleUrls: ['./connection.page.scss'],
   animations: [
-    trigger('switchComponent', [
-      transition('signIn => *, signUp => *', [
-        style({ opacity: 0}),
-        animate('250ms 250ms', style({ opacity: 1}))
-      ]),
-      transition('* => signIn, * => signUp', [
-        animate('250ms', style({ opacity: 0}))
-      ]),
+    trigger('signIn', [
+      state('true',
+        style({ opacity: 1})
+      ),
+      state('false',
+        style({ opacity: 0, display: 'none'}),
+      ),
+      transition('* => *', animate('250ms 250ms'))
+    ]),
+    trigger('signUp', [
+      state('true',
+        style({ opacity: 1})
+      ),
+      state('false',
+        style({ opacity: 0, display: 'none'}),
+      ),
+      transition('* => *', animate('250ms 250ms'))
     ])
   ]
 })
 export class ConnectionPage implements OnInit {
 
   public displayedComponent: string = 'signIn';
+  public signInAnimationState: string = 'true';
+  public signUpAnimationState: string = 'false';
+  public blockDisplaySignUpOnLoading: boolean = true;
   constructor(
     public devicePlatformService: DevicePlatformService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    setTimeout(() => this.blockDisplaySignUpOnLoading = false, 500);
+  }
 
   toggle() {
-    if(this.displayedComponent === 'signIn') {
-      this.displayedComponent = 'signUp';
-    }else{
-      this.displayedComponent = 'signIn';
-    }
+    this.signInAnimationState === 'true' ? this.signInAnimationState = 'false' : this.signInAnimationState = 'true';
+    this.signUpAnimationState === 'true' ? this.signUpAnimationState = 'false' : this.signUpAnimationState = 'true';
+    setTimeout(() =>
+    {
+      if (this.displayedComponent === 'signIn') {
+        this.displayedComponent = 'signUp';
+      } else {
+        this.displayedComponent = 'signIn';
+      }
+    }, 250);
   }
 }
