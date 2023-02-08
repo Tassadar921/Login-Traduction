@@ -1,21 +1,24 @@
 <ion-content>
+
   <app-moon-background></app-moon-background>
+
   <ion-fab vertical="bottom" horizontal="end">
     <app-language></app-language>
   </ion-fab>
+
 <ion-item>
   <ion-segment value="true" color="warning"
                [id]="devicePlatformService.currentPlatform==='mobile'?'ionSegmentMobile':'ionSegmentDesktop'">
-    <ion-segment-button value="true" (click)="hasAnAccount = true">
+    <ion-segment-button value="true" (click)="toggle()">
       <ion-label [id]="hasAnAccount?'selected':''">Sign in</ion-label>
     </ion-segment-button>
-    <ion-segment-button value="false" (click)="hasAnAccount = false">
+    <ion-segment-button value="false" (click)="toggle()">
       <ion-label [id]="hasAnAccount?'':'selected'">Sign up</ion-label>
     </ion-segment-button>
   </ion-segment>
 </ion-item>
 
-  <app-sign-in *ngIf="hasAnAccount"></app-sign-in>
-  <app-sign-up *ngIf="!hasAnAccount"></app-sign-up>
+  <app-sign-in [@switchComponent]="displayedComponent" *ngIf="signIn"></app-sign-in>
+  <app-sign-up [@switchComponent]="displayedComponent" *ngIf="signUp"></app-sign-up>
 
 </ion-content>
