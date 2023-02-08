@@ -10,10 +10,10 @@
   <ion-segment value="true" color="warning"
                [id]="devicePlatformService.currentPlatform==='mobile'?'ionSegmentMobile':'ionSegmentDesktop'">
     <ion-segment-button value="true" (click)="toggle()">
-      <ion-label [id]="hasAnAccount?'selected':''">Sign in</ion-label>
+      <ion-label [id]="signIn?'selected':''">Sign in</ion-label>
     </ion-segment-button>
     <ion-segment-button value="false" (click)="toggle()">
-      <ion-label [id]="hasAnAccount?'':'selected'">Sign up</ion-label>
+      <ion-label [id]="signUp?'selected':''">Sign up</ion-label>
     </ion-segment-button>
   </ion-segment>
 </ion-item>
