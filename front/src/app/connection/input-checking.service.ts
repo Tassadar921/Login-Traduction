@@ -8,7 +8,6 @@ export class InputCheckingService {
   public numbers = '0123456789';
   public letters = 'azertyuiopmlkjhgfdsqwxcvbnâûîôäüïëéèêùàç';
   public specialChars = '-_.!$£€@&\\{}[]()/*+';
-  private outputPassword = '';
 
   constructor(
     private languageService: LanguageService
@@ -26,7 +25,7 @@ export class InputCheckingService {
       for (const char of username) {
         if (!this.numbers.includes(char)
           && !this.letters.includes(char)
-          && !this.specialChars.includes(char)) {
+          && !this.specialChars.includes(char)){
           return this.languageService.dictionary.data.services.inputChecking.usernameContainsInvalidCharacter;
         }
       }
@@ -36,7 +35,7 @@ export class InputCheckingService {
 
     //hardly checks all password conditions
     //triggered by checkPassword
-    checkPasswordIntermediary (password: string): string {
+    checkPassword (password: string): string {
       if (password.length < 7) {
         return this.languageService.dictionary.data.services.inputChecking.passwordTooShort;
       } else if (password.length > 30) {
@@ -63,6 +62,7 @@ export class InputCheckingService {
           for (const char of password) {
             if (!this.numbers.includes(char)
               && !this.letters.includes(char)
+              && !this.letters.toUpperCase().includes(char)
               && !this.specialChars.includes(char)) {
               return this.languageService.dictionary.data.services.inputChecking.passwordContainsInvalidCharacter;
             }
@@ -71,10 +71,6 @@ export class InputCheckingService {
         }
       }
     };
-
-    //checks conditions of password inputs, returning id of error messages in dictionary
-    //triggers on keyup
-    checkPassword = (password: string) => this.checkPasswordIntermediary(password);
 
     //checks if passwords are matching
     //triggers on keyup, before checkPassword and only in SignUpComponent
@@ -129,10 +125,4 @@ export class InputCheckingService {
       }
       return false;
     };
-
-    //triggers on keyup in email input of signUp
-    updateEmail = (email: string) => this.checkEmail(email);
-
-    //triggers on keyup in username input of signUp
-    updateUsername = (username: string) => this.checkUsername(username);
   }

@@ -13,12 +13,15 @@
         "usernameContainsInvalidCharacter": "Username contains invalid character",
         "passwordTooShort": "Password is too short",
         "passwordTooLong": "Password is too long",
+        "passwordContainsInvalidCharacter": "Password contains invalid character",
         "passwordMissesUpperCase": "Password misses upper case",
         "passwordMissesLowerCase": "Password misses lower case",
         "passwordMissesNumber": "Password misses number",
-        "passwordMissesSpecialCharacter": "Password misses special character",
-        "passwordContainsInvalidCharacter": "Password contains invalid character",
-        "passwordsDoNotMatch": "Passwords do not match"
+        "passwordMissesSpecialChar": "Password misses special character",
+        "passwordsDontMatch": "Passwords don't match",
+        "emailTooShort": "Email is too short",
+        "emailTooLong": "Email is too long",
+        "emailMissesAt": "Email misses @"
       }
     }
   }

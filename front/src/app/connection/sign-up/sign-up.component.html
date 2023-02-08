@@ -6,16 +6,22 @@
           <ion-row>
             <ion-col>
               <ion-item>
-                <ion-label position="floating">Email</ion-label>
-                <ion-input placeholder="Email"></ion-input>
+                <ion-label position="floating">Username</ion-label>
+                <ion-input placeholder="Username" [(ngModel)]="username" (ionBlur)="checkUsername()"
+                           (ionFocus)="focusing = true;" type="text"
+                           minlength="3" maxlength="30" required="true">
+                </ion-input>
               </ion-item>
             </ion-col>
           </ion-row>
           <ion-row>
             <ion-col>
               <ion-item>
-                <ion-label position="floating">Username</ion-label>
-                <ion-input placeholder="Username"></ion-input>
+                <ion-label position="floating">Email</ion-label>
+                <ion-input placeholder="Email" [(ngModel)]="email" (ionBlur)="checkEmail()"
+                           (ionFocus)="focusing = true;" type="text"
+                           minlength="7" maxlength="100" required="true">
+                </ion-input>
               </ion-item>
             </ion-col>
           </ion-row>
@@ -23,7 +29,10 @@
             <ion-col>
               <ion-item>
                 <ion-label position="floating">Password</ion-label>
-                <ion-input placeholder="Password" [type]="showPassword?'text':'password'"></ion-input>
+                <ion-input placeholder="Password" [type]="showPassword?'text':'password'"
+                           [(ngModel)]="password" (ionBlur)="checkPassword(true)" (ionFocus)="focusing = true;"
+                            minlength="7" maxlength="30" required="true">
+                </ion-input>
               </ion-item>
               <ion-fab style="top:35px; right:0;">
                 <ion-fab-button color="light" size="small" (click)="showPassword = !showPassword">
@@ -36,7 +45,10 @@
             <ion-col>
               <ion-item>
                 <ion-label position="floating">Confirm password</ion-label>
-                <ion-input placeholder="Confirm password" [type]="showConfirmPassword?'text':'password'"></ion-input>
+                <ion-input placeholder="Confirm password" [type]="showConfirmPassword?'text':'password'"
+                           [(ngModel)]="confirmPassword" (ionBlur)="checkPassword(false)" (ionFocus)="focusing = true;"
+                           minlength="7" maxlength="30" required="true">
+                </ion-input>
               </ion-item>
               <ion-fab style="top:35px; right:0;">
                 <ion-fab-button color="light" size="small" (click)="showConfirmPassword = !showConfirmPassword">
@@ -47,8 +59,13 @@
           </ion-row>
           <ion-row>
             <ion-col>
-              <ion-button expand="block" id="submitButton" shape="round" color="success" strong="true"
-                          (click)="signUp()">
+              <p>{{output}}</p>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <ion-button expand="block" id="submitButton" shape="round" color="success" strong="true" (click)="signUp()"
+                          *ngIf="!focusing && email && username && password && confirmPassword && !output">
                 Sign in
               </ion-button>
             </ion-col>
