@@ -1,9 +1,8 @@
 {
   "compilerOptions": {
-    /* Visit https://aka.ms/tsconfig.json to read more about this file */
     "composite": true,                    /* Enable constraints that allow a TypeScript project to be used with project references. */
-    "target": "ESNext",                          /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', or 'ESNEXT'. */
-    "module": "ESNext",                     /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'. */
+    "target": "esnext",                          /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', or 'ESNEXT'. */
+    "module": "esnext",                     /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'. */
     "outDir": "./",     /* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */
     "baseUrl": "./",                       /* Base directory to resolve non-absolute module names. */
     "declaration": true,                   /* Generates corresponding '.d.ts' file. */
@@ -18,6 +17,6 @@
     "rootDirs": ["src", "compil"], /* List of root folders whose combined content represents the structure of the project at runtime. */
     "paths": {
       "@files/*": ["files/*"],
-    }
+    },
   }
 }

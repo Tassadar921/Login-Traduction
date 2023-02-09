@@ -21,7 +21,7 @@ createUser :
 	}
 
 signIn :
-	(req.body.username, req.body.password) => 
+	(req.body.identifier, req.body.password) =>
 	{
 		{status : -1} bad username or email shape
 		{status : 0} wrong identifier or password

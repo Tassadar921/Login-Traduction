@@ -3,13 +3,15 @@ import {environment} from '../../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {lastValueFrom} from 'rxjs';
 import {GetResult} from '@capacitor/preferences';
+import {CookieService} from './cookie.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RequestService {
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private cookieService: CookieService
   ) {}
 
   public async getLanguagesList (): Promise<Array<any>> {
@@ -21,15 +23,15 @@ export class RequestService {
     return await lastValueFrom(this.http.get(environment.apiUrl + '/languages/' + languageID));
   }
 
-  public async signIn(emailOrPassword: string, password: string): Promise<any> {
+  public async signIn(identifier: string, password: string): Promise<any> {
     return await lastValueFrom(this.http.post(environment.apiUrl + '/signIn/',
-      {}
+      {identifier, password}
     ));
   }
 
   public async signUp(username: string, email: string, password: string): Promise<any> {
     return await lastValueFrom(this.http.post(environment.apiUrl + '/signUp/',
-      {}
+      {username, email, password, language: await this.cookieService.getCookie('language')},
     ));
   }
 }
