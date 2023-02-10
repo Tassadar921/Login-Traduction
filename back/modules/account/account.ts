@@ -67,9 +67,11 @@ export class Account {
 
         const languageFile = await import('./files/json/languages/' + language + '/' + language + '_back.json', {assert: {type: 'json'}})
 
+        console.log(languageFile);
+
         this.mailOptions.to = email;
-        this.mailOptions.subject = languageFile.mail[0].data;
-        this.mailOptions.text = languageFile.mail[1].data.replace('username', username)
+        this.mailOptions.subject = languageFile.data.modules.account.mailCreateAccountCreateUrlToken.mailOptions.subject;
+        this.mailOptions.text = languageFile.data.modules.account.mailCreateAccountCreateUrlToken.mailOptions.subject.replace('username', username)
             + process.env.URL_FRONT
             + 'conf-account?urlToken='
             + urlToken;
@@ -159,6 +161,8 @@ export class Account {
         }
 
         await accountRequest.createResetPasswordUrlToken(urlToken, email, this.client);
+
+        console.log(urlToken)
 
         setTimeout(this.mailResetPasswordDeleteUrlToken, 600000, urlToken);
 
