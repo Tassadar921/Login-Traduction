@@ -8,7 +8,7 @@ export module accountRequest {
                     username,
                     email,
                 }
-                FILTER .email = ${email} OR .username = ${username}
+                FILTER .email = "${email}" OR .username = "${username}"
             `);
             resolve(result);
         });
@@ -21,7 +21,7 @@ export module accountRequest {
                     username,
                     email,
                 }
-                FILTER .email = ${email} AND .password = ${password}
+                FILTER .email = "${email}" AND .password = "${password}"
             `);
             resolve(result);
         });
@@ -34,7 +34,7 @@ export module accountRequest {
                     username,
                     email,
                 }
-                FILTER .username = ${username} AND .password = ${password}
+                FILTER .username = "${username}" AND .password = "${password}"
             `);
             resolve(result);
         });
@@ -46,7 +46,7 @@ export module accountRequest {
                 SELECT User {
                     username,
                 }
-                FILTER .token = ${token} AND .username = ${username}
+                FILTER .token = "${token}" AND .username = "${username}"
             `);
             resolve(result);
         });
@@ -58,7 +58,7 @@ export module accountRequest {
                 SELECT User {
                     password,
                 }
-                FILTER .token = ${token}
+                FILTER .token = "${token}"
             `);
             resolve(result);
         });
@@ -68,9 +68,9 @@ export module accountRequest {
         return new Promise<any[]>((resolve) => {
             const result = client.query(`
                 UPDATE User
-                FILTER .username = ${username}
+                FILTER .username = "${username}"
                 SET {
-                    token := ${token},
+                    token := "${token}",
                 }
             `);
             resolve(result);
@@ -81,10 +81,10 @@ export module accountRequest {
         return new Promise<any[]>((resolve) => {
             const result = client.query(`
                 insert User {
-                    username := ${username};
-                    email := ${email};
-                    password := ${password};
-                    token := ${token};
+                    username := "${username}";
+                    email := "${email}";
+                    password := "${password}";
+                    token := "${token}";
                 }
             `);
             resolve(result);
@@ -99,7 +99,7 @@ export module accountRequest {
                     email,
                     password
                 }
-                FILTER .urlToken = ${urlToken}
+                FILTER .urlToken = "${urlToken}"
             `);
             resolve(result);
         });
@@ -113,7 +113,7 @@ export module accountRequest {
                     username,
                     password
                 }
-                FILTER .email = ${email}
+                FILTER .email = "${email}"
             `);
             resolve(result);
         });
@@ -123,10 +123,10 @@ export module accountRequest {
         return new Promise<any[]>((resolve) => {
             const result = client.query(`
                 insert User_Creation {
-                    urlToken := ${urlToken};
-                    username := ${username};
-                    email := ${email};
-                    password := ${password};
+                    urlToken := "${urlToken}",
+                    username := "${username}",
+                    email := "${email}",
+                    password := "${password}"
                 }
             `);
             resolve(result);
@@ -137,7 +137,7 @@ export module accountRequest {
         return new Promise<any[]>((resolve) => {
             const result = client.query(`
                 delete User_Creation
-                    filter .urlToken = ${urlToken};
+                    filter .urlToken = "${urlToken}";
             `);
             resolve(result);
         });
@@ -151,7 +151,7 @@ export module accountRequest {
                     username,
                     password
                 }
-                FILTER .email = ${email}
+                FILTER .email = "${email}"
             `);
             resolve(result);
         });
@@ -165,7 +165,7 @@ export module accountRequest {
                     email,
                     password
                 }
-                FILTER .urlToken = ${urlToken}
+                FILTER .urlToken = "${urlToken}"
             `);
             resolve(result);
         });
@@ -175,7 +175,7 @@ export module accountRequest {
         return new Promise<any[]>((resolve) => {
             const result = client.query(`
                 delete Reset_Password
-                    filter .email = ${email};
+                    filter .email = "${email}";
             `);
             resolve(result);
         });
@@ -185,8 +185,8 @@ export module accountRequest {
         return new Promise<any[]>((resolve) => {
             const result = client.query(`
                 insert Reset_Password {
-                    urlToken := ${urlToken};
-                    email := ${email};
+                    urlToken := "${urlToken}",
+                    email := "${email}"
                 }
             `);
             resolve(result);
@@ -197,9 +197,9 @@ export module accountRequest {
         return new Promise<any[]>((resolve) => {
             const result = client.query(`
                 UPDATE User
-                FILTER .email = ${email}
+                FILTER .email = "${email}"
                 SET {
-                    password := ${password},
+                    password := "${password}",
                 }
             `);
             resolve(result);

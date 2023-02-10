@@ -5,7 +5,7 @@ module accountRouting {
     export function init(app : any): void {
         const account = new Account();
         
-        app.post('/mailCreateAccount', async function (req : Request, res : Response) {
+        app.post('/mailSignUp', async function (req : Request, res : Response) {
             await account.mailCreateAccountCreateUrlToken(req.body.username, req.body.password, req.body.email, req.body.language, res);
         });
         app.post('/createAccount', async function (req : Request, res : Response) {

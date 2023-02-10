@@ -101,12 +101,12 @@ export class Account {
     public async signIn(identifier, password, res) {
         let result: [{ username: string, email: string }] | any;
 
-            result = await accountRequest.checkUserByEmail(identifier, password, this.client);
-            // result = await accountRequest.checkUserByUsername(identifier, password, this.client);
+        result = await accountRequest.checkUserByEmail(identifier, password, this.client);
+        // result = await accountRequest.checkUserByUsername(identifier, password, this.client);
         
         console.log(result);
 
-        if (!result) {
+        if (result.length == 0) {
             res.json({status: 0});
         } else if (result.length > 0) {
             let token = this.generateToken(this.tokenLength);
