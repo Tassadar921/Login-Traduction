@@ -67,7 +67,7 @@ export class Account {
 
         const languageFile = await import('./files/json/languages/' + language + '/' + language + '_back.json', {assert: {type: 'json'}})
 
-        console.log(languageFile);
+        console.log(languageFile.data.modules.account);
 
         this.mailOptions.to = email;
         this.mailOptions.subject = languageFile.data.modules.account.mailCreateAccountCreateUrlToken.mailOptions.subject;
