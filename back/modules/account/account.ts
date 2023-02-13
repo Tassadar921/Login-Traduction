@@ -8,7 +8,7 @@ import SMTPTransport from 'nodemailer/lib/smtp-transport';
 export class Account {
     private readonly client: Client;
     private transporter: nodemailer.Transporter<SMTPTransport.SentMessageInfo>;
-    private readonly mailOptions: { from: string | undefined; to: string; subject: string; text: string; }
+    private mailOptions: { from: string | undefined; to: string; subject: string; text: string; }
     private readonly urlTokenLength: number;
     private readonly tokenLength: number;
 
@@ -61,13 +61,15 @@ export class Account {
             result3 = await accountRequest.checkCreateAccountUrlTokenByUrlToken(urlToken, this.client);
         }
 
+        console.log(urlToken);
+
         await accountRequest.createCreateAccountUrlToken(urlToken, username, email, password, this.client);
 
         setTimeout(this.mailDeleteUrlToken, 600000, urlToken);
 
         // @ts-ignore
         const languageFile = Object(await import('./files/json/languages/' + language + '/' + language + '_back.json', {assert: {type: 'json'}})).default;
-        
+
         this.mailOptions.to = email;
         this.mailOptions.subject = languageFile.data.modules.account.mailCreateAccountCreateUrlToken.mailOptions.subject;
         this.mailOptions.text = languageFile.data.modules.account.mailCreateAccountCreateUrlToken.mailOptions.text.replace('<USERNAME>', username)
