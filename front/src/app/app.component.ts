@@ -15,5 +15,6 @@ export class AppComponent implements OnInit {
 
   async ngOnInit() {
     await this.languageService.init();
+    console.log('test');
   }
 }

@@ -11,6 +11,10 @@ const routes: Routes = [
     path: 'connection',
     loadChildren: () => import('./connection/connection.module').then( m => m.ConnectionPageModule)
   },
+  {
+    path: 'conf-account',
+    loadChildren: () => import('./conf-account/conf-account.module').then( m => m.ConfAccountPageModule)
+  },
 ];
 
 @NgModule({

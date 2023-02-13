@@ -52,8 +52,4 @@ export class LanguageService {
     await this.cookieService.setCookie('language', languageID);
     this.dictionary = await this.requestService.getTranslation(await this.cookieService.getCookie('language'));
   }
-
-
-
-
 }

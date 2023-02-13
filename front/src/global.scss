@@ -25,6 +25,12 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
+*{
+  margin: 0;
+  padding: 0;
+  background-color: var('	--ion-color-light');
+}
+
 ion-col{
   text-align:center;
 }
