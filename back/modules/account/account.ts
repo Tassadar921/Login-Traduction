@@ -65,8 +65,9 @@ export class Account {
 
         setTimeout(this.mailDeleteUrlToken, 600000, urlToken);
 
+        // @ts-ignore
         const languageFile = Object(await import('./files/json/languages/' + language + '/' + language + '_back.json', {assert: {type: 'json'}})).default;
-
+        
         this.mailOptions.to = email;
         this.mailOptions.subject = languageFile.data.modules.account.mailCreateAccountCreateUrlToken.mailOptions.subject;
         this.mailOptions.text = languageFile.data.modules.account.mailCreateAccountCreateUrlToken.mailOptions.text.replace('<USERNAME>', username)
@@ -165,6 +166,7 @@ export class Account {
 
         setTimeout(this.mailResetPasswordDeleteUrlToken, 600000, urlToken);
 
+        // @ts-ignore
         const languageFile = await import('./files/json/languages/' + language + '/' + language + '_back.json', {assert: {type: 'json'}})
 
         this.mailOptions.to = email;
