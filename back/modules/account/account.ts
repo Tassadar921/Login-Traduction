@@ -102,13 +102,10 @@ export class Account {
     }
 
     //signIn, identifier can be either username or email
-    public async signIn(identifier, password, res) {
+    public async signIn(identifier : string, password : string, res : Response) {
         let result: [{ username: string, email: string }] | any;
 
-        result = await accountRequest.checkUserByEmail(identifier, password, this.client);
-        // result = await accountRequest.checkUserByUsername(identifier, password, this.client);
-        
-        console.log(result);
+        result = await accountRequest.checkUserAndPassword(identifier, password, this.client);
 
         if (result.length == 0) {
             res.json({status: 0});
@@ -123,6 +120,21 @@ export class Account {
             await accountRequest.updateUserToken(result[0].username, token, this.client);
 
             res.json({status: 1, token: token, username: result[0].username});
+        }
+    }
+
+    //delete the token of the user
+    public async logOut(token :string, username : string, res : Response) {
+        let result: [{ username: string, email: string }] | any;
+
+        result = await accountRequest.checkUserByToken(username, token, this.client);
+
+        if (result.length == 0) {
+            res.json({status: 0});
+        } else if (result.length > 0) {
+            await accountRequest.updateUserToken(username, 'none', this.client);
+
+            res.json({status: 1});
         }
     }
 

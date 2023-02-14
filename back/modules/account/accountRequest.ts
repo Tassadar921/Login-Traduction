@@ -14,27 +14,14 @@ export module accountRequest {
         });
     }
 
-    export async function checkUserByEmail(email : string, password : string, client : Client) {
+    export async function checkUserAndPassword(identifier : string, password : string, client : Client) {
         return new Promise<any[]>((resolve) => {
             const result = client.query(`
                 SELECT User {
                     username,
                     email,
                 }
-                FILTER .email = "${email}" AND .password = "${password}"
-            `);
-            resolve(result);
-        });
-    }
-
-    export async function checkUserByUsername(username : string, password : string, client : Client) {
-        return new Promise<any[]>((resolve) => {
-            const result = client.query(`
-                SELECT User {
-                    username,
-                    email,
-                }
-                FILTER .username = "${username}" AND .password = "${password}"
+                FILTER ( .email = "${identifier}" OR .username = "${identifier}") AND .password = "${password}"
             `);
             resolve(result);
         });

@@ -21,6 +21,13 @@ signIn :             => CODED
 		{status: 1, token: token, username: username} success
 	}
 
+logOut :             =>
+	(req.body.identifier, req.body.password) =>
+	{
+		{status : 0} no match for token username
+		{status: 1} no more token
+	}
+
 fastCheck :
 	(req.body.username, req.body.token) => 
 	{
