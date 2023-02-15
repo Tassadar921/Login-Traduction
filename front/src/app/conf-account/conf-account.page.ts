@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import {RequestService} from '../shared/services/request.service';
 
 @Component({
   selector: 'app-conf-account',
@@ -9,13 +10,14 @@ import { ActivatedRoute } from '@angular/router';
 export class ConfAccountPage implements OnInit {
 
   constructor(
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private requestService: RequestService
   ) { }
 
   ngOnInit() {
-    this.activatedRoute.queryParams.subscribe(params => {
-      console.log(params);
+    this.activatedRoute.queryParams.subscribe(async params => {
+      const rtrn = await this.requestService.createAccount(Object(params).urlToken);
+      console.log(rtrn);
     });
   }
-
 }

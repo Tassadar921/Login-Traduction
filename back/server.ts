@@ -28,3 +28,17 @@ if (app.listen(process.env.PORT || 8080)) {
     console.log('=========== SERVER STARTED FOR HTTP RQ ===========');
     console.log('    =============   PORT: 8080   =============');
 }
+
+import EncryptRsa from 'encrypt-rsa';
+const encryptRsa = new EncryptRsa();
+const {publicKey, privateKey} = encryptRsa.createPrivateAndPublicKeys();
+const encryptedText = encryptRsa.encryptStringWithRsaPublicKey({
+    text: 'hello world',
+    publicKey,
+});
+const decryptedText = encryptRsa.decryptStringWithRsaPrivateKey({
+    text: encryptedText,
+    privateKey
+});
+console.log(decryptedText);
+// hello world

@@ -5,13 +5,13 @@
   "main": "index.js",
   "scripts": {
     "deleteFilesfolder": "run-script-os",
-    "deleteFilesfolder:win32": "if exist compil rmdir compil /q /s",
-    "deleteFilesfolder:linux": "rm -rf compil",
+    "deleteFilesfolder:win32": "if exist build rmdir build /q /s",
+    "deleteFilesfolder:linux": "rm -rf build",
     "copyFilesFolder": "npm run deleteFilesfolder && run-script-os",
-    "copyFilesFolder:win32": "xcopy /E files compil\\files\\",
-    "copyFilesFolder:linux": "mkdir ./compil/files/ -p && cp -a ./files/. ./compil/files/",
-    "build": "npm run copyFilesFolder && esbuild server.ts --platform=node --bundle --outdir=compil/ --external:/files/*",
-    "start": "npm run build && node compil/server.js"
+    "copyFilesFolder:win32": "xcopy /E files build\\files\\",
+    "copyFilesFolder:linux": "mkdir ./build/files/ -p && cp -a ./files/. ./build/files/",
+    "build": "npm run copyFilesFolder && esbuild server.ts --platform=node --bundle --outdir=build/ --external:/files/*",
+    "start": "npm run build && node build/server.js"
   },
   "author": "",
   "license": "ISC",
@@ -22,6 +22,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "edgedb": "^1.0.2",
+    "encrypt-rsa": "^2.0.1",
     "esbuild": "^0.17.5",
     "express": "^4.18.2",
     "fs": "^0.0.1-security",

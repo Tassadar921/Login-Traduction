@@ -6,7 +6,7 @@ module accountRouting {
         const account = new Account();
         
         app.post('/mailSignUp', async function (req : Request, res : Response) {
-            await account.mailCreateAccountCreateUrlToken(req.body.username, req.body.password, req.body.email, req.body.language, res);
+            await account.mailSignUp(req.body.username, req.body.password, req.body.email, req.body.language, res);
         });
         app.post('/createAccount', async function (req : Request, res : Response) {
             await account.createAccount(req.body.urlToken, res);

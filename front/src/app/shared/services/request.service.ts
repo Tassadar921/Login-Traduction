@@ -43,4 +43,10 @@ export class RequestService {
       {username, email, password, language: await this.cookieService.getCookie('language')},
     ));
   }
+
+  public async createAccount(urlToken: string): Promise<any> {
+    return await lastValueFrom(this.http.post(environment.apiUrl + '/createAccount',
+      {urlToken}
+    ));
+  }
 }

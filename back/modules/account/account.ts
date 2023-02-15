@@ -8,7 +8,7 @@ import SMTPTransport from 'nodemailer/lib/smtp-transport';
 export class Account {
     private readonly client: Client;
     private transporter: nodemailer.Transporter<SMTPTransport.SentMessageInfo>;
-    private mailOptions: { from: string | undefined; to: string; subject: string; text: string; }
+    private readonly mailOptions: { from: string | undefined; to: string; subject: string; text: string; }
     private readonly urlTokenLength: number;
     private readonly tokenLength: number;
 
@@ -37,7 +37,7 @@ export class Account {
     }
 
 
-    public async mailCreateAccountCreateUrlToken(username: string, password: string, email: string, language: string, res: Response) {
+    public async mailSignUp(username: string, password: string, email: string, language: string, res: Response) {
         const result0: any[] = await accountRequest.checkUser(username, email, this.client);
 
         if (result0.length > 0) {
@@ -61,11 +61,9 @@ export class Account {
             result3 = await accountRequest.checkCreateAccountUrlTokenByUrlToken(urlToken, this.client);
         }
 
-        console.log(urlToken);
-
         await accountRequest.createCreateAccountUrlToken(urlToken, username, email, password, this.client);
 
-        setTimeout(this.mailDeleteUrlToken, 600000, urlToken);
+        setTimeout(this.deleteCreateAccountQueueUrlToken, 600000, urlToken);
 
         // @ts-ignore
         const languageFile = Object(await import('./files/json/languages/' + language + '/' + language + '_back.json', {assert: {type: 'json'}})).default;
@@ -81,7 +79,6 @@ export class Account {
 
         this.transporter.sendMail(this.mailOptions, async function (error) {
             if (error) {
-                console.log(error);
                 res.json({status: -1});
             } else {
                 res.json({status: 1});
@@ -91,10 +88,13 @@ export class Account {
 
     //creates the account with datas in the queue linked to token
     public async createAccount(urlToken: string, res: Response) {
-        const result: [{ username: string, email: string, password: string }] | any = await accountRequest.checkCreateAccountUrlTokenByUrlToken(urlToken, this.client);
+        const result = await accountRequest.checkCreateAccountUrlTokenByUrlToken(urlToken, this.client);
         if (result.length > 0) {
+            console.log('coucou')
             await accountRequest.deleteCreateAccountUrlToken(urlToken, this.client);
+            console.log('ici')
             await accountRequest.createUser(result[0].username, result[0].email, result[0].password, 'none', this.client);
+            console.log('là')
             res.json({status: 1});
         } else {
             res.json({status: 0});
@@ -124,7 +124,7 @@ export class Account {
     }
 
     //delete the token of the user
-    public async logOut(token :string, username : string, res : Response) {
+    public async signOut(token :string, username : string, res : Response) {
         let result: [{ username: string, email: string }] | any;
 
         result = await accountRequest.checkUserByToken(username, token, this.client);
@@ -215,7 +215,7 @@ export class Account {
     }
 
     //sends an email containing a unique token to create the account, effective for 10 minutes
-    private async mailDeleteUrlToken(urlToken) {
+    private async deleteCreateAccountQueueUrlToken(urlToken) {
         await accountRequest.deleteCreateAccountUrlToken(urlToken, this.client);
     }
 
@@ -227,12 +227,13 @@ export class Account {
     // generates token by stringing a random number of characters from a dictionnary
     private generateToken(length: number) {
         //edit the token allowed characters
-        let a = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'.split('');
-        let b: string[] = [];
+        let alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'.split('');
+        let token: string = '';
         for (let i = 0; i < length; i++) {
-            let j = (Math.random() * (a.length - 1)).toFixed(0);
-            b[i] = a[j];
+            let j = Math.floor(Math.random() * (alphabet.length - 1));
+            token += alphabet[j];
         }
-        return b.join('');
+        console.log(token);
+        return token;
     }
 }

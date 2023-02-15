@@ -68,10 +68,10 @@ export module accountRequest {
         return new Promise<any[]>((resolve) => {
             const result = client.query(`
                 insert User {
-                    username := "${username}";
-                    email := "${email}";
-                    password := "${password}";
-                    token := "${token}";
+                    username := "${username}",
+                    email := "${email}",
+                    password := "${password}",
+                    token := "${token}"
                 }
             `);
             resolve(result);
