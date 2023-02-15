@@ -20,12 +20,11 @@ export class AppComponent implements OnInit {
   async ngOnInit() {
     await this.languageService.init();
     environment.publicKey = Object(await this.requestService.getPublicKey()).publicKey;
-    console.log(typeof environment.publicKey);
-
+    const a = await this.requestService.test(this.encryptWithPublicKey('wesh'));
   }
 
   public encryptWithPublicKey(valueToEncrypt: string): string {
     const rsa = Forge.pki.publicKeyFromPem(environment.publicKey);
-    return window.btoa(rsa.encrypt('Hello World!'));
+    return window.btoa(rsa.encrypt(valueToEncrypt, 'RSA-OAEP'));
   }
 }
