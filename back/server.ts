@@ -1,13 +1,33 @@
 // @ts-ignore
-import express from 'express';
+import express, {Request, Response} from 'express';
 // @ts-ignore
 import bodyParser from 'body-parser';
 // @ts-ignore
 import cors from 'cors';
 import * as dotenv from 'dotenv';
+import EncryptRsa from 'encrypt-rsa';
 
 import languagesRouting from './modules/languages/languagesRouting';
 import accountRouting from './modules/account/accountRouting';
+
+const encryptRsa = new EncryptRsa();
+const {publicKey, privateKey} = encryptRsa.createPrivateAndPublicKeys();
+function decrypt(encryptedText: string)
+{
+    console.log('publicKey : ', publicKey);
+    const decryptedText = encryptRsa.decryptStringWithRsaPrivateKey({
+        text: encryptedText,
+        privateKey
+    });
+    console.log('decrypted : ', decryptedText);
+}
+
+const encryptedText = encryptRsa.encryptStringWithRsaPublicKey({
+    text: 'hello world',
+    publicKey,
+});
+
+console.log('native publicKey : ', publicKey);
 
 dotenv.config();
 
@@ -29,16 +49,11 @@ if (app.listen(process.env.PORT || 8080)) {
     console.log('    =============   PORT: 8080   =============');
 }
 
-import EncryptRsa from 'encrypt-rsa';
-const encryptRsa = new EncryptRsa();
-const {publicKey, privateKey} = encryptRsa.createPrivateAndPublicKeys();
-const encryptedText = encryptRsa.encryptStringWithRsaPublicKey({
-    text: 'hello world',
-    publicKey,
+app.get('/getPublicKey', async function(req : Request, res : Response) {
+    res.json({publicKey});
 });
-const decryptedText = encryptRsa.decryptStringWithRsaPrivateKey({
-    text: encryptedText,
-    privateKey
+
+app.post('/test', async function(req : Request, res : Response) {
+    decrypt(req.body.encryptedText);
+    res.json({});
 });
-console.log(decryptedText);
-// hello world

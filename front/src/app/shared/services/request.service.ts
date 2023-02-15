@@ -18,11 +18,6 @@ export class RequestService {
     return await lastValueFrom(this.http.get<Object>(environment.apiUrl + '/getPublicKey'));
   }
 
-  public async test (encryptedText: string): Promise<Object> {
-    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/test',
-      {encryptedText}));
-  }
-
   //array containing all available languages, with their full name and id
   public async getLanguagesList (): Promise<Array<Object>> {
     return await lastValueFrom(this.http.get<Array<Object>>(environment.apiUrl + '/languages/list'));
