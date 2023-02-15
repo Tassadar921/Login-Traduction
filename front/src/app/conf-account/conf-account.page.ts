@@ -12,7 +12,7 @@ export class ConfAccountPage implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private requestService: RequestService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe(async params => {

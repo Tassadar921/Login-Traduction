@@ -14,6 +14,10 @@ export class RequestService {
     private cookieService: CookieService
   ) {}
 
+  public async getPublicKey (): Promise<Object> {
+    return await lastValueFrom(this.http.get<Object>(environment.apiUrl + '/getPublicKey'));
+  }
+
   //array containing all available languages, with their full name and id
   public async getLanguagesList (): Promise<Array<Object>> {
     return await lastValueFrom(this.http.get<Array<Object>>(environment.apiUrl + '/languages/list'));
