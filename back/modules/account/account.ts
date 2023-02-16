@@ -139,7 +139,7 @@ export class Account {
     }
 
     //checks if the token is valid for the user
-    public async fastCheck(username, token, res) {
+    public async fastCheck(username : string, token : string, res : Response) {
         const result: [{ username: string }] | any = await accountRequest.checkUserByToken(username, token, this.client);
         if (result.length == 1) {
             res.json({status: 1});
@@ -202,7 +202,7 @@ export class Account {
     }
 
     //resets the password of the account linked to the email, himself linked to the token
-    public async resetPassword(urlToken, password, res) {
+    public async resetPassword(urlToken : string, password : string, res : Response) {
         const result: [{ username: string, email: string, password: string }] | any = await accountRequest.checkResetPasswordUrlTokenByUrlToken(urlToken, this.client);
 
         if (result.length > 0) {
@@ -215,13 +215,28 @@ export class Account {
     }
 
     //sends an email containing a unique token to create the account, effective for 10 minutes
-    private async mailDeleteUrlToken(urlToken) {
+    private async mailDeleteUrlToken(urlToken : string) {
         await accountRequest.deleteCreateAccountUrlToken(urlToken, this.client);
     }
 
     //sends an email containing a unique token to reset the password, effective for 10 minutes
-    private async mailResetPasswordDeleteUrlToken(urlToken) {
+    private async mailResetPasswordDeleteUrlToken(urlToken : string) {
         await accountRequest.deleteResetPasswordUrlToken(urlToken, this.client);
+    }
+
+    //checks if the username is valid
+    private async checkRegexUsername(username : string) {
+        
+    }
+
+    //checks if the email is valid
+    private async checkRegexEmail(email : string) {
+        
+    }
+
+    //checks if the password is valid
+    private async checkRegexPassword(password : string) {
+
     }
 
     // generates token by stringing a random number of characters from a dictionnary
