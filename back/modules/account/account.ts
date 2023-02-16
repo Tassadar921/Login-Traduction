@@ -39,7 +39,6 @@ export class Account {
 
     public async mailSignUp(username: string, password: string, email: string, language: string, res: Response) {
         if(!this.checkRegexEmail(email) || !this.checkRegexPassword(password) || !this.checkRegexUsername(username)){
-            
             res.json({status: -2});
         }
 
@@ -98,6 +97,9 @@ export class Account {
 
     //signIn, identifier can be either username or email
     public async signIn(identifier : string, password : string, res : Response) {
+        if((!this.checkRegexEmail(identifier) && !this.checkRegexUsername(identifier))){
+            res.json({status: -1});
+        }
 
         let result = await accountRequest.checkUserAndPassword(identifier, await this.hashSha256(password), this.client);
 
@@ -118,7 +120,7 @@ export class Account {
     }
 
     //delete the token of the user
-    public async signOut(token :string, username : string, res : Response) {
+    public async signOut(username : string, token : string, res : Response) {
         let result: [{ username: string, email: string }] | any;
 
         result = await accountRequest.checkUserByToken(username, token, this.client);
@@ -133,7 +135,7 @@ export class Account {
     }
 
     //checks if the token is valid for the user
-    public async fastCheck(username : string, token : string, res : Response) {
+    public async fastCheck(username : string, token : string, res : Response) {       
         const result: [{ username: string }] | any = await accountRequest.checkUserByToken(username, token, this.client);
         if (result.length == 1) {
             res.json({status: 1});
@@ -145,6 +147,10 @@ export class Account {
     //sends an email containing a unique token to reset the password, effective for 10 minutes
     //temporary linking the token and email in the resetPassword queue
     public async mailResetPasswordCreateUrlToken(email: string, language: string, res: Response) {
+        if(!this.checkRegexEmail(email)){
+            res.json({status: -2});
+        }
+
         const result0: any[] = await accountRequest.checkUser('', email, this.client);
 
         if (result0.length > 0) {
