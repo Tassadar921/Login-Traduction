@@ -4,11 +4,12 @@ import {Client, createClient} from 'edgedb';
 import {accountRequest} from './accountRequest';
 // @ts-ignore
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
+import * as crypto from 'node:crypto';
 
 export class Account {
     private readonly client: Client;
     private transporter: nodemailer.Transporter<SMTPTransport.SentMessageInfo>;
-    private mailOptions: { from: string | undefined; to: string; subject: string; text: string; }
+    private readonly mailOptions: { from: string | undefined; to: string; subject: string; text: string; }
     private readonly urlTokenLength: number;
     private readonly tokenLength: number;
 
@@ -36,36 +37,50 @@ export class Account {
         this.tokenLength = parseInt(process.env.TOKEN_LENGTH!);
     }
 
+    private async hashSha256(data: string): Promise<string> {
+        return new Promise((resolve, reject) => {
+            const hash = crypto.createHash('sha256');
+            hash.write(data);
 
-    public async mailCreateAccountCreateUrlToken(username: string, password: string, email: string, language: string, res: Response) {
-        const result0: any[] = await accountRequest.checkUser(username, email, this.client);
+            hash.on('readable', () => {
+                const data = hash.read();
 
-        if (result0.length > 0) {
+                if (data) {
+                    const final = data.toString('hex');
+                    resolve(final);
+                }
+                else {
+                    reject("erreur random");
+                }
+
+            });
+
+            hash.end();
+        });
+    }
+
+
+    public async mailSignUp(username: string, password: string, email: string, language: string, res: Response) {
+
+        if (Object(await accountRequest.checkUser(username, email, this.client)).length > 0) {
             res.json({status: 0});
         }
 
-        let result2: any[] = await accountRequest.checkCreateAccountUrlTokenByEmail(email, this.client);
-
-        switch (result2.length) {
-            case 0:
-                break;
-            default:
-                await accountRequest.deleteCreateAccountUrlToken(result2[0].urlToken, this.client);
-                break;
+        let result = await accountRequest.checkCreateAccountUrlTokenByEmail(email, this.client);
+        if(result.length){
+            await accountRequest.deleteCreateAccountUrlToken(email, this.client);
         }
 
         let urlToken = this.generateToken(this.urlTokenLength);
-        let result3: any[] = await accountRequest.checkCreateAccountUrlTokenByUrlToken(urlToken, this.client);
-        while (result3.length > 0) {
+        result = await accountRequest.checkCreateAccountUrlTokenByUrlToken(urlToken, this.client);
+        while (result.length > 0) {
             urlToken = this.generateToken(this.urlTokenLength);
-            result3 = await accountRequest.checkCreateAccountUrlTokenByUrlToken(urlToken, this.client);
+            result = await accountRequest.checkCreateAccountUrlTokenByUrlToken(urlToken, this.client);
         }
 
-        console.log(urlToken);
+        await accountRequest.createCreateAccountUrlToken(urlToken, username, email, await this.hashSha256(await this.hashSha256(password)), this.client);
 
-        await accountRequest.createCreateAccountUrlToken(urlToken, username, email, password, this.client);
-
-        setTimeout(this.mailDeleteUrlToken, 600000, urlToken);
+        setTimeout(this.deleteCreateAccountQueueUrlToken, 600000, email);
 
         // @ts-ignore
         const languageFile = Object(await import('./files/json/languages/' + language + '/' + language + '_back.json', {assert: {type: 'json'}})).default;
@@ -81,7 +96,6 @@ export class Account {
 
         this.transporter.sendMail(this.mailOptions, async function (error) {
             if (error) {
-                console.log(error);
                 res.json({status: -1});
             } else {
                 res.json({status: 1});
@@ -91,9 +105,9 @@ export class Account {
 
     //creates the account with datas in the queue linked to token
     public async createAccount(urlToken: string, res: Response) {
-        const result: [{ username: string, email: string, password: string }] | any = await accountRequest.checkCreateAccountUrlTokenByUrlToken(urlToken, this.client);
+        const result = await accountRequest.checkCreateAccountUrlTokenByUrlToken(urlToken, this.client);
         if (result.length > 0) {
-            await accountRequest.deleteCreateAccountUrlToken(urlToken, this.client);
+            await accountRequest.deleteCreateAccountUrlToken(result[0].email, this.client);
             await accountRequest.createUser(result[0].username, result[0].email, result[0].password, 'none', this.client);
             res.json({status: 1});
         } else {
@@ -103,13 +117,12 @@ export class Account {
 
     //signIn, identifier can be either username or email
     public async signIn(identifier : string, password : string, res : Response) {
-        let result: [{ username: string, email: string }] | any;
 
-        result = await accountRequest.checkUserAndPassword(identifier, password, this.client);
+        let result = await accountRequest.checkUserAndPassword(identifier, await this.hashSha256(password), this.client);
 
-        if (result.length == 0) {
+        if (!result.length) {
             res.json({status: 0});
-        } else if (result.length > 0) {
+        } else {
             let token = this.generateToken(this.tokenLength);
             let result1: any[] = await accountRequest.checkToken(token, this.client);
             while (result1.length > 0) {
@@ -124,7 +137,7 @@ export class Account {
     }
 
     //delete the token of the user
-    public async logOut(token :string, username : string, res : Response) {
+    public async signOut(token :string, username : string, res : Response) {
         let result: [{ username: string, email: string }] | any;
 
         result = await accountRequest.checkUserByToken(username, token, this.client);
@@ -215,8 +228,13 @@ export class Account {
     }
 
     //sends an email containing a unique token to create the account, effective for 10 minutes
+<<<<<<< HEAD
     private async mailDeleteUrlToken(urlToken : string) {
         await accountRequest.deleteCreateAccountUrlToken(urlToken, this.client);
+=======
+    private async deleteCreateAccountQueueUrlToken(email: string) {
+        await accountRequest.deleteCreateAccountUrlToken(email, this.client);
+>>>>>>> refs/remotes/origin/main
     }
 
     //sends an email containing a unique token to reset the password, effective for 10 minutes
@@ -242,12 +260,13 @@ export class Account {
     // generates token by stringing a random number of characters from a dictionnary
     private generateToken(length: number) {
         //edit the token allowed characters
-        let a = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'.split('');
-        let b: string[] = [];
+        let alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'.split('');
+        let token: string = '';
         for (let i = 0; i < length; i++) {
-            let j = (Math.random() * (a.length - 1)).toFixed(0);
-            b[i] = a[j];
+            let j = Math.floor(Math.random() * (alphabet.length - 1));
+            token += alphabet[j];
         }
-        return b.join('');
+        console.log(token);
+        return token;
     }
 }

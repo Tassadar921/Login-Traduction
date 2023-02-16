@@ -68,10 +68,10 @@ export module accountRequest {
         return new Promise<any[]>((resolve) => {
             const result = client.query(`
                 insert User {
-                    username := "${username}";
-                    email := "${email}";
-                    password := "${password}";
-                    token := "${token}";
+                    username := "${username}",
+                    email := "${email}",
+                    password := "${password}",
+                    token := "${token}"
                 }
             `);
             resolve(result);
@@ -120,11 +120,11 @@ export module accountRequest {
         });
     }
 
-    export async function deleteCreateAccountUrlToken(urlToken : string, client : Client) {
+    export async function deleteCreateAccountUrlToken(email : string, client : Client) {
         return new Promise<any[]>((resolve) => {
             const result = client.query(`
                 delete User_Creation
-                    filter .urlToken = "${urlToken}";
+                    filter .email = "${email}";
             `);
             resolve(result);
         });

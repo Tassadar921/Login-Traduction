@@ -14,6 +14,10 @@ export class RequestService {
     private cookieService: CookieService
   ) {}
 
+  public async getPublicKey (): Promise<Object> {
+    return await lastValueFrom(this.http.get<Object>(environment.apiUrl + '/getPublicKey'));
+  }
+
   //array containing all available languages, with their full name and id
   public async getLanguagesList (): Promise<Array<Object>> {
     return await lastValueFrom(this.http.get<Array<Object>>(environment.apiUrl + '/languages/list'));
@@ -41,6 +45,12 @@ export class RequestService {
   public async mailSignUp(username: string, email: string, password: string): Promise<any> {
     return await lastValueFrom(this.http.post(environment.apiUrl + '/mailSignUp',
       {username, email, password, language: await this.cookieService.getCookie('language')},
+    ));
+  }
+
+  public async createAccount(urlToken: string): Promise<any> {
+    return await lastValueFrom(this.http.post(environment.apiUrl + '/createAccount',
+      {urlToken}
     ));
   }
 }

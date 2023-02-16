@@ -6,7 +6,7 @@ mailSignUp :           => CODED
 		{status : 1} success
 	}
 
-createUser : 
+createAccount :       => CODED
 	(req.body.token) => 
 	{
 		{status : 0} no such token is allowed
@@ -21,7 +21,7 @@ signIn :             => CODED
 		{status: 1, token: token, username: username} success
 	}
 
-logOut :             =>
+signOut :             =>
 	(req.body.identifier, req.body.password) =>
 	{
 		{status : 0} no match for token username

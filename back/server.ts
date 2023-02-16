@@ -1,10 +1,11 @@
 // @ts-ignore
-import express from 'express';
+import express, {Request, Response} from 'express';
 // @ts-ignore
 import bodyParser from 'body-parser';
 // @ts-ignore
 import cors from 'cors';
 import * as dotenv from 'dotenv';
+import EncryptRsa from 'encrypt-rsa';
 
 import languagesRouting from './modules/languages/languagesRouting';
 import accountRouting from './modules/account/accountRouting';
