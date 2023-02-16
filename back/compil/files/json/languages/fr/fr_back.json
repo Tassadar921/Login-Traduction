@@ -1,0 +1,13 @@
+  {
+    "header":
+      {
+        "tag": "fr",
+        "side": "backend",
+        "fullName": "Français"
+      }
+  ,
+    "data": {
+      "components": {},
+      "services": {}
+    }
+  }

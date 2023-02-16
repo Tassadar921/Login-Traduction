@@ -228,13 +228,8 @@ export class Account {
     }
 
     //sends an email containing a unique token to create the account, effective for 10 minutes
-<<<<<<< HEAD
-    private async mailDeleteUrlToken(urlToken : string) {
-        await accountRequest.deleteCreateAccountUrlToken(urlToken, this.client);
-=======
     private async deleteCreateAccountQueueUrlToken(email: string) {
         await accountRequest.deleteCreateAccountUrlToken(email, this.client);
->>>>>>> refs/remotes/origin/main
     }
 
     //sends an email containing a unique token to reset the password, effective for 10 minutes
