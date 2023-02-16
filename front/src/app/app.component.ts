@@ -19,6 +19,6 @@ export class AppComponent implements OnInit {
 
   async ngOnInit() {
     await this.languageService.init();
-    this.rsaService.publicKey = Object(await this.requestService.getPublicKey()).publicKey;
+    await this.rsaService.setPublicKey();
   }
 }

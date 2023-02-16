@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {DevicePlatformService} from '../../shared/services/device-platform.service';
 import {InputCheckingService} from '../input-checking.service';
 import { RequestService } from 'src/app/shared/services/request.service';
+import {RSAService} from "../../shared/services/rsa.service";
 
 @Component({
   selector: 'app-sign-up',
@@ -21,7 +22,8 @@ export class SignUpComponent implements OnInit {
   constructor(
     public devicePlatformService: DevicePlatformService,
     public inputCheckingService: InputCheckingService,
-    private requestService: RequestService
+    private requestService: RequestService,
+    private rsaService: RSAService
   ) {}
 
   ngOnInit() {}
@@ -53,7 +55,11 @@ export class SignUpComponent implements OnInit {
   }
 
   public async mailSignUp() {
-    const rtrn = await this.requestService.mailSignUp(this.username, this.email, this.password);
+    const rtrn = await this.requestService.mailSignUp(
+      this.username,
+      this.email,
+      this.rsaService.encryptWithPublicKey(this.password)
+    );
     console.log(rtrn);
   }
 
