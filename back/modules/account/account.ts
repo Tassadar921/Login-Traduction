@@ -37,30 +37,12 @@ export class Account {
         this.tokenLength = parseInt(process.env.TOKEN_LENGTH!);
     }
 
-    private async hashSha256(data: string): Promise<string> {
-        return new Promise((resolve, reject) => {
-            const hash = crypto.createHash('sha256');
-            hash.write(data);
-
-            hash.on('readable', () => {
-                const data = hash.read();
-
-                if (data) {
-                    const final = data.toString('hex');
-                    resolve(final);
-                }
-                else {
-                    reject("erreur random");
-                }
-
-            });
-
-            hash.end();
-        });
-    }
-
-
     public async mailSignUp(username: string, password: string, email: string, language: string, res: Response) {
+        const validInput = [this.checkRegexEmail(email) ,this.checkRegexPassword(password), this.checkRegexUsername(username)];
+        if(!validInput[0] || !validInput[1] || !validInput[2]){
+            
+            res.json({status: -2});
+        }
 
         if (Object(await accountRequest.checkUser(username, email, this.client)).length > 0) {
             res.json({status: 0});
@@ -227,6 +209,29 @@ export class Account {
         }
     }
 
+    //hash a string with sha256
+    private async hashSha256(data: string): Promise<string> {
+        return new Promise((resolve, reject) => {
+            const hash = crypto.createHash('sha256');
+            hash.write(data);
+
+            hash.on('readable', () => {
+                const data = hash.read();
+
+                if (data) {
+                    const final = data.toString('hex');
+                    resolve(final);
+                }
+                else {
+                    reject("erreur random");
+                }
+
+            });
+
+            hash.end();
+        });
+    }
+
     //sends an email containing a unique token to create the account, effective for 10 minutes
     private async deleteCreateAccountQueueUrlToken(email: string) {
         await accountRequest.deleteCreateAccountUrlToken(email, this.client);
@@ -239,17 +244,26 @@ export class Account {
 
     //checks if the username is valid
     private async checkRegexUsername(username : string) {
-        
+        if((/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/).test(username)) {
+            return true
+        }
+        return false
     }
 
     //checks if the email is valid
     private async checkRegexEmail(email : string) {
-        
+        if((/^[A-Z0-9+_.-]+@[A-Z0-9.-]+$/).test(email)) {
+            return true
+        }
+        return false
     }
 
     //checks if the password is valid
     private async checkRegexPassword(password : string) {
-
+        if(/^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]){8,}$/) {
+            return true
+        }
+        return false
     }
 
     // generates token by stringing a random number of characters from a dictionnary

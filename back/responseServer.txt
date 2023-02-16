@@ -1,6 +1,7 @@
 mailSignUp :           => CODED
 	(req.body.username, req.body.password, req.body.email, req.body.language) => 
 	{
+		{status : -2} problem with the inputs, bad shape
 		{status : -1} problem with the mail
 		{status : 0} a user exist
 		{status : 1} success
