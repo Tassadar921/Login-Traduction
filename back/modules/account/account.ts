@@ -38,8 +38,7 @@ export class Account {
     }
 
     public async mailSignUp(username: string, password: string, email: string, language: string, res: Response) {
-        const validInput = [this.checkRegexEmail(email) ,this.checkRegexPassword(password), this.checkRegexUsername(username)];
-        if(!validInput[0] || !validInput[1] || !validInput[2]){
+        if(!this.checkRegexEmail(email) || !this.checkRegexPassword(password) || !this.checkRegexUsername(username)){
             
             res.json({status: -2});
         }
