@@ -10,6 +10,7 @@ module default {
         required property token -> str;
         link permission -> Permission;
         multi link friends -> User;
+        multi link notifications -> Notification;
     }
 
     type User_Creation {
@@ -22,5 +23,14 @@ module default {
     type Password_Reset {
         required property urlToken -> str;
         required property email -> str;
+    }
+
+    type Notification {
+        required property name -> str;
+        required property text -> str;
+        required property date -> datetime;
+        required property seen -> bool { 
+            default := false 
+        };
     }
 }
