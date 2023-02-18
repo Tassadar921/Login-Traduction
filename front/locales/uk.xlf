@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en-UK" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="5814608513609314065" datatype="html">
+        <source> sign in </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/connection/connection.page.html</context>
+          <context context-type="linenumber">13,15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="197864894617864351" datatype="html">
+        <source> sign up </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/connection/connection.page.html</context>
+          <context context-type="linenumber">18,20</context>
+        </context-group>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

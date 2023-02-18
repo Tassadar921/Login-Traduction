@@ -48,6 +48,12 @@ export class RequestService {
     ));
   }
 
+  public async test(message: string): Promise<any> {
+    return await lastValueFrom(this.http.post(environment.apiUrl + '/test',
+      {message},
+    ));
+  }
+
   public async createAccount(urlToken: string): Promise<any> {
     return await lastValueFrom(this.http.post(environment.apiUrl + '/createAccount',
       {urlToken}

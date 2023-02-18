@@ -5,7 +5,12 @@
     "fullName": "Anglo-English"
   },
   "data": {
-    "components": {},
+    "components": {
+      "connection": {
+        "signIn": "Sign in",
+        "signUp": "Sign up"
+      }
+    },
     "services": {
       "inputChecking": {
         "usernameTooShort": "Username is too short",

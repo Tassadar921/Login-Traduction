@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {DevicePlatformService} from '../shared/services/device-platform.service';
 import {animate, state, style, transition, trigger} from '@angular/animations';
+import {LanguageService} from '../shared/services/language.service';
 
 @Component({
   selector: 'app-connection',
@@ -34,7 +35,8 @@ export class ConnectionPage implements OnInit {
   public signUpAnimationState: string = 'false';
   public blockDisplaySignUpOnLoading: boolean = true;
   constructor(
-    public devicePlatformService: DevicePlatformService
+    public devicePlatformService: DevicePlatformService,
+    public languageService: LanguageService
   ) {}
 
   ngOnInit() {

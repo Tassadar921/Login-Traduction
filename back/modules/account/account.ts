@@ -40,47 +40,45 @@ export class Account {
     public async mailSignUp(username: string, password: string, email: string, language: string, res: Response) {
         if(!this.checkRegexEmail(email) || !this.checkRegexPassword(password) || !this.checkRegexUsername(username)){
             res.json({status: -2});
-        }
-
-        if (Object(await accountRequest.checkUser(username, email, this.client)).length > 0) {
+        }else if (Object(await accountRequest.checkUser(username, email, this.client)).length > 0) {
             res.json({status: 0});
-        }
-
-        let result = await accountRequest.checkCreateAccountUrlTokenByEmail(email, this.client);
-        if(result.length){
-            await accountRequest.deleteCreateAccountUrlToken(email, this.client);
-        }
-
-        let urlToken = this.generateToken(this.urlTokenLength);
-        result = await accountRequest.checkCreateAccountUrlTokenByUrlToken(urlToken, this.client);
-        while (result.length > 0) {
-            urlToken = this.generateToken(this.urlTokenLength);
-            result = await accountRequest.checkCreateAccountUrlTokenByUrlToken(urlToken, this.client);
-        }
-
-        await accountRequest.createCreateAccountUrlToken(urlToken, username, email, await this.hashSha256(await this.hashSha256(password)), this.client);
-
-        setTimeout(this.deleteCreateAccountQueueUrlToken, 600000, email);
-
-        // @ts-ignore
-        const languageFile = Object(await import('./files/json/languages/' + language + '/' + language + '_back.json', {assert: {type: 'json'}})).default;
-
-        this.mailOptions.to = email;
-        this.mailOptions.subject = languageFile.data.modules.account.mailCreateAccountCreateUrlToken.mailOptions.subject;
-        this.mailOptions.text = languageFile.data.modules.account.mailCreateAccountCreateUrlToken.mailOptions.text.replace('<USERNAME>', username)
-            + process.env.URL_FRONT
-            + 'conf-account?urlToken='
-            + urlToken;
-
-        //sends an email containing a unique token to delete the account, effective for 10 minutes
-
-        this.transporter.sendMail(this.mailOptions, async function (error) {
-            if (error) {
-                res.json({status: -1});
-            } else {
-                res.json({status: 1});
+        } else {
+            let result = await accountRequest.checkCreateAccountUrlTokenByEmail(email, this.client);
+            if(result.length){
+                await accountRequest.deleteCreateAccountUrlToken(email, this.client);
             }
-        });
+
+            let urlToken = this.generateToken(this.urlTokenLength);
+            result = await accountRequest.checkCreateAccountUrlTokenByUrlToken(urlToken, this.client);
+            while (result.length > 0) {
+                urlToken = this.generateToken(this.urlTokenLength);
+                result = await accountRequest.checkCreateAccountUrlTokenByUrlToken(urlToken, this.client);
+            }
+
+            await accountRequest.createCreateAccountUrlToken(urlToken, username, email, await this.hashSha256(await this.hashSha256(password)), this.client);
+
+            setTimeout(this.deleteCreateAccountQueueUrlToken, 600000, email);
+
+            // @ts-ignore
+            const languageFile = Object(await import('./files/json/languages/' + language + '/' + language + '_back.json', {assert: {type: 'json'}})).default;
+
+            this.mailOptions.to = email;
+            this.mailOptions.subject = languageFile.data.modules.account.mailCreateAccountCreateUrlToken.mailOptions.subject;
+            this.mailOptions.text = languageFile.data.modules.account.mailCreateAccountCreateUrlToken.mailOptions.text.replace('<USERNAME>', username)
+                + process.env.URL_FRONT
+                + 'conf-account?urlToken='
+                + urlToken;
+
+            //sends an email containing a unique token to delete the account, effective for 10 minutes
+
+            this.transporter.sendMail(this.mailOptions, async function (error) {
+                if (error) {
+                    res.json({status: -1});
+                } else {
+                    res.json({status: 1});
+                }
+            });
+        }
     };
 
     //creates the account with datas in the queue linked to token
@@ -176,8 +174,6 @@ export class Account {
 
         await accountRequest.createResetPasswordUrlToken(urlToken, email, this.client);
 
-        console.log(urlToken)
-
         setTimeout(this.mailResetPasswordDeleteUrlToken, 600000, urlToken);
 
         // @ts-ignore
@@ -219,20 +215,15 @@ export class Account {
         return new Promise((resolve, reject) => {
             const hash = crypto.createHash('sha256');
             hash.write(data);
-
             hash.on('readable', () => {
                 const data = hash.read();
-
                 if (data) {
                     const final = data.toString('hex');
                     resolve(final);
+                } else {
+                    reject("");
                 }
-                else {
-                    reject("erreur random");
-                }
-
             });
-
             hash.end();
         });
     }
@@ -248,27 +239,18 @@ export class Account {
     }
 
     //checks if the username is valid
-    private async checkRegexUsername(username : string) {
-        if((/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/).test(username)) {
-            return true
-        }
-        return false
+    private checkRegexUsername(username : string) {
+        return (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/).test(username);
     }
 
     //checks if the email is valid
-    private async checkRegexEmail(email : string) {
-        if((/^[A-Z0-9+_.-]+@[A-Z0-9.-]+$/).test(email)) {
-            return true
-        }
-        return false
+    private checkRegexEmail(email : string) {
+        return (/^[A-Z0-9+_.-]+@[A-Z0-9.-]+$/).test(email);
     }
 
     //checks if the password is valid
-    private async checkRegexPassword(password : string) {
-        if(/^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]){8,}$/) {
-            return true
-        }
-        return false
+    private checkRegexPassword(password : string) {
+        return (/^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]){8,}$/).test(password);
     }
 
     // generates token by stringing a random number of characters from a dictionnary

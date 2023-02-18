@@ -14,7 +14,12 @@ export class LanguageService {
         "tag": "uk"
       },
     "data": {
-      "components": {},
+      "components": {
+        "connection": {
+          "signIn": "Sign in",
+          "signUp": "Sign up"
+        }
+      },
       "services": {
         "inputChecking": {
           "usernameTooShort": "Username is too short",

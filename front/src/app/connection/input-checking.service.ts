@@ -11,8 +11,7 @@ export class InputCheckingService {
 
   constructor(
     private languageService: LanguageService
-  ) {
-  }
+  ) {}
 
   //checks conditions of username inputs, returning id of error messages in dictionary
   //triggers on keyup

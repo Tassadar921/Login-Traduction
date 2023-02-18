@@ -11,7 +11,7 @@ export class ConfAccountPage implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private requestService: RequestService
+    private requestService: RequestService,
   ) {}
 
   ngOnInit() {

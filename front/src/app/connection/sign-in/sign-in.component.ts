@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {DevicePlatformService} from '../../shared/services/device-platform.service';
 import {RequestService} from '../../shared/services/request.service';
+import {CryptoService} from '../../shared/services/crypto.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -19,7 +20,8 @@ export class SignInComponent implements OnInit {
 
   constructor(
     public devicePlatformService: DevicePlatformService,
-    private requestService: RequestService
+    private requestService: RequestService,
+    private cryptoService: CryptoService
   ) {}
 
   ngOnInit() {}
@@ -29,7 +31,10 @@ export class SignInComponent implements OnInit {
   }
 
   public async signIn() {
-    const rtrn = await this.requestService.signIn(this.username, this.password);
+    const rtrn = await this.requestService.signIn(
+      this.username,
+      this.cryptoService.sha256(this.password)
+    );
     console.log(rtrn);
   }
 }

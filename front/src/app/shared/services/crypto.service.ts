@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import * as Forge from "node-forge";
+import * as forge from "node-forge";
 import {RequestService} from "./request.service";
 
 @Injectable({
   providedIn: 'root'
 })
-export class RSAService {
+export class CryptoService {
 
   private publicKey: string = '';
 
@@ -13,11 +13,15 @@ export class RSAService {
     private requestService: RequestService
   ) {}
 
-  public async setPublicKey():Promise<void>{
+  public async setRsaPublicKey():Promise<void>{
     this.publicKey = Object(await this.requestService.getPublicKey()).publicKey;
   }
-  public encryptWithPublicKey(valueToEncrypt: string): string {
-    const rsa = Forge.pki.publicKeyFromPem(this.publicKey);
+  public rsaEncryptWithPublicKey(valueToEncrypt: string): string {
+    const rsa = forge.pki.publicKeyFromPem(this.publicKey);
     return window.btoa(rsa.encrypt(valueToEncrypt, 'RSA-OAEP'));
+  }
+
+  public sha256(valueToEncrypt: string): string {
+    return forge.md.sha256.create().update(valueToEncrypt).digest().toHex();
   }
 }
