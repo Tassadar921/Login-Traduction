@@ -7,11 +7,15 @@ import {RequestService} from "./request.service";
 })
 export class CryptoService {
 
-  private publicKey: string = '';
+  public publicKey: string = '';
 
   constructor(
     private requestService: RequestService
   ) {}
+
+  public getPublicKey(): string {
+    return this.publicKey;
+  }
 
   public async setRsaPublicKey():Promise<void>{
     this.publicKey = Object(await this.requestService.getPublicKey()).publicKey;

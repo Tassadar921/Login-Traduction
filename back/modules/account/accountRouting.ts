@@ -16,10 +16,15 @@ module accountRouting {
         }
 
         app.get('/getPublicKey', async function (req: Request, res: Response) {
+            console.log('publicKey : ', publicKey);
             await res.json({publicKey});
         });
         app.post('/mailSignUp', async function (req: Request, res: Response) {
-            await account.mailSignUp(req.body.username, decrypt(req.body.password), req.body.email, req.body.language, res);
+            if(req.body.publicKey!==publicKey) {
+                await res.json({status: -3});
+            } else {
+                await account.mailSignUp(req.body.username, decrypt(req.body.password), req.body.email, req.body.language, res);
+            }
         });
         app.post('/createAccount', async function (req: Request, res: Response) {
             await account.createAccount(req.body.urlToken, res);

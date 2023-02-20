@@ -11,7 +11,7 @@ import {CookieService} from './cookie.service';
 export class RequestService {
   constructor(
     private http: HttpClient,
-    private cookieService: CookieService
+    private cookieService: CookieService,
   ) {}
 
   public async getPublicKey (): Promise<Object> {
@@ -25,15 +25,15 @@ export class RequestService {
 
   //json of the language id selectedLanguage
   public async getTranslation(languageID: GetResult): Promise<any> {
-    return await lastValueFrom(this.http.get(environment.apiUrl + '/languages/' + languageID));
+    return await lastValueFrom(this.http.get<Object>(environment.apiUrl + '/languages/' + languageID));
   }
 
   /*
   {status : -1} bad username or email shape
 	{status : 0} wrong identifier or password
 	{status: 1, token: token, username: username} success*/
-  public async signIn(identifier: string, password: string): Promise<any> {
-    return await lastValueFrom(this.http.post(environment.apiUrl + '/signIn',
+  public async signIn(identifier: string, password: string): Promise<Object> {
+    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/signIn',
       {identifier, password}
     ));
   }
@@ -42,20 +42,20 @@ export class RequestService {
   {status : -1} problem with the mail
 	{status : 0} a user exist
 	{status : 1} success*/
-  public async mailSignUp(username: string, email: string, password: string): Promise<any> {
-    return await lastValueFrom(this.http.post(environment.apiUrl + '/mailSignUp',
-      {username, email, password, language: await this.cookieService.getCookie('language')},
+  public async mailSignUp(username: string, email: string, password: string, publicKey: string): Promise<Object> {
+    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/mailSignUp',
+      {username, password, email, language: await this.cookieService.getCookie('language'), publicKey},
     ));
   }
 
-  public async test(message: string): Promise<any> {
-    return await lastValueFrom(this.http.post(environment.apiUrl + '/test',
+  public async test(message: string): Promise<Object> {
+    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/test',
       {message},
     ));
   }
 
-  public async createAccount(urlToken: string): Promise<any> {
-    return await lastValueFrom(this.http.post(environment.apiUrl + '/createAccount',
+  public async createAccount(urlToken: string): Promise<Object> {
+    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/createAccount',
       {urlToken}
     ));
   }

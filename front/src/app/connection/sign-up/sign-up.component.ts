@@ -3,6 +3,8 @@ import {DevicePlatformService} from '../../shared/services/device-platform.servi
 import {InputCheckingService} from '../input-checking.service';
 import { RequestService } from 'src/app/shared/services/request.service';
 import {CryptoService} from "../../shared/services/crypto.service";
+import {lastValueFrom} from "rxjs";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-sign-up',
@@ -55,17 +57,16 @@ export class SignUpComponent implements OnInit {
   }
 
   public async mailSignUp() {
-    let rtrn = await this.requestService.mailSignUp(
-      this.username,
-      this.email,
-      this.cryptoService.rsaEncryptWithPublicKey(this.password)
-    );
-    if(rtrn.status===-3) {
+    console.log('front key : ', this.cryptoService.publicKey);
+    console.log('back key : ', Object(await this.requestService.getPublicKey()).publicKey);
+    let rtrn;
+    while(!rtrn || Object(rtrn).status===3){
       await this.cryptoService.setRsaPublicKey();
       rtrn = await this.requestService.mailSignUp(
         this.username,
         this.email,
-        this.cryptoService.rsaEncryptWithPublicKey(this.password)
+        this.cryptoService.rsaEncryptWithPublicKey(this.password),
+        this.cryptoService.getPublicKey()
       );
     }
     console.log(rtrn);

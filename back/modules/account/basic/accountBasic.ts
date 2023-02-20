@@ -176,8 +176,6 @@ export class AccountBasic {
 
         await accountBasicRequest.createResetPasswordUrlToken(urlToken, email, this.client);
 
-        console.log(urlToken)
-
         setTimeout(this.mailResetPasswordDeleteUrlToken, 600000, urlToken);
 
         // @ts-ignore
@@ -248,30 +246,21 @@ export class AccountBasic {
     }
 
     //checks if the username is valid
-    private async checkRegexUsername(username : string) {
-        if((/^[A-Za-zÀ-ÖØ-öø-ÿ0-9_-]{3,20}$/).test(username)) {
-            return true
-        }
-        return false
+    private checkRegexUsername(username : string) {
+        return (/^[A-Za-zÀ-ÖØ-öø-ÿ0-9_-]{3,20}$/).test(username);
     }
 
     //checks if the email is valid
-    private async checkRegexEmail(email : string) {
-        if((/^[A-Z0-9+_.-]+@[A-Z0-9.-]+$/).test(email)) {
-            return true
-        }
-        return false
+    private checkRegexEmail(email : string) {
+        return (/^[A-Z0-9+_.-]+@[A-Z0-9.-]+$/).test(email);
     }
 
     //checks if the password is valid
-    private async checkRegexPassword(password : string) {
-        if((/^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]){8,}$/).test(password)) {
-            return true
-        }
-        return false
+    private checkRegexPassword(password : string) {
+        return (/^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]){8,}$/).test(password);
     }
 
-    // generates token by stringing a random number of characters from a dictionnary
+    // generates token by stringing a random number of characters from a dictionary
     private generateToken(length: number) {
         //edit the token allowed characters
         let alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'.split('');
@@ -280,7 +269,6 @@ export class AccountBasic {
             let j = Math.floor(Math.random() * (alphabet.length - 1));
             token += alphabet[j];
         }
-        console.log(token);
         return token;
     }
 }
