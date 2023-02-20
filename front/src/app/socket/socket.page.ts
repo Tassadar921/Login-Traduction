@@ -15,7 +15,7 @@ export class SocketPage implements OnInit {
   }
 
   public emit() {
-    this.socket.emit('test', 'test');
+    this.socket.emit('hello');
   }
 
 }

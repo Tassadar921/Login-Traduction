@@ -69,7 +69,7 @@ export class AccountBasic {
         this.mailOptions.subject = languageFile.data.modules.account.basic.mailCreateAccountCreateUrlToken.mailOptions.subject;
         this.mailOptions.text = languageFile.data.modules.account.basic.mailCreateAccountCreateUrlToken.mailOptions.text.replace('<USERNAME>', username)
             + process.env.URL_FRONT
-            + 'conf-account?urlToken='
+            + '/conf-account?urlToken='
             + urlToken;
 
         //sends an email containing a unique token to delete the account, effective for 10 minutes
@@ -185,7 +185,7 @@ export class AccountBasic {
         this.mailOptions.subject = languageFile.data.modules.account.basic.mailResetPasswordCreateUrlToken.mailOptions.subject;
         this.mailOptions.text = languageFile.data.modules.account.basic.mailResetPasswordCreateUrlToken.mailOptions.text.replace('username', result0[0].username)
             + process.env.URL_FRONT
-            + 'conf-account?urlToken='
+            + '/conf-account?urlToken='
             + urlToken;
 
         //sends an email containing a unique token to delete the account, effective for 10 minutes
