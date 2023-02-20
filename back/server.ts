@@ -7,6 +7,7 @@ import cors from 'cors';
 import * as dotenv from 'dotenv';
 import * as socketIO from 'socket.io';
 
+import http from 'http';
 
 import accountRouting from './modules/account/accountRouting';
 import languagesRouting from './modules/languages/languagesRouting';
@@ -25,12 +26,15 @@ if (app.get('env') === 'production') {
     app.set('trust proxy', 1);
 }
 
+const server = http.createServer(app);
+
 const io = new socketIO.Server<socketOptions.ClientToServerEvents, socketOptions.ServerToClientEvents, socketOptions.InterServerEvents, socketOptions.SocketData>();
+io.attach(server);
 
 languagesRouting.init(app);
 accountRouting.init(app,io);
 
-if (app.listen(process.env.PORT || 8080)) {
+if (server.listen(process.env.PORT || 8080)) {
     console.log('=========== SERVER STARTED FOR HTTP RQ ===========');
     console.log('    =============   PORT: 8080   =============');
 }

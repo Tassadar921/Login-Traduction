@@ -60,9 +60,13 @@ module accountRouting {
 
     function initSocket(io : socketIO.Server<socketOptions.ClientToServerEvents, socketOptions.ServerToClientEvents, socketOptions.InterServerEvents, socketOptions.SocketData>) : void {
         io.on('connection', (socket) => {
+            console.log('socket connected');
 //            socket.emit('emitNotif', [{name : "test", text : "test", date : new Date()}]);          
-            socket.on('delete', () => {
-                
+            socket.on('noArg', () => {
+                console.log('noArg');
+            });
+            socket.on('hello', () => {
+                console.log('hello');
             });
             socket.on('disconnect', () => {
                 

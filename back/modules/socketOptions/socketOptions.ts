@@ -5,7 +5,8 @@ module socketOptions {
     }
     
     export interface ClientToServerEvents {
-        delete: () => void;
+        noArg: () => void;
+        emitNotif: (data: [{name : string, text : string, date:Date}]) => void;
         hello: () => void;
     }
     
