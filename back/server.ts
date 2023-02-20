@@ -1,16 +1,17 @@
 // @ts-ignore
-import express, {Request, Response} from 'express';
+import express from 'express';
 // @ts-ignore
 import bodyParser from 'body-parser';
 // @ts-ignore
 import cors from 'cors';
 import * as dotenv from 'dotenv';
-import EncryptRsa from 'encrypt-rsa';
+import * as socketIO from 'socket.io';
 
+
+import accountRouting from './modules/account/accountRouting';
 import languagesRouting from './modules/languages/languagesRouting';
-import accountBasicRouting from './modules/account/basic/accountBasicRouting';
-import accountFriendsRouting from './modules/account/friends/accountFriendsRouting';
-import accountNotificationRouting from './modules/account/notification/accountNotificationRouting';
+import socketOptions from './modules/socketOptions/socketOptions';
+
 
 dotenv.config();
 
@@ -24,11 +25,10 @@ if (app.get('env') === 'production') {
     app.set('trust proxy', 1);
 }
 
-languagesRouting.init(app);
-accountBasicRouting.init(app);
-accountFriendsRouting.init(app);
-accountNotificationRouting.init();
+const io = new socketIO.Server<socketOptions.ClientToServerEvents, socketOptions.ServerToClientEvents, socketOptions.InterServerEvents, socketOptions.SocketData>();
 
+languagesRouting.init(app);
+accountRouting.init(app,io);
 
 if (app.listen(process.env.PORT || 8080)) {
     console.log('=========== SERVER STARTED FOR HTTP RQ ===========');
