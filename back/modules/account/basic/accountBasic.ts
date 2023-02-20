@@ -252,12 +252,12 @@ export class AccountBasic {
 
     //checks if the email is valid
     private checkRegexEmail(email : string) {
-        return (/^[A-Z0-9+_.-]+@[A-Z0-9.-]+$/).test(email);
+        return (/^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$/).test(email);
     }
 
     //checks if the password is valid
     private checkRegexPassword(password : string) {
-        return (/^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]){8,}$/).test(password);
+        return (/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/).test(password);
     }
 
     // generates token by stringing a random number of characters from a dictionary
