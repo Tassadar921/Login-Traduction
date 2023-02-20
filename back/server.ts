@@ -28,8 +28,10 @@ if (app.get('env') === 'production') {
 
 const server = http.createServer(app);
 
-const io = new socketIO.Server<socketOptions.ClientToServerEvents, socketOptions.ServerToClientEvents, socketOptions.InterServerEvents, socketOptions.SocketData>();
-io.attach(server);
+const io = new socketIO.Server(server, {cors: {
+    origin: process.env.URL_FRONT,
+        methods: ["GET", "POST"]
+}});
 
 languagesRouting.init(app);
 accountRouting.init(app,io);
