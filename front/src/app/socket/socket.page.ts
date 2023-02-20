@@ -11,13 +11,11 @@ export class SocketPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    console.log('socket', this.socket);
     this.socket.connect();
   }
 
   public emit() {
-    console.log('socket', this.socket);
-    this.socket.emit('hello');
+    this.socket.emit('test', 'test');
   }
 
 }

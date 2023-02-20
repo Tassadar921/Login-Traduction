@@ -29,7 +29,6 @@ module accountRouting {
         }
 
         app.get('/getPublicKey', async function (req: Request, res: Response) {
-            console.log('publicKey : ', publicKey);
             await res.json({publicKey});
         });
         app.post('/mailSignUp', async function (req: Request, res: Response) {
@@ -60,16 +59,13 @@ module accountRouting {
 
     function initSocket(io : socketIO.Server<socketOptions.ClientToServerEvents, socketOptions.ServerToClientEvents, socketOptions.InterServerEvents, socketOptions.SocketData>) : void {
         io.on('connection', (socket) => {
-            console.log('socket connected');
+            console.log('client connecté')
 //            socket.emit('emitNotif', [{name : "test", text : "test", date : new Date()}]);          
-            socket.on('noArg', () => {
-                console.log('noArg');
-            });
-            socket.on('hello', () => {
-                console.log('hello');
+            socket.on('delete', () => {
+                
             });
             socket.on('disconnect', () => {
-                
+                console.log('client déconnecté')
             });
         });
 
