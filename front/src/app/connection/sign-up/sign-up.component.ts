@@ -55,12 +55,19 @@ export class SignUpComponent implements OnInit {
   }
 
   public async mailSignUp() {
-    const rtrn = await this.requestService.mailSignUp(
+    let rtrn = await this.requestService.mailSignUp(
       this.username,
       this.email,
       this.cryptoService.rsaEncryptWithPublicKey(this.password)
     );
+    if(rtrn.status===-3) {
+      await this.cryptoService.setRsaPublicKey();
+      rtrn = await this.requestService.mailSignUp(
+        this.username,
+        this.email,
+        this.cryptoService.rsaEncryptWithPublicKey(this.password)
+      );
+    }
     console.log(rtrn);
   }
-
 }
