@@ -8,17 +8,19 @@
     "data": {
       "modules": {
         "account": {
-          "mailCreateAccountCreateUrlToken": {
-            "mailOptions": {
-              "subject": "Welcome to the Anglo-English Dictionary",
-              "text" : "Welcome, <USERNAME>, to the Anglo-English Dictionary. Please click on the link below to activate your account. "
-            }
-          },
-          "resetPassword": {
-            "mailOptions": {
-              "subject": "Welcome to the Anglo-English Dictionary",
-              "text" : "Welcome, <USERNAME>, to the Anglo-English Dictionary. Please click on the link below to reset your password. "
-            }
+          "basic": {
+            "mailCreateAccountCreateUrlToken": {
+              "mailOptions": {
+                "subject": "Welcome to the Anglo-English Dictionary",
+                "text" : "Welcome, <USERNAME>, to the Anglo-English Dictionary. Please click on the link below to activate your account. "
+              }
+            },
+            "resetPassword": {
+              "mailOptions": {
+                "subject": "Welcome to the Anglo-English Dictionary",
+                "text" : "Welcome, <USERNAME>, to the Anglo-English Dictionary. Please click on the link below to reset your password. "
+              }
+            } 
           }
         }
       }

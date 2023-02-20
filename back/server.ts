@@ -8,7 +8,9 @@ import * as dotenv from 'dotenv';
 import EncryptRsa from 'encrypt-rsa';
 
 import languagesRouting from './modules/languages/languagesRouting';
-import accountRouting from './modules/account/accountRouting';
+import accountBasicRouting from './modules/account/basic/accountBasicRouting';
+import accountFriendsRouting from './modules/account/friends/accountFriendsRouting';
+import accountNotificationRouting from './modules/account/notification/accountNotificationRouting';
 
 dotenv.config();
 
@@ -22,8 +24,11 @@ if (app.get('env') === 'production') {
     app.set('trust proxy', 1);
 }
 
-accountRouting.init(app);
 languagesRouting.init(app);
+accountBasicRouting.init(app);
+accountFriendsRouting.init(app);
+accountNotificationRouting.init();
+
 
 if (app.listen(process.env.PORT || 8080)) {
     console.log('=========== SERVER STARTED FOR HTTP RQ ===========');

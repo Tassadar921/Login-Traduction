@@ -1,10 +1,10 @@
 import {Request, Response} from "express";
-import {Account} from "./account";
+import {AccountBasic} from "./accountBasic";
 import EncryptRsa from "encrypt-rsa";
 
 module accountRouting {
     export function init(app: any): void {
-        const account = new Account();
+        const account = new AccountBasic();
         const encryptRsa = new EncryptRsa();
         const {publicKey, privateKey} = encryptRsa.createPrivateAndPublicKeys();
 
