@@ -1,9 +1,22 @@
-import {Request, Response} from "express";
-import {AccountBasic} from "./basic/accountBasic";
+import {Express, Request, Response} from "express";
 import EncryptRsa from "encrypt-rsa";
+import * as socketIO from "socket.io";
+
+import socketOptions from "../socketOptions/socketOptions";
+
+import { AccountBasic } from "./basic/accountBasic";
+import { AccountFriends } from "./friends/accountFriends";
+import { AccountNotification } from "./notification/accountNotification";
 
 module accountRouting {
-    export function init(app: any): void {
+    export function init(app: Express, io : socketIO.Server<socketOptions.ClientToServerEvents, socketOptions.ServerToClientEvents, socketOptions.InterServerEvents, socketOptions.SocketData>): void {
+        initHttp(app);
+        initSocket(io);
+
+        console.log('accountRouting init');
+    }
+
+    function initHttp(app: Express): void {
         const account = new AccountBasic();
         const encryptRsa = new EncryptRsa();
         const {publicKey, privateKey} = encryptRsa.createPrivateAndPublicKeys();
@@ -42,7 +55,20 @@ module accountRouting {
             await account.fastCheck(req.body.username, req.body.token, res);
         });
 
-        console.log('Account routing initialized');
+        return;
+    }
+
+    function initSocket(io : socketIO.Server<socketOptions.ClientToServerEvents, socketOptions.ServerToClientEvents, socketOptions.InterServerEvents, socketOptions.SocketData>) : void {
+        io.on('connection', (socket) => {
+//            socket.emit('emitNotif', [{name : "test", text : "test", date : new Date()}]);          
+            socket.on('delete', () => {
+                
+            });
+            socket.on('disconnect', () => {
+                
+            });
+        });
+
         return;
     }
 }
