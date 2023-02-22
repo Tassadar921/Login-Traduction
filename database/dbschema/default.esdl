@@ -9,8 +9,12 @@ module default {
         required property email -> str;
         required property token -> str;
         link permission -> Permission;
-        multi link friends -> User;
-        multi link notifications -> Notification;
+        multi link friends -> User{
+            on target delete allow;
+        };
+        multi link notifications -> Notification {
+            on target delete allow;
+        };
     }
 
     type User_Creation {

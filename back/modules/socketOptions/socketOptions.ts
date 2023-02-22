@@ -5,8 +5,11 @@ module socketOptions {
     }
     
     export interface ClientToServerEvents {
-        noArg: () => void;
-        emitNotif: (data: [{name : string, text : string, date:Date}]) => void;
+        initSocketData: (username: string, token: string) => void;
+        synchronizeNotifications: () => void;
+        notificationIsSeen: (id: string) => void;
+        deleteNotification: (id: string) => void;
+
         hello: () => void;
     }
     
@@ -16,7 +19,7 @@ module socketOptions {
     
     export interface SocketData {
         username: string;
-        token: number;
+        token: string;
     }    
 }
 
