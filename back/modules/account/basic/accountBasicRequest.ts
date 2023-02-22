@@ -120,11 +120,11 @@ export module accountBasicRequest {
         });
     }
 
-    export async function deleteCreateAccountUrlToken(email : string, client : Client) {
+    export async function deleteCreateAccountUrlToken(urlToken : string, client : Client) {
         return new Promise<any[]>((resolve) => {
             const result = client.query(`
                 delete User_Creation
-                    filter .email = "${email}";
+                    filter .urlToken = "${urlToken}";
             `);
             resolve(result);
         });
@@ -158,11 +158,11 @@ export module accountBasicRequest {
         });
     }
 
-    export async function deleteResetPasswordUrlToken(email : string, client : Client) {
+    export async function deleteResetPasswordUrlToken(urlToken : string, client : Client) {
         return new Promise<any[]>((resolve) => {
             const result = client.query(`
                 delete Reset_Password
-                    filter .email = "${email}";
+                    filter .urlToken = "${urlToken}";
             `);
             resolve(result);
         });

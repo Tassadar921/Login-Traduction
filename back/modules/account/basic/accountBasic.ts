@@ -12,6 +12,7 @@ export class AccountBasic {
     private readonly mailOptions: { from: string | undefined; to: string; subject: string; text: string; }
     private readonly urlTokenLength: number;
     private readonly tokenLength: number;
+    private readonly urlTokenTimeoutDelay: number;
 
     constructor() {
         this.client = createClient({});
@@ -35,6 +36,7 @@ export class AccountBasic {
 
         this.urlTokenLength = parseInt(process.env.URL_TOKEN_LENGTH!);
         this.tokenLength = parseInt(process.env.TOKEN_LENGTH!);
+        this.urlTokenTimeoutDelay = parseInt(process.env.URL_TOKEN_TIMEOUT_DELAY!);
     }
 
     public async mailSignUp(username: string, password: string, email: string, language: string, res: Response) {
@@ -60,7 +62,7 @@ export class AccountBasic {
 
         await accountBasicRequest.createCreateAccountUrlToken(urlToken, username, email, await this.hashSha256(await this.hashSha256(password)), this.client);
 
-        setTimeout(this.deleteCreateAccountQueueUrlToken, 600000, email);
+        this.deleteCreateAccountQueueUrlToken(urlToken);
 
         // @ts-ignore
         const languageFile = Object(await import('./files/json/languages/' + language + '/' + language + '_back.json', {assert: {type: 'json'}})).default;
@@ -178,7 +180,7 @@ export class AccountBasic {
 
         await accountBasicRequest.createResetPasswordUrlToken(urlToken, email, this.client);
 
-        setTimeout(this.mailResetPasswordDeleteUrlToken, 600000, urlToken);
+        this.deleteMailResetPasswordQueueUrlToken(urlToken);
 
         // @ts-ignore
         const languageFile = await import('./files/json/languages/' + language + '/' + language + '_back.json', {assert: {type: 'json'}})
@@ -238,13 +240,17 @@ export class AccountBasic {
     }
 
     //sends an email containing a unique token to create the account, effective for 10 minutes
-    private async deleteCreateAccountQueueUrlToken(email: string) {
-        await accountBasicRequest.deleteCreateAccountUrlToken(email, this.client);
+    private deleteCreateAccountQueueUrlToken(urlToken: string) {
+        const clientTmp = this.client;
+        setTimeout(() => {accountBasicRequest.deleteCreateAccountUrlToken(urlToken, clientTmp)}, this.urlTokenTimeoutDelay);
+        return
     }
 
     //sends an email containing a unique token to reset the password, effective for 10 minutes
-    private async mailResetPasswordDeleteUrlToken(urlToken : string) {
-        await accountBasicRequest.deleteResetPasswordUrlToken(urlToken, this.client);
+    private deleteMailResetPasswordQueueUrlToken(urlToken : string) {
+        const clientTmp = this.client;
+        setTimeout(() => {accountBasicRequest.deleteResetPasswordUrlToken(urlToken, clientTmp)}, this.urlTokenTimeoutDelay);
+        return
     }
 
     //checks if the username is valid
