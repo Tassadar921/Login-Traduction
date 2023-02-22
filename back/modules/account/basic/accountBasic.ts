@@ -102,7 +102,17 @@ export class AccountBasic {
         if (result.length > 0) {
             await accountBasicRequest.deleteCreateAccountUrlToken(result[0].email, this.client);
             await accountBasicRequest.createUser(result[0].username, result[0].email, result[0].password, 'none', this.client);
-            res.json({status: 1});
+
+            let token = this.generateToken(this.tokenLength);
+            let result1: any[] = await accountBasicRequest.checkToken(token, this.client);
+            while (result1.length > 0) {
+                token = this.generateToken(this.tokenLength);
+                result1 = await accountBasicRequest.checkToken(token, this.client);
+            }
+
+            await accountBasicRequest.updateUserToken(result[0].username, token, this.client);
+
+            res.json({status: 1, token: token, username: result[0].username});
         } else {
             res.json({status: 0});
         }

@@ -15,7 +15,7 @@ createAccount :       => CODED
 	(req.body.token) => 
 	{
 		{status : 0} no such token is allowed
-		{status : 1} success
+		{status: 1, token: token, username: username} success
 	}
 
 signIn :             => CODED
