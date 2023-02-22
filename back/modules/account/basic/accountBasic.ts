@@ -76,11 +76,13 @@ export class AccountBasic {
 
         this.transporter.sendMail(this.mailOptions, async function (error) {
             if (error) {
+                console.log(error);
                 res.json({status: -1});
             } else {
                 res.json({status: 1});
             }
         });
+        return;
     };
 
     //creates the account with datas in the queue linked to token
