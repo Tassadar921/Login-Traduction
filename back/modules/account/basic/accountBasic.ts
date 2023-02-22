@@ -40,12 +40,23 @@ export class AccountBasic {
     }
 
     public async mailSignUp(username: string, password: string, email: string, language: string, res: Response) {
-        if(!this.checkRegexEmail(email) || !this.checkRegexPassword(password) || !this.checkRegexUsername(username)){
-            res.json({status: -2});
+        if(!this.checkRegexEmail(email)){
+            res.json({status: -20});
+        }
+        if(!this.checkRegexPassword(password)){
+            res.json({status: -21});
+        }
+        if(!this.checkRegexUsername(username)){
+            res.json({status: -22});
         }
 
-        if (Object(await accountBasicRequest.checkUser(username, email, this.client)).length > 0) {
-            res.json({status: 0});
+        let result0 = Object(await accountBasicRequest.checkUser(username, email, this.client)).length > 0
+        if (result0) {
+            if(result0[0].username === username){
+                res.json({status: 0});
+            } else {
+                res.json({status: 1});
+            }
         }
 
         let result = await accountBasicRequest.checkCreateAccountUrlTokenByEmail(email, this.client);

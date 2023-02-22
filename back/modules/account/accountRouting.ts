@@ -58,12 +58,28 @@ module accountRouting {
     }
 
     function initSocket(io : socketIO.Server<socketOptions.ClientToServerEvents, socketOptions.ServerToClientEvents, socketOptions.InterServerEvents, socketOptions.SocketData>) : void {
+        const accountNotification = new AccountNotification();
+
         io.on('connection', (socket) => {
-            console.log('client connecté')
-//            socket.emit('emitNotif', [{name : "test", text : "test", date : new Date()}]);          
-            socket.on('hello', () => {
-                console.log('hello');
+            console.log('-----new client-----')
+            socket.on('initSocketData', (username : string, token : string) => {
+                accountNotification.initSocketData(socket, username, token);
             });
+
+//            socket.emit('emitNotif', [{name : "test", text : "test", date : new Date()}]);          
+            socket.on('synchronizeNotifications', () => {
+                accountNotification.synchronizeNotifications(socket);
+            });
+            socket.on('notificationIsSeen', (id) => {
+                accountNotification.notificationIsSeen(socket, id);
+            });
+            socket.on('deleteNotification', (id) => {
+                accountNotification.deleteNotification(socket, id);
+            });
+
+
+
+
             socket.on('disconnect', () => {
                 console.log('client déconnecté')
             });
