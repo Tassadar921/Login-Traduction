@@ -17,7 +17,11 @@ export class ConfAccountPage implements OnInit {
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe(async params => {
       const rtrn = await this.requestService.createAccount(Object(params).urlToken);
-      console.log(rtrn);
+      if(Object(rtrn).status) {
+        //account created => redirect + toast
+      }else{
+        //token deprecated or wrong => redirect connection + toast
+      }
     });
   }
 }
