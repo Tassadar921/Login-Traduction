@@ -14,6 +14,7 @@ module default {
         };
         multi link notifications -> Notification {
             on target delete allow;
+            on source delete delete target;
         };
     }
 
