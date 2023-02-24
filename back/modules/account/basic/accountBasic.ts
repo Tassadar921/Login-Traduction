@@ -42,59 +42,58 @@ export class AccountBasic {
     public async mailSignUp(username: string, password: string, email: string, language: string, res: Response) {
         if(!this.checkRegexEmail(email)){
             res.json({status: -20});
-        }
-        if(!this.checkRegexPassword(password)){
+        } else if(!this.checkRegexPassword(password)){
             res.json({status: -21});
-        }
-        if(!this.checkRegexUsername(username)){
+        } else if(!this.checkRegexUsername(username)){
             res.json({status: -22});
-        }
+        }else {
 
-        let result0 = Object(await accountBasicRequest.checkUser(username, email, this.client)).length > 0
-        if (result0) {
-            if(result0[0].username === username){
-                res.json({status: 0});
-            } else {
-                res.json({status: 1});
+            let result: any = Object(await accountBasicRequest.checkUser(username, email, this.client)).length > 0
+            if (result) {
+                if (result[0].username === username) {
+                    res.json({status: 40});
+                } else {
+                    res.json({status: 41});
+                }
             }
-        }
 
-        let result = await accountBasicRequest.checkCreateAccountUrlTokenByEmail(email, this.client);
-        if(result.length){
-            await accountBasicRequest.deleteCreateAccountUrlToken(email, this.client);
-        }
+            result = await accountBasicRequest.checkCreateAccountUrlTokenByEmail(email, this.client);
+            if (result.length) {
+                await accountBasicRequest.deleteCreateAccountUrlToken(email, this.client);
+            }
 
-        let urlToken = this.generateToken(this.urlTokenLength);
-        result = await accountBasicRequest.checkCreateAccountUrlTokenByUrlToken(urlToken, this.client);
-        while (result.length > 0) {
-            urlToken = this.generateToken(this.urlTokenLength);
+            let urlToken = this.generateToken(this.urlTokenLength);
             result = await accountBasicRequest.checkCreateAccountUrlTokenByUrlToken(urlToken, this.client);
-        }
-
-        await accountBasicRequest.createCreateAccountUrlToken(urlToken, username, email, await this.hashSha256(await this.hashSha256(password)), this.client);
-
-        this.deleteCreateAccountQueueUrlToken(urlToken);
-
-        // @ts-ignore
-        const languageFile = Object(await import('./files/json/languages/' + language + '/' + language + '_back.json', {assert: {type: 'json'}})).default;
-
-        this.mailOptions.to = email;
-        this.mailOptions.subject = languageFile.data.modules.account.basic.mailCreateAccountCreateUrlToken.mailOptions.subject;
-        this.mailOptions.text = languageFile.data.modules.account.basic.mailCreateAccountCreateUrlToken.mailOptions.text.replace('<USERNAME>', username)
-            + process.env.URL_FRONT
-            + '/conf-account?urlToken='
-            + urlToken;
-
-        //sends an email containing a unique token to delete the account, effective for 10 minutes
-
-        this.transporter.sendMail(this.mailOptions, async function (error) {
-            if (error) {
-                console.log(error);
-                res.json({status: -1});
-            } else {
-                res.json({status: 1});
+            while (result.length > 0) {
+                urlToken = this.generateToken(this.urlTokenLength);
+                result = await accountBasicRequest.checkCreateAccountUrlTokenByUrlToken(urlToken, this.client);
             }
-        });
+
+            await accountBasicRequest.createCreateAccountUrlToken(urlToken, username, email, await this.hashSha256(await this.hashSha256(password)), this.client);
+
+            this.deleteCreateAccountQueueUrlToken(urlToken);
+
+            // @ts-ignore
+            const languageFile = Object(await import('./files/json/languages/' + language + '/' + language + '_back.json', {assert: {type: 'json'}})).default;
+
+            this.mailOptions.to = email;
+            this.mailOptions.subject = languageFile.data.modules.account.basic.mailCreateAccountCreateUrlToken.mailOptions.subject;
+            this.mailOptions.text = languageFile.data.modules.account.basic.mailCreateAccountCreateUrlToken.mailOptions.text.replace('<USERNAME>', username)
+                + process.env.URL_FRONT
+                + '/conf-account?urlToken='
+                + urlToken;
+
+            //sends an email containing a unique token to delete the account, effective for 10 minutes
+
+            this.transporter.sendMail(this.mailOptions, async function (error) {
+                if (error) {
+                    console.log(error);
+                    res.json({status: -1});
+                } else {
+                    res.json({status: 1});
+                }
+            });
+        }
         return;
     };
 

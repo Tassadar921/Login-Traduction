@@ -19,6 +19,7 @@ export class SignUpComponent implements OnInit {
   public showConfirmPassword = false;
   public output = '';
   public focusing = false;
+
   constructor(
     public devicePlatformService: DevicePlatformService,
     public inputCheckingService: InputCheckingService,
@@ -28,35 +29,31 @@ export class SignUpComponent implements OnInit {
 
   ngOnInit() {}
 
-  public checkUsername():void {
+  public checkUsername(): void {
     this.output = this.inputCheckingService.checkUsername(this.username);
     this.focusing = false;
   }
 
-  public checkEmail():void {
+  public checkEmail(): void {
     this.output = this.inputCheckingService.checkEmail(this.email);
     this.focusing = false;
   }
 
-  public checkPassword(password: boolean):void {
+  public checkPassword(password: boolean): void {
     if (password) {
       this.output = this.inputCheckingService.checkPassword(this.password);
-      //action sur input
-    }else{
+    } else {
       this.output = this.inputCheckingService.checkPassword(this.confirmPassword);
-      if(!this.output){
+      if (!this.output) {
         this.output = this.inputCheckingService.checkPasswords(this.password, this.confirmPassword);
-        //action sur input
-      }else {
-        //action sur input
       }
     }
     this.focusing = false;
   }
 
-  public async mailSignUp() {
+  public async mailSignUp(): Promise<void> {
     let rtrn;
-    while(!rtrn || Object(rtrn).status===3){
+    while (!rtrn || Object(rtrn).status === 3) {
       await this.cryptoService.setRsaPublicKey();
       rtrn = await this.requestService.mailSignUp(
         this.username,
@@ -65,6 +62,20 @@ export class SignUpComponent implements OnInit {
         this.cryptoService.getPublicKey()
       );
     }
-    console.log(rtrn);
+    if (Object(rtrn).status === 1) {
+      //check emails
+    }else if (Object(rtrn).status === -1) {
+      //something went wrong in email sending
+    }else if(Object(rtrn).status === -20) {
+      //wrong email shape
+    }else if(Object(rtrn).status === -21) {
+      //wrong password shape
+    }else if(Object(rtrn).status === -22) {
+      //wrong username shape
+    }else if(Object(rtrn).status === -40) {
+      //username already exists
+    }else if (Object(rtrn).status === -41) {
+      //email already exists
+    }
   }
 }
