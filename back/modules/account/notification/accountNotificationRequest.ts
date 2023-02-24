@@ -1,14 +1,13 @@
 import { Client } from "edgedb";
-import { uuid } from "edgedb/dist/codecs/ifaces";
 
-export module AccountNotificationRequest {
+module AccountNotificationRequest {
     export async function getNotifications(token : string, client : Client) {
         return new Promise<any[]>((resolve) => {
             const result = client.query(`
                 SELECT Notification {
                     id,
                     date,
-                    name,
+                    title,
                     seen,
                     text,
                 }
@@ -18,7 +17,7 @@ export module AccountNotificationRequest {
         });
     }
 
-    export async function notificationIsSeen(id : uuid, client : Client) {
+    export async function notificationIsSeen(id : string, client : Client) {
         return new Promise<any[]>((resolve) => {
             const result = client.query(`
                 UPDATE Notification
@@ -29,23 +28,33 @@ export module AccountNotificationRequest {
         });
     }
 
-    export async function deleteNotification(id : uuid, client : Client) {
+    export async function deleteNotification(id : string, client : Client) {
         return new Promise<any[]>((resolve) => {
             const result = client.query(`
                 DELETE Notification 
-                FILTER .id = <uuid>'${id}';
+                FILTER .id = <uuid>"${id}";
             `);
             resolve(result);
         });
     }
 
-    export async function addNotifications(token : string, client : Client) {
+    export async function addNotifications(token : string, title : string, text : string, date : string, client : Client) {
         return new Promise<any[]>((resolve) => {
             const result = client.query(`
-                SELECT Notification {
-
+                UPDATE User 
+                filter .token = "${token}"
+                SET {
+                    notifications += (INSERT Notification { 
+                        title := "${title}",
+                        text := "${text}",
+                        date := <datetime>"${date}",
+                    })
+                }
             `);
+
             resolve(result);
         });
     }
 }
+
+export default AccountNotificationRequest;

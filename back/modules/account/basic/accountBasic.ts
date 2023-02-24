@@ -1,7 +1,7 @@
 import * as nodemailer from 'nodemailer';
 import {Response} from 'express';
 import {Client, createClient} from 'edgedb';
-import {accountBasicRequest} from './accountBasicRequest';
+import accountBasicRequest from './accountBasicRequest';
 // @ts-ignore
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import * as crypto from 'node:crypto';

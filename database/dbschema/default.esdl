@@ -31,7 +31,7 @@ module default {
     }
 
     type Notification {
-        required property name -> str;
+        required property title -> str;
         required property text -> str;
         required property date -> datetime;
         required property seen -> bool { 

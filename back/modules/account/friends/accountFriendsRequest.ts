@@ -1,5 +1,7 @@
 import { Client } from "edgedb";
 
-export module accountFriendsRequest {
+module accountFriendsRequest {
 
 }
+
+export default accountFriendsRequest;

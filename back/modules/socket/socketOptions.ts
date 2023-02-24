@@ -1,7 +1,8 @@
 module socketOptions {
     export interface ServerToClientEvents {
-        noArg: () => void;
         emitNotif: (data: [{name : string, text : string, date:Date}]) => void;
+        sendMessage: (username: string, message: string, date: Date) => void;
+        initSocketData: () => void;
     }
     
     export interface ClientToServerEvents {
@@ -9,8 +10,9 @@ module socketOptions {
         synchronizeNotifications: () => void;
         notificationIsSeen: (id: string) => void;
         deleteNotification: (id: string) => void;
-
-        hello: () => void;
+        sendMessage: (username: string, message: string, date: Date) => void;
+        getChat: (username: string) => void;
+        addNotifications: (username: string, title: string, text: string) => void;
     }
     
     export interface InterServerEvents {

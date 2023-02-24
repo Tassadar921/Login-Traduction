@@ -2,7 +2,7 @@ import {Express, Request, Response} from "express";
 import EncryptRsa from "encrypt-rsa";
 import * as socketIO from "socket.io";
 
-import socketOptions from "../socketOptions/socketOptions";
+import socketOptions from "../socket/socketOptions";
 
 import { AccountBasic } from "./basic/accountBasic";
 import { AccountFriends } from "./friends/accountFriends";
@@ -62,25 +62,39 @@ module accountRouting {
 
         io.on('connection', (socket) => {
             console.log('-----new client-----')
-            socket.on('initSocketData', (username : string, token : string) => {
-                accountNotification.initSocketData(socket, username, token);
+            socket.emit('initSocketData');
+
+            socket.on('initSocketData', async (username : string, token : string) => {
+                await accountNotification.initSocketData(socket, username, token);
             });
 
-//            socket.emit('emitNotif', [{name : "test", text : "test", date : new Date()}]);          
-            socket.on('synchronizeNotifications', () => {
-                accountNotification.synchronizeNotifications(socket);
+            /*------------------------------------Notification------------------------------------*/
+            socket.on('synchronizeNotifications', async () => {
+                await accountNotification.synchronizeNotifications(socket);
             });
-            socket.on('notificationIsSeen', (id) => {
-                accountNotification.notificationIsSeen(socket, id);
+            socket.on('notificationIsSeen', async (id) => {
+                await accountNotification.notificationIsSeen(socket, id);
             });
-            socket.on('deleteNotification', (id) => {
-                accountNotification.deleteNotification(socket, id);
+            socket.on('deleteNotification', async (id) => {
+                await accountNotification.deleteNotification(socket, id);
+            });
+            socket.on('addNotifications', async (username, title, text) => {
+                await accountNotification.addNotifications(username, title, text);
             });
 
+            /*----------------------------------------Chat----------------------------------------*/
+            socket.on('getChat', async (username) => {
+                
+            });
+            socket.on('sendMessage', async (username, message, date) => {
+                const toSocket = (await io.fetchSockets()).find((socketTmp) => socketTmp.data.username === username);
+                accountNotification.addNotifications(username, 'Nouveau message', message);
+                if(toSocket !== undefined) {
+                    io.to(toSocket?.id!).emit('sendMessage', socket.data.username!, message, date);
+                }
+            });
 
-
-
-            socket.on('disconnect', () => {
+            socket.on('disconnect', async () => {
                 console.log('client déconnecté')
             });
         });

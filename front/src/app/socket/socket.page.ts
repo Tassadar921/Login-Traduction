@@ -10,19 +10,29 @@ import { emit } from 'process';
 })
 export class SocketPage implements OnInit {
   private id = "";
+  notification : [{id : string, title : string, text : string, date : Date, seen : boolean}] | undefined;
+  lastMessage : {username : string, message : string, date : Date} | undefined;
 
-  constructor(
-    private socket: Socket
-  ) {
+  constructor(private socket: Socket) {
+    this.socket.on("initSocketData", () => {
+      this.socket.emit('initSocketData',"oui" ,"oui");
+      this.socket.emit('synchronizeNotifications');
+    });
     this.socket.on('synchronizeNotifications', (data : any) => {
       console.log(data);
-      this.id = data[0].id;
+      if(data.length > 0) {
+
+        this.notification = data.map((notification : any) => {notification.date = new Date(notification.date); return notification;});
+        this.id = data[0].id;
+      }
+    });
+    this.socket.on('sendMessage', (username : string, message : string, date : string) => {
+      this.lastMessage = {username, message, date : new Date(date)};
     });
   }
 
   ngOnInit() {
     this.socket.connect();
-    this.socket.emit('initSocketData',"oui" ,"oui");
   }
 
   public emit1() {
@@ -31,12 +41,14 @@ export class SocketPage implements OnInit {
 
   public emit2() {
     this.socket.emit('notificationIsSeen', this.id);
-
-    this.emit1();
   }
   public emit3() {
     this.socket.emit('deleteNotification', this.id);
-
-    this.emit1();
+  }
+  public emit4() {
+    this.socket.emit('addNotifications', "oui", "titre", "texte");
+  }
+  public emit5() {
+    this.socket.emit('sendMessage', "oui", "texte", Date.now());
   }
 }

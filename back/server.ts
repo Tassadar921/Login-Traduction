@@ -5,14 +5,12 @@ import bodyParser from 'body-parser';
 // @ts-ignore
 import cors from 'cors';
 import * as dotenv from 'dotenv';
-import * as socketIO from 'socket.io';
 
 import http from 'http';
 
 import accountRouting from './modules/account/accountRouting';
 import languagesRouting from './modules/languages/languagesRouting';
-import socketOptions from './modules/socketOptions/socketOptions';
-
+import ioServer from './modules/socket/socket';
 
 dotenv.config();
 
@@ -28,10 +26,9 @@ if (app.get('env') === 'production') {
 
 const server = http.createServer(app);
 
-const io = new socketIO.Server(server, {cors: {
-    origin: process.env.URL_FRONT,
-        methods: ["GET", "POST"]
-}});
+ioServer.init(server)
+
+const io = ioServer.io;
 
 languagesRouting.init(app);
 accountRouting.init(app,io);

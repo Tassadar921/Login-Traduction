@@ -1,3 +1,16 @@
+<div *ngFor="let item of notification">
+  <div>{{item.title}}</div>
+  <div>{{item.seen}}</div>
+  <div>{{item.date}}</div>
+  <div>{{item.text}}</div>
+</div>
+<div>
+  <div>{{lastMessage?.username}}</div>
+  <div>{{lastMessage?.message}}</div>
+  <div>{{lastMessage?.date}}</div>
+</div>
 <ion-button (click)="emit1()">synchronize notif</ion-button>
 <ion-button (click)="emit2()">Seen notif</ion-button>
 <ion-button (click)="emit3()">del Notif</ion-button>
+<ion-button (click)="emit4()">add Notif</ion-button>
+<ion-button (click)="emit5()">send message</ion-button>
