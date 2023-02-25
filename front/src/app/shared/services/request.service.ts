@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {environment} from '../../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {lastValueFrom} from 'rxjs';
-import {GetResult} from '@capacitor/preferences';
 import {CookieService} from './cookie.service';
 
 @Injectable({
@@ -24,7 +23,7 @@ export class RequestService {
   }
 
   //json of the language id selectedLanguage
-  public async getTranslation(languageID: GetResult): Promise<any> {
+  public async getTranslation(languageID: string): Promise<any> {
     return await lastValueFrom(this.http.get<Object>(environment.apiUrl + '/languages/' + languageID));
   }
 

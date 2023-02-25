@@ -9,14 +9,14 @@
 <ion-item>
   <ion-segment value="true" color="warning"
                [id]="devicePlatformService.currentPlatform==='mobile'?'ionSegmentMobile':'ionSegmentDesktop'">
-    <ion-segment-button value="true" (click)="toggle()">
-      <ion-label [id]="displayedComponent==='signIn'?'selected':''" i18n>
-        sign in
+    <ion-segment-button value="true" (click)="loadComponent('signIn')">
+      <ion-label [id]="displayedComponent==='signIn'?'selected':''">
+        {{languageService.dictionary.data ? languageService.dictionary.data.components.connection.signIn : ''}}
       </ion-label>
     </ion-segment-button>
-    <ion-segment-button value="false" (click)="toggle()">
-      <ion-label [id]="displayedComponent==='signUp'?'selected':''" i18n>
-        sign up
+    <ion-segment-button value="false" (click)="loadComponent('signUp')">
+      <ion-label [id]="displayedComponent==='signUp'?'selected':''">
+        {{languageService.dictionary.data ? languageService.dictionary.data.components.connection.signUp : ''}}
       </ion-label>
     </ion-segment-button>
   </ion-segment>

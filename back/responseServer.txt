@@ -21,7 +21,6 @@ createAccount :       => CODED
 signIn :             => CODED
 	(req.body.identifier, req.body.password) =>
 	{
-		{status : -1} bad username or email shape
 		{status : 0} wrong identifier or password
 		{status: 1, token: token, username: username} success
 	}

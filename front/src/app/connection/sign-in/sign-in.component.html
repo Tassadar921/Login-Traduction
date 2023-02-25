@@ -6,8 +6,12 @@
           <ion-row>
             <ion-col>
               <ion-item>
-                <ion-label position="floating">Email or username</ion-label>
-                <ion-input placeholder="Username" [(ngModel)]="username" type="text">
+                <ion-label position="floating">
+                  {{languageService.dictionary.data ? languageService.dictionary.data.components.signIn.emailOrUsername : ''}}
+                </ion-label>
+                <ion-input
+                  [placeholder]="languageService.dictionary.data ? languageService.dictionary.data.components.signIn.emailOrUsername : ''"
+                  [(ngModel)]="identifier" type="text">
                 </ion-input>
               </ion-item>
             </ion-col>
@@ -15,9 +19,13 @@
           <ion-row>
             <ion-col>
               <ion-item>
-                <ion-label position="floating">Password</ion-label>
-                <ion-input placeholder="Password" [type]="showPassword?'text':'password'"
-                           [(ngModel)]="password" type="text">
+                <ion-label position="floating">
+                  {{languageService.dictionary.data ? languageService.dictionary.data.components.signIn.password : ''}}
+                </ion-label>
+                <ion-input
+                  [placeholder]="languageService.dictionary.data ? languageService.dictionary.data.components.signIn.password : ''"
+                  [type]="showPassword?'text':'password'"
+                  [(ngModel)]="password" type="text">
                 </ion-input>
               </ion-item>
               <ion-fab style="top:35px; right:0;">
@@ -33,11 +41,14 @@
             </ion-col>
           </ion-row>
           <ion-row>
-            <ion-col>
+            <ion-col *ngIf="!waiting">
               <ion-button expand="block" id="submitButton" shape="round" color="success" strong="true"
-                          (click)="signIn()" *ngIf="username && password">
+                          (click)="signIn()" *ngIf="identifier && password">
                 Sign in
               </ion-button>
+            </ion-col>
+            <ion-col *ngIf="waiting">
+              <ion-spinner name="lines"></ion-spinner>
             </ion-col>
           </ion-row>
         </ion-card-content>

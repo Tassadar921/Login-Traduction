@@ -32,3 +32,12 @@ ion-item{
 #selected{
   font-weight: bold;
 }
+
+#clickableMail{
+  color: #007bff;
+  text-decoration: underline;
+}
+
+#clickableMail:hover{
+  cursor: pointer;
+}

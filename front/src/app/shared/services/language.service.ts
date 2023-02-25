@@ -8,38 +8,7 @@ import { RequestService } from './request.service';
 export class LanguageService {
 
   public languagesList: any[] = [];
-  public dictionary = {
-    "header":
-      {
-        "tag": "uk"
-      },
-    "data": {
-      "components": {
-        "connection": {
-          "signIn": "Sign in",
-          "signUp": "Sign up"
-        }
-      },
-      "services": {
-        "inputChecking": {
-          "usernameTooShort": "Username is too short",
-          "usernameTooLong": "Username is too long",
-          "usernameContainsInvalidCharacter": "Username contains invalid character",
-          "passwordTooShort": "Password is too short",
-          "passwordTooLong": "Password is too long",
-          "passwordContainsInvalidCharacter": "Password contains invalid character",
-          "passwordMissesUpperCase": "Password misses upper case",
-          "passwordMissesLowerCase": "Password misses lower case",
-          "passwordMissesNumber": "Password misses number",
-          "passwordMissesSpecialChar": "Password misses special character",
-          "passwordsDontMatch": "Passwords don't match",
-          "emailTooShort": "Email is too short",
-          "emailTooLong": "Email is too long",
-          "emailMissesAt": "Email misses @",
-        }
-      }
-    }
-  };
+  public dictionary: any = {};
 
   constructor(
     private cookieService: CookieService,

@@ -121,9 +121,6 @@ export class AccountBasic {
 
     //signIn, identifier can be either username or email
     public async signIn(identifier : string, password : string, res : Response) {
-        if((!this.checkRegexEmail(identifier) && !this.checkRegexUsername(identifier))){
-            res.json({status: -1});
-        }
 
         let result = await accountBasicRequest.checkUserAndPassword(identifier, await this.hashSha256(password), this.client);
 

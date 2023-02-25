@@ -3,6 +3,10 @@ import {DevicePlatformService} from '../../shared/services/device-platform.servi
 import {InputCheckingService} from '../input-checking.service';
 import { RequestService } from 'src/app/shared/services/request.service';
 import {CryptoService} from "../../shared/services/crypto.service";
+import {LanguageService} from '../../shared/services/language.service';
+import {environment} from '../../../environments/environment';
+import {Clipboard} from '@angular/cdk/clipboard';
+import {ToastService} from '../../shared/services/toast.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -19,15 +23,24 @@ export class SignUpComponent implements OnInit {
   public showConfirmPassword = false;
   public output = '';
   public focusing = false;
+  public waiting = false;
+  public supportEmail = '';
+  public mailError = false;
 
   constructor(
     public devicePlatformService: DevicePlatformService,
     public inputCheckingService: InputCheckingService,
     private requestService: RequestService,
-    private cryptoService: CryptoService
-  ) {}
+    private cryptoService: CryptoService,
+    public languageService: LanguageService,
+    private toastService: ToastService,
+    public clipboard: Clipboard
+  ) {
+    this.supportEmail = environment.supportEmail;
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   public checkUsername(): void {
     this.output = this.inputCheckingService.checkUsername(this.username);
@@ -52,6 +65,8 @@ export class SignUpComponent implements OnInit {
   }
 
   public async mailSignUp(): Promise<void> {
+    this.waiting = true;
+    this.mailError = false;
     let rtrn;
     while (!rtrn || Object(rtrn).status === 3) {
       await this.cryptoService.setRsaPublicKey();
@@ -63,19 +78,26 @@ export class SignUpComponent implements OnInit {
       );
     }
     if (Object(rtrn).status === 1) {
-      //check emails
-    }else if (Object(rtrn).status === -1) {
-      //something went wrong in email sending
-    }else if(Object(rtrn).status === -20) {
-      //wrong email shape
-    }else if(Object(rtrn).status === -21) {
-      //wrong password shape
-    }else if(Object(rtrn).status === -22) {
-      //wrong username shape
-    }else if(Object(rtrn).status === -40) {
-      //username already exists
-    }else if (Object(rtrn).status === -41) {
-      //email already exists
+      this.output = this.languageService.dictionary.data.components.signUp.checkYourMails;
+    } else if (Object(rtrn).status === -1) {
+      this.output = this.languageService.dictionary.data.components.signUp.mailSendingError;
+      this.mailError = true;
+    } else if (Object(rtrn).status === -20) {
+      this.output = this.languageService.dictionary.data.components.signUp.emailWrongFormat;
+    } else if (Object(rtrn).status === -21) {
+      this.output = this.languageService.dictionary.data.components.signUp.passwordWrongFormat;
+    } else if (Object(rtrn).status === -22) {
+      this.output = this.languageService.dictionary.data.components.signUp.usernameWrongFormat;
+    } else if (Object(rtrn).status === -40) {
+      this.output = this.languageService.dictionary.data.components.signUp.usernameAlreadyExists;
+    } else if (Object(rtrn).status === -41) {
+      this.output = this.languageService.dictionary.data.components.signUp.emailAlreadyExists;
     }
+    this.waiting = false;
+  }
+
+  public async copyEmail(): Promise<void> {
+    this.clipboard.copy(this.supportEmail);
+    await this.toastService.displayToast(this.languageService.dictionary.data.components.signUp.emailCopied, 'top');
   }
 }

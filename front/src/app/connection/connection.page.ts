@@ -34,25 +34,25 @@ export class ConnectionPage implements OnInit {
   public signInAnimationState: string = 'true';
   public signUpAnimationState: string = 'false';
   public blockDisplaySignUpOnLoading: boolean = true;
+
   constructor(
     public devicePlatformService: DevicePlatformService,
     public languageService: LanguageService
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     setTimeout(() => this.blockDisplaySignUpOnLoading = false, 500);
   }
 
-  toggle() {
-    this.signInAnimationState === 'true' ? this.signInAnimationState = 'false' : this.signInAnimationState = 'true';
-    this.signUpAnimationState === 'true' ? this.signUpAnimationState = 'false' : this.signUpAnimationState = 'true';
-    setTimeout(() =>
-    {
-      if (this.displayedComponent === 'signIn') {
-        this.displayedComponent = 'signUp';
-      } else {
-        this.displayedComponent = 'signIn';
-      }
-    }, 250);
+  loadComponent(component: string) {
+    if(component === 'signUp'){
+      this.signInAnimationState = 'false';
+      this.signUpAnimationState = 'true';
+    }else if(component === 'signIn'){
+      this.signInAnimationState = 'true';
+      this.signUpAnimationState = 'false';
+    }
+    setTimeout(() => this.displayedComponent = component, 500);
   }
 }
