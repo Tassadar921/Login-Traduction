@@ -58,4 +58,10 @@ export class RequestService {
       {urlToken}
     ));
   }
+
+  public async checkSession(username: string, token: string): Promise<Object> {
+    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/checkSession',
+      {username, token}
+    ));
+  }
 }

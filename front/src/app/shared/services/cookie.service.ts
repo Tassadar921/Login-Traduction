@@ -9,7 +9,7 @@ import {PopoverController} from '@ionic/angular';
 export class CookieService {
 
   //for html dynamic display
-  public username = '';
+  private username = '';
 
   constructor(
     private router: Router,
@@ -22,12 +22,21 @@ export class CookieService {
   //sets cookie from key and value, erasing previous cookie if exists
   setCookie = async (key: string, value: any) => await Preferences.set({key, value});
 
-  //disconnection is in a popover
-  disconnect = async () => {
+  public async connect(username: string, token: string) {
+    await this.setCookie('username', username);
+    await this.setCookie('token', token);
+    this.username = username;
+  }
+
+  disconnect = async (popover: boolean = false) => {
     this.username = '';
     await Preferences.remove({ key: 'username' });
     await Preferences.remove({ key: 'token' });
-    await this.popoverController.dismiss();
+    if(popover) {
+      await this.popoverController.dismiss();
+    }
     await this.router.navigateByUrl('/connection');
   };
+
+  getUsername = () => this.username;
 }

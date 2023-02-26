@@ -50,8 +50,8 @@ module accountRouting {
         app.post('/resetPassword', async function (req: Request, res: Response) {
             await account.resetPassword(req.body.urlToken, req.body.password, res);
         });
-        app.post('/fastCheck', async function (req: Request, res: Response) {
-            await account.fastCheck(req.body.username, req.body.token, res);
+        app.post('/checkSession', async function (req: Request, res: Response) {
+            await account.checkSession(req.body.username, req.body.token, res);
         });
 
         return;

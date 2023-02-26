@@ -39,7 +39,7 @@ export class AccountBasic {
         this.urlTokenTimeoutDelay = parseInt(process.env.URL_TOKEN_TIMEOUT_DELAY!);
     }
 
-    public async mailSignUp(username: string, password: string, email: string, language: string, res: Response) {
+    public async mailSignUp(username: string, password: string, email: string, language: string, res: Response): Promise<void> {
         if(!this.checkRegexEmail(email)){
             res.json({status: -20});
         } else if(!this.checkRegexPassword(password)){
@@ -71,7 +71,7 @@ export class AccountBasic {
 
             await accountBasicRequest.createCreateAccountUrlToken(urlToken, username, email, await this.hashSha256(await this.hashSha256(password)), this.client);
 
-            this.deleteCreateAccountQueueUrlToken(urlToken);
+            await this.deleteCreateAccountQueueUrlToken(urlToken);
 
             // @ts-ignore
             const languageFile = Object(await import('./files/json/languages/' + language + '/' + language + '_back.json', {assert: {type: 'json'}})).default;
@@ -98,7 +98,7 @@ export class AccountBasic {
     };
 
     //creates the account with datas in the queue linked to token
-    public async createAccount(urlToken: string, res: Response) {
+    public async createAccount(urlToken: string, res: Response): Promise<void> {
         const result = await accountBasicRequest.checkCreateAccountUrlTokenByUrlToken(urlToken, this.client);
         if (result.length > 0) {
             await accountBasicRequest.deleteCreateAccountUrlToken(result[0].email, this.client);
@@ -113,19 +113,22 @@ export class AccountBasic {
 
             await accountBasicRequest.updateUserToken(result[0].username, token, this.client);
 
-            res.json({status: 1, token: token, username: result[0].username});
+            res.json({status: 1, token, username: result[0].username});
+            return;
         } else {
             res.json({status: 0});
+            return;
         }
     }
 
     //signIn, identifier can be either username or email
-    public async signIn(identifier : string, password : string, res : Response) {
+    public async signIn(identifier : string, password : string, res : Response): Promise<void> {
 
         let result = await accountBasicRequest.checkUserAndPassword(identifier, await this.hashSha256(password), this.client);
 
         if (!result.length) {
             res.json({status: 0});
+            return;
         } else {
             let token = this.generateToken(this.tokenLength);
             let result1: any[] = await accountBasicRequest.checkToken(token, this.client);
@@ -136,12 +139,13 @@ export class AccountBasic {
 
             await accountBasicRequest.updateUserToken(result[0].username, token, this.client);
 
-            res.json({status: 1, token: token, username: result[0].username});
+            res.json({status: 1, token, username: result[0].username});
+            return;
         }
     }
 
     //delete the token of the user
-    public async signOut(username : string, token : string, res : Response) {
+    public async signOut(username : string, token : string, res : Response): Promise<void> {
         let result: [{ username: string, email: string }] | any;
 
         result = await accountBasicRequest.checkUserByToken(username, token, this.client);
@@ -156,7 +160,7 @@ export class AccountBasic {
     }
 
     //checks if the token is valid for the user
-    public async fastCheck(username : string, token : string, res : Response) {       
+    public async checkSession(username : string, token : string, res : Response): Promise<void> {
         const result: [{ username: string }] | any = await accountBasicRequest.checkUserByToken(username, token, this.client);
         if (result.length == 1) {
             res.json({status: 1});
@@ -167,7 +171,7 @@ export class AccountBasic {
 
     //sends an email containing a unique token to reset the password, effective for 10 minutes
     //temporary linking the token and email in the resetPassword queue
-    public async mailResetPasswordCreateUrlToken(email: string, language: string, res: Response) {
+    public async mailResetPasswordCreateUrlToken(email: string, language: string, res: Response): Promise<void> {
         if(!this.checkRegexEmail(email)){
             res.json({status: -2});
         }
@@ -218,10 +222,11 @@ export class AccountBasic {
                 res.json({status: 1});
             }
         });
+        return;
     }
 
     //resets the password of the account linked to the email, himself linked to the token
-    public async resetPassword(urlToken : string, password : string, res : Response) {
+    public async resetPassword(urlToken : string, password : string, res : Response): Promise<void> {
         const result: [{ username: string, email: string, password: string }] | any = await accountBasicRequest.checkResetPasswordUrlTokenByUrlToken(urlToken, this.client);
 
         if (result.length > 0) {
@@ -231,6 +236,7 @@ export class AccountBasic {
         } else {
             res.json({status: 0});
         }
+        return;
     }
 
     //hash a string with sha256
@@ -238,7 +244,6 @@ export class AccountBasic {
         return new Promise((resolve, reject) => {
             const hash = crypto.createHash('sha256');
             hash.write(data);
-
             hash.on('readable', () => {
                 const data = hash.read();
 
@@ -251,42 +256,41 @@ export class AccountBasic {
                 }
 
             });
-
             hash.end();
         });
     }
 
     //sends an email containing a unique token to create the account, effective for 10 minutes
-    private deleteCreateAccountQueueUrlToken(urlToken: string) {
+    private deleteCreateAccountQueueUrlToken(urlToken: string): Promise<void> {
         const clientTmp = this.client;
-        setTimeout(() => {accountBasicRequest.deleteCreateAccountUrlToken(urlToken, clientTmp)}, this.urlTokenTimeoutDelay);
-        return
+        setTimeout(async () => {await accountBasicRequest.deleteCreateAccountUrlToken(urlToken, clientTmp)}, this.urlTokenTimeoutDelay);
+        return;
     }
 
     //sends an email containing a unique token to reset the password, effective for 10 minutes
-    private deleteMailResetPasswordQueueUrlToken(urlToken : string) {
+    private deleteMailResetPasswordQueueUrlToken(urlToken : string): Promise<void> {
         const clientTmp = this.client;
-        setTimeout(() => {accountBasicRequest.deleteResetPasswordUrlToken(urlToken, clientTmp)}, this.urlTokenTimeoutDelay);
-        return
+        setTimeout(async () => {await accountBasicRequest.deleteResetPasswordUrlToken(urlToken, clientTmp)}, this.urlTokenTimeoutDelay);
+        return;
     }
 
     //checks if the username is valid
-    private checkRegexUsername(username : string) {
+    private checkRegexUsername(username : string): boolean {
         return (/^[A-Za-zÀ-ÖØ-öø-ÿ0-9_-]{3,20}$/).test(username);
     }
 
     //checks if the email is valid
-    private checkRegexEmail(email : string) {
+    private checkRegexEmail(email : string): boolean {
         return (/^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$/).test(email);
     }
 
     //checks if the password is valid
-    private checkRegexPassword(password : string) {
+    private checkRegexPassword(password : string): boolean {
         return (/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/).test(password);
     }
 
     // generates token by stringing a random number of characters from a dictionary
-    private generateToken(length: number) {
+    private generateToken(length: number): string {
         //edit the token allowed characters
         let alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'.split('');
         let token: string = '';

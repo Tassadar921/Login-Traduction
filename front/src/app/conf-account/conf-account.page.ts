@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import {RequestService} from '../shared/services/request.service';
 import {ToastService} from '../shared/services/toast.service';
 import {LanguageService} from '../shared/services/language.service';
+import {CookieService} from '../shared/services/cookie.service';
 
 @Component({
   selector: 'app-conf-account',
@@ -17,12 +18,14 @@ export class ConfAccountPage implements OnInit {
     private router: Router,
     private toastService: ToastService,
     private languageService: LanguageService,
+    private cookieService: CookieService
   ) {}
 
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe(async params => {
       const rtrn = await this.requestService.createAccount(Object(params).urlToken);
       if(Object(rtrn).status) {
+        await this.cookieService.connect(Object(rtrn).username, Object(rtrn).token);
         await this.toastService.displayToast(
           this.languageService.dictionary.data.components.confAccount.tokenError, 'top'
         );

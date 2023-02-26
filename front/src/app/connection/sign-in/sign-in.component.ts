@@ -4,6 +4,7 @@ import {RequestService} from '../../shared/services/request.service';
 import {CryptoService} from '../../shared/services/crypto.service';
 import {LanguageService} from '../../shared/services/language.service';
 import {ToastService} from '../../shared/services/toast.service';
+import {CookieService} from '../../shared/services/cookie.service';
 import {Router} from '@angular/router';
 
 @Component({
@@ -26,6 +27,7 @@ export class SignInComponent implements OnInit {
     private cryptoService: CryptoService,
     public languageService: LanguageService,
     private toastService: ToastService,
+    private cookieService: CookieService,
     private router: Router
   ) {}
 
@@ -40,6 +42,7 @@ export class SignInComponent implements OnInit {
     if(Object(rtrn).status === 0){
       this.output = this.languageService.dictionary.data.components.signIn.wrongIdentifierOrPassword;
     }else{
+      await this.cookieService.connect(Object(rtrn).username, Object(rtrn).token);
       await this.toastService.displayToast(
         this.languageService.dictionary.data.components.signIn.connected, 'top'
       );
