@@ -15,11 +15,6 @@ import {FormGroup, FormControl, Validators} from '@angular/forms';
   styleUrls: ['../connection.page.scss'],
 })
 export class SignUpComponent implements OnInit {
-
-  public email = '';
-  public username = '';
-  public password = '';
-  public confirmPassword = '';
   public showPassword = false;
   public showConfirmPassword = false;
   public output = '';
@@ -48,8 +43,7 @@ export class SignUpComponent implements OnInit {
             Validators.required,
             Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ0-9_-]{3,20}$')
           ]}
-      ),
-      email: new FormControl(
+      ), email: new FormControl(
       '',
       {
         updateOn: 'change',
@@ -57,8 +51,7 @@ export class SignUpComponent implements OnInit {
           Validators.required,
           Validators.pattern('^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$')
         ]}
-    ),
-      password: new FormControl(
+    ), password: new FormControl(
         '',
         {
           updateOn: 'change',
@@ -67,8 +60,7 @@ export class SignUpComponent implements OnInit {
             Validators.pattern('^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*#?&\\.\\-_])[A-Za-z\\d@$!%*?&\\.\\-_]{8,}$')
           ]}
 
-      ),
-      confPassword: new FormControl(
+      ), confirmPassword: new FormControl(
         '',
         {
           updateOn: 'change',
@@ -83,22 +75,24 @@ export class SignUpComponent implements OnInit {
   ngOnInit() {}
 
   public checkUsername(): void {
-    this.output = this.inputCheckingService.checkUsername(this.username);
+    this.output = this.inputCheckingService.checkUsername(this.formControl.controls.username.value);
     this.focusing = false;
   }
 
   public checkEmail(): void {
-    this.output = this.inputCheckingService.checkEmail(this.email);
+    this.output = this.inputCheckingService.checkEmail(this.formControl.controls.email.value);
     this.focusing = false;
   }
 
   public checkPassword(password: boolean): void {
     if (password) {
-      this.output = this.inputCheckingService.checkPassword(this.password);
+      this.output = this.inputCheckingService.checkPassword(this.formControl.controls.password.value);
     } else {
-      this.output = this.inputCheckingService.checkPassword(this.confirmPassword);
+      this.output = this.inputCheckingService.checkPassword(this.formControl.controls.confirmPassword.value);
       if (!this.output) {
-        this.output = this.inputCheckingService.checkPasswords(this.password, this.confirmPassword);
+        this.output = this.inputCheckingService.checkPasswords(
+          this.formControl.controls.password.value,
+          this.formControl.controls.confirmPassword.value);
       }
     }
     this.focusing = false;
@@ -111,13 +105,12 @@ export class SignUpComponent implements OnInit {
     while (!rtrn || Object(rtrn).status === 3) {
       await this.cryptoService.setRsaPublicKey();
       rtrn = await this.requestService.mailSignUp(
-        this.username,
-        this.email,
-        this.cryptoService.rsaEncryptWithPublicKey(this.password),
+        this.formControl.controls.username.value,
+        this.formControl.controls.email.value,
+        this.cryptoService.rsaEncryptWithPublicKey(this.formControl.controls.password.value),
         this.cryptoService.getPublicKey()
       );
     }
-    console.log(rtrn);
     if (Object(rtrn).status === 1) {
       this.output = this.languageService.dictionary.data.components.signUp.checkYourMails;
     } else if (Object(rtrn).status === -1) {

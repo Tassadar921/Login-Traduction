@@ -21,18 +21,22 @@ export class ConfAccountPage implements OnInit {
     private cookieService: CookieService
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.languageService.init();
     this.activatedRoute.queryParams.subscribe(async params => {
       const rtrn = await this.requestService.createAccount(Object(params).urlToken);
+      console.log(rtrn);
       if(Object(rtrn).status) {
+        console.log('token ok')
         await this.cookieService.connect(Object(rtrn).username, Object(rtrn).token);
         await this.toastService.displayToast(
-          this.languageService.dictionary.data.components.confAccount.tokenError, 'top'
+          this.languageService.dictionary.data.components.confAccount.accountCreated, 'top', 5000
         );
         await this.router.navigateByUrl('/home');
       }else{
+        console.log('token pas ok')
         await this.toastService.displayToast(
-          this.languageService.dictionary.data.components.confAccount.accountCreated, 'top'
+          this.languageService.dictionary.data.components.confAccount.tokenError, 'top', 5000
         );
         await this.router.navigateByUrl('/connection');
       }

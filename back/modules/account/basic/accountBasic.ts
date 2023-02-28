@@ -49,7 +49,7 @@ export class AccountBasic {
         }else {
 
             let result: any = Object(await accountBasicRequest.checkUser(username, email, this.client)).length > 0
-            if (result) {
+            if (result[0]) {
                 if (result[0].username === username) {
                     res.json({status: 40});
                 } else {
