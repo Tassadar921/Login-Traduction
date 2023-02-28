@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "esbuild server.ts --platform=node --bundle --outfile=out.js",
-    "start": "npm run build && node out.js"
+    "build": "esbuild server.ts --platform=node --bundle --outfile=compil/out.js",
+    "start": "npm run build && node compil/out.js"
   },
   "author": "",
   "license": "ISC",
