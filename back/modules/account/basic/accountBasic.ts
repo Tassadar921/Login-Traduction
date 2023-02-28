@@ -11,7 +11,7 @@ export class AccountBasic {
     private transporter: nodemailer.Transporter<SMTPTransport.SentMessageInfo>;
     private readonly mailOptions: { from: string | undefined; to: string; subject: string; text: string; }
     private readonly urlTokenLength: number;
-    private readonly tokenLength: number;
+    private readonly sessionTokenLength: number;
     private readonly urlTokenTimeoutDelay: number;
 
     constructor() {
@@ -35,7 +35,7 @@ export class AccountBasic {
         };
 
         this.urlTokenLength = parseInt(process.env.URL_TOKEN_LENGTH!);
-        this.tokenLength = parseInt(process.env.TOKEN_LENGTH!);
+        this.sessionTokenLength = parseInt(process.env.SESSION_TOKEN_LENGTH!);
         this.urlTokenTimeoutDelay = parseInt(process.env.URL_TOKEN_TIMEOUT_DELAY!);
     }
 
@@ -104,10 +104,10 @@ export class AccountBasic {
             await accountBasicRequest.deleteCreateAccountUrlToken(result[0].email, this.client);
             await accountBasicRequest.createUser(result[0].username, result[0].email, result[0].password, 'none', this.client);
 
-            let token = this.generateToken(this.tokenLength);
+            let token = this.generateToken(this.sessionTokenLength);
             let result1: any[] = await accountBasicRequest.checkToken(token, this.client);
             while (result1.length > 0) {
-                token = this.generateToken(this.tokenLength);
+                token = this.generateToken(this.sessionTokenLength);
                 result1 = await accountBasicRequest.checkToken(token, this.client);
             }
 
@@ -130,10 +130,10 @@ export class AccountBasic {
             res.json({status: 0});
             return;
         } else {
-            let token = this.generateToken(this.tokenLength);
+            let token = this.generateToken(this.sessionTokenLength);
             let result1: any[] = await accountBasicRequest.checkToken(token, this.client);
             while (result1.length > 0) {
-                token = this.generateToken(this.tokenLength);
+                token = this.generateToken(this.sessionTokenLength);
                 result1 = await accountBasicRequest.checkToken(token, this.client);
             }
 
@@ -201,7 +201,7 @@ export class AccountBasic {
 
         await accountBasicRequest.createResetPasswordUrlToken(urlToken, email, this.client);
 
-        this.deleteMailResetPasswordQueueUrlToken(urlToken);
+        await this.deleteMailResetPasswordQueueUrlToken(urlToken);
 
         // @ts-ignore
         const languageFile = await import('./files/json/languages/' + language + '/' + language + '_back.json', {assert: {type: 'json'}})
@@ -286,7 +286,7 @@ export class AccountBasic {
 
     //checks if the password is valid
     private checkRegexPassword(password : string): boolean {
-        return (/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/).test(password);
+        return (/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&\.\-_])[A-Za-z\d@$!%*?&\.\-_]{8,}$/).test(password);
     }
 
     // generates token by stringing a random number of characters from a dictionary

@@ -7,6 +7,7 @@ import {LanguageService} from '../../shared/services/language.service';
 import {environment} from '../../../environments/environment';
 import {Clipboard} from '@angular/cdk/clipboard';
 import {ToastService} from '../../shared/services/toast.service';
+import {FormGroup, FormControl, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-sign-up',
@@ -26,6 +27,7 @@ export class SignUpComponent implements OnInit {
   public waiting = false;
   public supportEmail = '';
   public mailError = false;
+  public formControl: any;
 
   constructor(
     public devicePlatformService: DevicePlatformService,
@@ -37,10 +39,48 @@ export class SignUpComponent implements OnInit {
     public clipboard: Clipboard
   ) {
     this.supportEmail = environment.supportEmail;
+    this.formControl = new FormGroup({
+      username: new FormControl(
+        '',
+        {
+          updateOn: 'change',
+          validators: [
+            Validators.required,
+            Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ0-9_-]{3,20}$')
+          ]}
+      ),
+      email: new FormControl(
+      '',
+      {
+        updateOn: 'change',
+        validators: [
+          Validators.required,
+          Validators.pattern('^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$')
+        ]}
+    ),
+      password: new FormControl(
+        '',
+        {
+          updateOn: 'change',
+          validators: [
+            Validators.required,
+            Validators.pattern('^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*#?&\\.\\-_])[A-Za-z\\d@$!%*?&\\.\\-_]{8,}$')
+          ]}
+
+      ),
+      confPassword: new FormControl(
+        '',
+        {
+          updateOn: 'change',
+          validators: [
+            Validators.required,
+            Validators.pattern('^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*#?&\\.\\-_])[A-Za-z\\d@$!%*?&\\.\\-_]{8,}$')
+          ]}
+      )
+    });
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   public checkUsername(): void {
     this.output = this.inputCheckingService.checkUsername(this.username);
@@ -77,6 +117,7 @@ export class SignUpComponent implements OnInit {
         this.cryptoService.getPublicKey()
       );
     }
+    console.log(rtrn);
     if (Object(rtrn).status === 1) {
       this.output = this.languageService.dictionary.data.components.signUp.checkYourMails;
     } else if (Object(rtrn).status === -1) {

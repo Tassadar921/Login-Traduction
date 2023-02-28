@@ -2,17 +2,16 @@
   <ion-row>
     <ion-col>
       <ion-card [id]="devicePlatformService.currentPlatform==='mobile'?'mobileContent':'desktopContent'">
-        <ion-card-content>
+        <ion-card-content [formGroup]="formControl">
           <ion-row>
             <ion-col>
               <ion-item>
                 <ion-label position="floating">
                   {{languageService.dictionary.data ? languageService.dictionary.data.components.signUp.username : ''}}
                 </ion-label>
-                <ion-input minlength="3" maxlength="30" required="true"
+                <ion-input type="text"
                            [placeholder]="languageService.dictionary.data ? languageService.dictionary.data.components.signUp.username : ''"
-                           [(ngModel)]="username" (ionBlur)="checkUsername()"
-                           (ionFocus)="focusing = true;" type="text">
+                           formControlName="username" class="form-control">
                 </ion-input>
               </ion-item>
             </ion-col>
@@ -23,10 +22,9 @@
                 <ion-label position="floating">
                   {{languageService.dictionary.data ? languageService.dictionary.data.components.signUp.email : ''}}
                 </ion-label>
-                <ion-input minlength="7" maxlength="100" required="true"
+                <ion-input type="text"
                            [placeholder]="languageService.dictionary.data ? languageService.dictionary.data.components.signUp.email : ''"
-                           [(ngModel)]="email" (ionBlur)="checkEmail()"
-                           (ionFocus)="focusing = true;" type="text">
+                           formControlName="email" class="form-control">
                 </ion-input>
               </ion-item>
             </ion-col>
@@ -37,10 +35,9 @@
                 <ion-label position="floating">
                   {{languageService.dictionary.data ? languageService.dictionary.data.components.signUp.password : ''}}
                 </ion-label>
-                <ion-input minlength="7" maxlength="30" required="true"
+                <ion-input [type]="showPassword?'text':'password'"
                            [placeholder]="languageService.dictionary.data ? languageService.dictionary.data.components.signUp.password : ''"
-                           [type]="showPassword?'text':'password'"
-                           [(ngModel)]="password" (ionBlur)="checkPassword(true)" (ionFocus)="focusing = true;">
+                           formControlName="password" class="form-control">
                 </ion-input>
               </ion-item>
               <ion-fab style="top:35px; right:0;">
@@ -56,10 +53,9 @@
                 <ion-label position="floating">
                   {{languageService.dictionary.data ? languageService.dictionary.data.components.signUp.confirmPassword : ''}}
                 </ion-label>
-                <ion-input minlength="7" maxlength="30" required="true"
+                <ion-input [type]="showConfirmPassword?'text':'password'"
                            [placeholder]="languageService.dictionary.data ? languageService.dictionary.data.components.signUp.confirmPassword : ''"
-                           [type]="showConfirmPassword?'text':'password'"
-                           [(ngModel)]="confirmPassword" (ionBlur)="checkPassword(false)" (ionFocus)="focusing = true;">
+                           formControlName="confPassword" class="form-control">
                 </ion-input>
               </ion-item>
               <ion-fab style="top:35px; right:0;">
@@ -78,7 +74,7 @@
           <ion-row>
             <ion-col *ngIf="!waiting">
               <ion-button expand="block" id="submitButton" shape="round" color="success" strong="true" (click)="mailSignUp()"
-                          *ngIf="!focusing && email && username && password && confirmPassword && !output">
+              [disabled]="!formControl.valid">
                 Sign up
               </ion-button>
             </ion-col>

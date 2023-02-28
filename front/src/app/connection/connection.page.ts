@@ -31,15 +31,14 @@ import {LanguageService} from '../shared/services/language.service';
 export class ConnectionPage implements OnInit {
 
   public displayedComponent: string = 'signIn';
-  public signInAnimationState: string = 'true';
-  public signUpAnimationState: string = 'false';
+  public signInAnimationState: string = 'false';
+  public signUpAnimationState: string = 'true';
   public blockDisplaySignUpOnLoading: boolean = true;
 
   constructor(
     public devicePlatformService: DevicePlatformService,
     public languageService: LanguageService
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
     setTimeout(() => this.blockDisplaySignUpOnLoading = false, 500);

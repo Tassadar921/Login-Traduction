@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
@@ -21,7 +21,8 @@ import {NomenclatureComponent} from './sign-up/nomenclature/nomenclature.compone
     IonicModule,
     ConnectionPageRoutingModule,
     LanguageModule,
-    MoonBackgroundModule
+    MoonBackgroundModule,
+    ReactiveFormsModule
   ],
   declarations: [ConnectionPage, SignInComponent, SignUpComponent, ForgotPasswordComponent, NomenclatureComponent]
 })

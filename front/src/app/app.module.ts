@@ -22,7 +22,7 @@ const config: SocketIoConfig = { url: environment.apiUrl, options: {} };
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    SocketIoModule.forRoot(config)
+    SocketIoModule.forRoot(config),
   ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],

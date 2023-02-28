@@ -43,7 +43,7 @@
           <ion-row>
             <ion-col *ngIf="!waiting">
               <ion-button expand="block" id="submitButton" shape="round" color="success" strong="true"
-                          (click)="signIn()" *ngIf="identifier && password">
+                          (click)="signIn()" [disabled]="!(identifier && password)">
                 Sign in
               </ion-button>
             </ion-col>

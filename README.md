@@ -11,7 +11,7 @@ EMAIL_SERVICE=<string> // email service used to send emails (gmail, outlook, etc
 EMAIL_PASSWORD=<string> // application password of the email address
 PORT=<number> // port used by the server
 URL_TOKEN_LENGTH=<number> // length of the url token sent by email
-TOKEN_LENGTH=<number> // length of the token used to authenticate the user
+SESSION_TOKEN_LENGTH=<number> // length of the token used to authenticate the user
 URL_TOKEN_TIMEOUT_DELAY=<number> // delay in milliseconds before the url token expires
 URL_FRONT=<string>
 ```

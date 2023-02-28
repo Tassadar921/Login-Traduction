@@ -35,7 +35,7 @@ export class InputCheckingService {
     //hardly checks all password conditions
     //triggered by checkPassword
     checkPassword (password: string): string {
-      if (password.length < 7) {
+      if (password.length < 8) {
         return this.languageService.dictionary.data.services.inputChecking.passwordTooShort;
       } else if (password.length > 30) {
         return this.languageService.dictionary.data.services.inputChecking.passwordTooLong;
