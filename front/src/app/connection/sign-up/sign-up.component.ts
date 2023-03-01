@@ -111,6 +111,7 @@ export class SignUpComponent implements OnInit {
         this.cryptoService.getPublicKey()
       );
     }
+    console.log(rtrn);
     if (Object(rtrn).status === 1) {
       this.output = this.languageService.dictionary.data.components.signUp.checkYourMails;
     } else if (Object(rtrn).status === -1) {

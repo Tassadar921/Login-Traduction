@@ -40,22 +40,28 @@ export class AccountBasic {
     }
 
     public async mailSignUp(username: string, password: string, email: string, language: string, res: Response): Promise<void> {
+
         if(!this.checkRegexEmail(email)){
             res.json({status: -20});
+            return;
         } else if(!this.checkRegexPassword(password)){
             res.json({status: -21});
+            return;
         } else if(!this.checkRegexUsername(username)){
             res.json({status: -22});
+            return;
         }else {
-
-            let result: any = Object(await accountBasicRequest.checkUser(username, email, this.client)).length > 0
-            if (result[0]) {
-                if (result[0].username === username) {
-                    res.json({status: 40});
-                } else {
-                    res.json({status: 41});
+            let result: any = Object(await accountBasicRequest.checkUser(username, email, this.client));
+            console.log(result);
+                if (result[0]) {
+                    if (result[0].username === username) {
+                        res.json({status: -40});
+                        return;
+                    } else {
+                        res.json({status: -41});
+                        return;
+                    }
                 }
-            }
 
             result = await accountBasicRequest.checkCreateAccountUrlTokenByEmail(email, this.client);
             if (result.length) {
@@ -89,12 +95,13 @@ export class AccountBasic {
                 if (error) {
                     console.log(error);
                     res.json({status: -1});
+                    return;
                 } else {
                     res.json({status: 1});
+                    return;
                 }
             });
         }
-        return;
     };
 
     //creates the account with datas in the queue linked to token
@@ -151,10 +158,11 @@ export class AccountBasic {
 
         if (result.length == 0) {
             res.json({status: 0});
+            return;
         } else if (result.length > 0) {
             await accountBasicRequest.updateUserToken(username, 'none', this.client);
-
             res.json({status: 1});
+            return;
         }
     }
 
@@ -163,8 +171,10 @@ export class AccountBasic {
         const result: [{ username: string }] | any = await accountBasicRequest.checkUserByToken(username, token, this.client);
         if (result.length == 1) {
             res.json({status: 1});
+            return;
         } else {
             res.json({status: 0});
+            return;
         }
     }
 
@@ -173,16 +183,18 @@ export class AccountBasic {
     public async mailResetPasswordCreateUrlToken(email: string, language: string, res: Response): Promise<void> {
         if(!this.checkRegexEmail(email)){
             res.json({status: -2});
+            return;
         }
 
         const result0: any[] = await accountBasicRequest.checkUser('', email, this.client);
 
         if (result0.length > 0) {
             res.json({status: 0});
+            return;
         }
 
         let result2: any[] = await accountBasicRequest.checkResetPasswordUrlTokenByEmail(email, this.client);
-
+        
         switch (result2.length) {
             case 0:
                 break;
@@ -217,11 +229,12 @@ export class AccountBasic {
         this.transporter.sendMail(this.mailOptions, async function (error) {
             if (error) {
                 res.json({status: -1});
+                return;
             } else {
                 res.json({status: 1});
+                return;
             }
         });
-        return;
     }
 
     //resets the password of the account linked to the email, himself linked to the token
@@ -232,10 +245,11 @@ export class AccountBasic {
             await accountBasicRequest.deleteResetPasswordUrlToken(urlToken, this.client);
             await accountBasicRequest.resetPassword(result[0].email, password, this.client);
             res.json({status: 1});
+            return;
         } else {
             res.json({status: 0});
+            return;
         }
-        return;
     }
 
     //hash a string with sha256
@@ -245,7 +259,6 @@ export class AccountBasic {
             hash.write(data);
             hash.on('readable', () => {
                 const data = hash.read();
-
                 if (data) {
                     const final = data.toString('hex');
                     resolve(final);
@@ -253,7 +266,6 @@ export class AccountBasic {
                 else {
                     reject("erreur random");
                 }
-
             });
             hash.end();
         });
