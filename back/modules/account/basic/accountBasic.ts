@@ -165,13 +165,14 @@ export class AccountBasic {
     }
 
     //checks if the token is valid for the user
-    public async checkSession(username : string, token : string, res : Response): Promise<void> {
-        if(this.checkRegexUsername(username) && this.checkRegexSessionToken(token)){
+    public async checkSession(username : string, sessionToken : string, res : Response): Promise<void> {
+        if(!this.checkRegexUsername(username) || !this.checkRegexSessionToken(sessionToken)){
             res.json({status: 0});
+            return;
         }
 
-        const result: [{ username: string }] | any = await accountBasicRequest.checkUserByToken(username, token, this.client);
-        if (result.length == 1 && token != 'none') {
+        const result: [{ username: string }] | any = await accountBasicRequest.checkUserByToken(username, sessionToken, this.client);
+        if (result.length == 1 && sessionToken != 'none') {
             res.json({status: 1});
             return;
         } else {
@@ -275,13 +276,15 @@ export class AccountBasic {
 
     //sends an email containing a unique token to create the account, effective for 10 minutes
     private deleteCreateAccountQueueUrlToken(urlToken: string): void {
-        setTimeout(async () => {await accountBasicRequest.deleteCreateAccountUrlToken(urlToken, this.client)}, this.urlTokenExpiration);
+        const client = this.client;
+        setTimeout(async () => {await accountBasicRequest.deleteCreateAccountUrlToken(urlToken, client)}, this.urlTokenExpiration);
         return;
     }
 
     //sends an email containing a unique token to reset the password, effective for 10 minutes
     private deleteMailResetPasswordQueueUrlToken(urlToken : string): void {
-        setTimeout(async () => {await accountBasicRequest.deleteResetPasswordUrlToken(urlToken, this.client)}, this.urlTokenExpiration);
+        const client = this.client;
+        setTimeout(async () => {await accountBasicRequest.deleteResetPasswordUrlToken(urlToken, client)}, this.urlTokenExpiration);
         return;
     }
 
