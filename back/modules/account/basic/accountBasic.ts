@@ -277,7 +277,9 @@ export class AccountBasic {
     //sends an email containing a unique token to create the account, effective for 10 minutes
     private deleteCreateAccountQueueUrlToken(urlToken: string): void {
         const client = this.client;
-        setTimeout(async () => {await accountBasicRequest.deleteCreateAccountUrlToken(urlToken, client)}, this.urlTokenExpiration);
+
+        console.log("bonjour1");
+        setTimeout(async () => {await accountBasicRequest.deleteCreateAccountUrlToken(urlToken, client);         console.log("bonjour2");}, this.urlTokenExpiration);
         return;
     }
 
