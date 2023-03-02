@@ -1,20 +1,9 @@
-<ion-fab-button color="warning" id="language" size="large">
-  <ion-icon name="language" color="light"></ion-icon>
-</ion-fab-button>
-
-<ion-modal trigger="language">
-  <ng-template>
-    <ion-content>
-      <div *ngFor="let line of languageService.languagesList" class="flag-box">
-        <img
-          class="flag"
-          [id]="languageService.dictionary?languageService.dictionary.header.tag===line.id?'selected':'':''"
-          [src]="apiURL + '/files/img/flags/png/'+line.id+'.png'"
-          title="{{line.name}}"
-          alt="{{line.name}}"
-          (click)="languageService.updateLanguage(line.id)">
-      </div>
-    </ion-content>
-    <app-modal-close-button></app-modal-close-button>
-  </ng-template>
-</ion-modal>
+<div *ngFor="let line of languageService.languagesList" class="flag-box">
+  <img
+    class="flag"
+    [id]="languageService.dictionary?languageService.dictionary.header.tag===line.id?'selected':'':''"
+    [src]="apiURL + '/files/img/flags/png/'+line.id+'.png'"
+    title="{{line.name}}"
+    alt="{{line.name}}"
+    (click)="languageService.updateLanguage(line.id)">
+</div>

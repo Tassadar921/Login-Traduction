@@ -15,11 +15,12 @@ import {Router} from '@angular/router';
 
 export class SignInComponent implements OnInit {
 
-  public showPassword = false;
-  public output = '';
-  public identifier = '';
-  public password = '';
-  public waiting = false;
+  public showPassword:boolean = false;
+  public output:string = '';
+  public identifier:string = '';
+  public password:string = '';
+  public waiting:boolean = false;
+  public displayForgotPassword:boolean = false;
 
   constructor(
     public devicePlatformService: DevicePlatformService,
@@ -33,7 +34,7 @@ export class SignInComponent implements OnInit {
 
   ngOnInit() {}
 
-  public async signIn() {
+  public async signIn(): Promise<void> {
     this.waiting = true;
     const rtrn = await this.requestService.signIn(
       this.identifier,
@@ -49,5 +50,6 @@ export class SignInComponent implements OnInit {
       await this.router.navigateByUrl('/home');
     }
     this.waiting = false;
+    return;
   }
 }
