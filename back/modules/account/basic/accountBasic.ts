@@ -166,6 +166,10 @@ export class AccountBasic {
 
     //checks if the token is valid for the user
     public async checkSession(username : string, token : string, res : Response): Promise<void> {
+        if(this.checkRegexUsername(username) && this.checkRegexSessionToken(token)){
+            res.json({status: 0});
+        }
+
         const result: [{ username: string }] | any = await accountBasicRequest.checkUserByToken(username, token, this.client);
         if (result.length == 1 && token != 'none') {
             res.json({status: 1});
@@ -281,14 +285,27 @@ export class AccountBasic {
         return;
     }
 
+
+    private checkRegexSessionToken(sessionToken : string): boolean {
+        const regex = new RegExp('/^[A-Za-z0-9]{'+this.sessionTokenLength+'}$/');
+
+        return (regex).test(sessionToken);
+    }
+
+    private checkRegexUrlToken(urlToken : string): boolean {
+        const regex = new RegExp('/^[A-Za-z0-9]{'+this.urlTokenLength+'}$/');
+
+        return (regex).test(urlToken);
+    }
+
     //checks if the username is valid
     private checkRegexUsername(username : string): boolean {
-        return (/^[A-Za-zÀ-ÖØ-öø-ÿ0-9_-]{3,20}$/).test(username);
+        return (/^[A-Za-zÀ-ÖØ-öø-ÿ0-9_\-]{3,20}$/).test(username);
     }
 
     //checks if the email is valid
     private checkRegexEmail(email : string): boolean {
-        return (/^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$/).test(email);
+        return (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/).test(email);
     }
 
     //checks if the password is valid
