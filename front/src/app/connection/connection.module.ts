@@ -12,7 +12,7 @@ import {SignUpComponent} from './sign-up/sign-up.component';
 import {LanguageModule} from '../shared/components/language/language.module';
 import {MoonBackgroundModule} from '../shared/components/moon-background/moon-background.module';
 import {ForgotPasswordComponent} from './sign-in/forgot-password/forgot-password.component';
-import {NomenclatureComponent} from './sign-up/nomenclature/nomenclature.component';
+import {NomenclatureComponent} from "./sign-up/nomenclature/nomenclature.component";
 
 @NgModule({
   imports: [

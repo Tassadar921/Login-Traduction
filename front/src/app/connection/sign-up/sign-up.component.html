@@ -4,6 +4,9 @@
       <ion-card [id]="devicePlatformService.currentPlatform==='mobile'?'mobileContent':'desktopContent'">
         <ion-card-content [formGroup]="formControl">
           <ion-row>
+            <ion-col size="2">
+              <app-nomenclature [data]="'username'" [modalName]="'username'"></app-nomenclature>
+            </ion-col>
             <ion-col>
               <ion-item>
                 <ion-label position="floating">
@@ -17,6 +20,9 @@
             </ion-col>
           </ion-row>
           <ion-row>
+            <ion-col size="2">
+              <app-nomenclature [data]="'email'" [modalName]="'email'"></app-nomenclature>
+            </ion-col>
             <ion-col>
               <ion-item>
                 <ion-label position="floating">
@@ -30,6 +36,9 @@
             </ion-col>
           </ion-row>
           <ion-row>
+            <ion-col size="2">
+              <app-nomenclature [data]="'password'" [modalName]="'password'"></app-nomenclature>
+            </ion-col>
             <ion-col>
               <ion-item>
                 <ion-label position="floating">
@@ -48,6 +57,9 @@
             </ion-col>
           </ion-row>
           <ion-row>
+            <ion-col size="2">
+              <app-nomenclature [data]="'confPassword'" [modalName]="'confPassword'"></app-nomenclature>
+            </ion-col>
             <ion-col>
               <ion-item>
                 <ion-label position="floating">
@@ -87,7 +99,3 @@
     </ion-col>
   </ion-row>
 </ion-grid>
-
-<ion-fab horizontal="start" vertical="bottom">
-  <app-nomenclature></app-nomenclature>
-</ion-fab>

@@ -1,28 +1,22 @@
-<ion-fab-button size="large" id="infos">
-  <ion-icon name="help"></ion-icon>
-</ion-fab-button>
+<ion-icon name="information-circle" [id]="modalName" class="clickableIcon"></ion-icon>
 
-<ion-modal trigger="infos">
+<ion-modal [trigger]="modalName">
   <ng-template>
     <ion-content>
       <ion-grid>
         <ion-row>
           <ion-col>
-            on mettra ici toutes les infos pour la nomenclature : username, email, passwords
+            <p>{{data}}</p>
           </ion-col>
         </ion-row>
       </ion-grid>
     </ion-content>
-    <ion-row>
-      <ion-col>
-        <ion-footer class="ion-no-border">
-          <ion-toolbar>
-            <ion-button fill="clear" shape="round" (click)="modalController.dismiss()">
-              <ion-icon name="close-circle" slot="icon-only" size="large" color="warning"></ion-icon>
-            </ion-button>
-          </ion-toolbar>
-        </ion-footer>
-      </ion-col>
-    </ion-row>
+    <ion-footer>
+      <ion-row>
+        <ion-col>
+            <ion-button shape="round" (click)="modalController.dismiss()">Close</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-footer>
   </ng-template>
 </ion-modal>
