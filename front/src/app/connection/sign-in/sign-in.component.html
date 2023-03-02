@@ -4,13 +4,14 @@
       <ion-card [id]="devicePlatformService.currentPlatform==='mobile'?'mobileContent':'desktopContent'">
         <ion-card-content>
           <ion-row>
-            <ion-col>
-              <ion-item>
+            <ion-col size="11">
+              <ion-item fill="solid">
                 <ion-label position="floating">
-                  {{languageService.dictionary.data ? languageService.dictionary.data.components.signIn.emailOrUsername : ''}}
+                  {{languageService.dictionary.data?.components.signIn.emailOrUsername}}
                 </ion-label>
                 <ion-input
-                  [placeholder]="languageService.dictionary.data ? languageService.dictionary.data.components.signIn.emailOrUsername : ''"
+                  [placeholder]="languageService.dictionary.data?.components.signIn.emailOrUsername"
+                  required="true"
                   [(ngModel)]="identifier" type="text">
                 </ion-input>
               </ion-item>
@@ -18,13 +19,14 @@
           </ion-row>
           <ion-row>
             <ion-col>
-              <ion-item>
+              <ion-item fill="solid">
                 <ion-label position="floating">
-                  {{languageService.dictionary.data ? languageService.dictionary.data.components.signIn.password : ''}}
+                  {{languageService.dictionary.data?.components.signIn.password}}
                 </ion-label>
                 <ion-input
-                  [placeholder]="languageService.dictionary.data ? languageService.dictionary.data.components.signIn.password : ''"
+                  [placeholder]="languageService.dictionary.data?.components.signIn.password"
                   [type]="showPassword?'text':'password'"
+                  required="true"
                   [(ngModel)]="password" type="text">
                 </ion-input>
               </ion-item>
@@ -36,24 +38,26 @@
             </ion-col>
           </ion-row>
           <ion-row>
-            <ion-col style="text-align:right; margin-top:10px">
-              <p id="forgotPassword">forgot password ?</p>
-            </ion-col>
-          </ion-row>
-          <ion-row>
             <ion-col>
               <p>{{output}}</p>
             </ion-col>
           </ion-row>
           <ion-row>
-            <ion-col *ngIf="!waiting">
-              <ion-button expand="block" id="submitButton" shape="round" color="success" strong="true"
-                          (click)="signIn()" [disabled]="!(identifier && password)">
-                Sign in
+            <ion-col size="4" push="7">
+              <ion-button id="submitButton" shape="round" (click)="signIn()"
+                          [color]="identifier && password?'success':'danger'"
+                          [disabled]="!(identifier && password)" *ngIf="!waiting">
+                <p>{{languageService.dictionary.data?.components.signIn.send}}</p>
+                <ion-icon name="send"></ion-icon>
               </ion-button>
+              <ion-spinner name="lines" *ngIf="waiting"></ion-spinner>
             </ion-col>
-            <ion-col *ngIf="waiting">
-              <ion-spinner name="lines"></ion-spinner>
+          </ion-row>
+          <ion-row>
+            <ion-col style="margin-top:10px" push="4">
+              <p id="forgotPassword">
+                {{languageService.dictionary.data?.components.signIn.forgotPassword}}
+              </p>
             </ion-col>
           </ion-row>
         </ion-card-content>

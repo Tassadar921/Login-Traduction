@@ -1,4 +1,5 @@
 .clickableIcon{
+  margin-left: -20px;
   margin-top: 40px;
   ion-icon{
     color: #6b6b1c;
@@ -7,7 +8,6 @@
 }
 
 .clickableIcon:hover{
-  margin-top: 40px;
   ion-icon{
     color: #ffff00;
   }

@@ -15,7 +15,9 @@
           "emailOrUsername": "Email ou pseudonyme",
           "password": "Mot de passe",
           "wrongIdentifierOrPassword": "Mauvais identifiant ou mot de passe",
-          "connected": "Connecté"
+          "connected": "Connecté",
+          "send": "Envoyer",
+          "forgotPassword": "mot de passe oublié ?"
         }, "signUp": {
           "username": "Pseudonyme",
           "email": "Email",
@@ -28,7 +30,8 @@
           "emailWrongFormat": "Email au mauvais format",
           "passwordWrongFormat": "Mot de passe au mauvais format",
           "mailSendingError": "Quelque chose s'est mal déroulé dans l'envoi du mail. Si le problème persiste, veuillez nous contacter à l'adresse suivante : ",
-          "emailCopied": "Email copié"
+          "emailCopied": "Email copié",
+          "send": "Envoyer"
         },
         "confAccount": {
           "accountCreated": "Compte créé, vous êtes maintenant connecté",

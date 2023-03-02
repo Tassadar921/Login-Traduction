@@ -4,48 +4,48 @@
       <ion-card [id]="devicePlatformService.currentPlatform==='mobile'?'mobileContent':'desktopContent'">
         <ion-card-content [formGroup]="formControl">
           <ion-row>
-            <ion-col size="2">
+            <ion-col size="1">
               <app-nomenclature [data]="'username'" [modalName]="'username'"></app-nomenclature>
             </ion-col>
-            <ion-col>
-              <ion-item>
+            <ion-col size="10">
+              <ion-item fill="solid">
                 <ion-label position="floating">
-                  {{languageService.dictionary.data ? languageService.dictionary.data.components.signUp.username : ''}}
+                  {{languageService.dictionary.data?.components.signUp.username}}
                 </ion-label>
                 <ion-input type="text"
-                           [placeholder]="languageService.dictionary.data ? languageService.dictionary.data.components.signUp.username : ''"
+                           [placeholder]="languageService.dictionary.data?.components.signUp.username"
                            formControlName="username" class="form-control">
                 </ion-input>
               </ion-item>
             </ion-col>
           </ion-row>
           <ion-row>
-            <ion-col size="2">
+            <ion-col size="1">
               <app-nomenclature [data]="'email'" [modalName]="'email'"></app-nomenclature>
             </ion-col>
-            <ion-col>
-              <ion-item>
+            <ion-col size="10">
+              <ion-item fill="solid">
                 <ion-label position="floating">
-                  {{languageService.dictionary.data ? languageService.dictionary.data.components.signUp.email : ''}}
+                  {{languageService.dictionary.data?.components.signUp.email}}
                 </ion-label>
                 <ion-input type="text"
-                           [placeholder]="languageService.dictionary.data ? languageService.dictionary.data.components.signUp.email : ''"
+                           [placeholder]="languageService.dictionary.data?.components.signUp.email"
                            formControlName="email" class="form-control">
                 </ion-input>
               </ion-item>
             </ion-col>
           </ion-row>
           <ion-row>
-            <ion-col size="2">
+            <ion-col size="1">
               <app-nomenclature [data]="'password'" [modalName]="'password'"></app-nomenclature>
             </ion-col>
             <ion-col>
-              <ion-item>
+              <ion-item fill="solid">
                 <ion-label position="floating">
-                  {{languageService.dictionary.data ? languageService.dictionary.data.components.signUp.password : ''}}
+                  {{languageService.dictionary.data?.components.signUp.password}}
                 </ion-label>
                 <ion-input [type]="showPassword?'text':'password'"
-                           [placeholder]="languageService.dictionary.data ? languageService.dictionary.data.components.signUp.password : ''"
+                           [placeholder]="languageService.dictionary.data?.components.signUp.password"
                            formControlName="password" class="form-control">
                 </ion-input>
               </ion-item>
@@ -57,16 +57,16 @@
             </ion-col>
           </ion-row>
           <ion-row>
-            <ion-col size="2">
+            <ion-col size="1">
               <app-nomenclature [data]="'confPassword'" [modalName]="'confPassword'"></app-nomenclature>
             </ion-col>
             <ion-col>
-              <ion-item>
+              <ion-item fill="solid">
                 <ion-label position="floating">
-                  {{languageService.dictionary.data ? languageService.dictionary.data.components.signUp.confirmPassword : ''}}
+                  {{languageService.dictionary.data?.components.signUp.confirmPassword}}
                 </ion-label>
                 <ion-input [type]="showConfirmPassword?'text':'password'"
-                           [placeholder]="languageService.dictionary.data ? languageService.dictionary.data.components.signUp.confirmPassword : ''"
+                           [placeholder]="languageService.dictionary.data?.components.signUp.confirmPassword"
                            formControlName="confirmPassword" class="form-control">
                 </ion-input>
               </ion-item>
@@ -84,10 +84,12 @@
             </ion-col>
           </ion-row>
           <ion-row>
-            <ion-col>
-              <ion-button expand="block" id="submitButton" shape="round" color="success" strong="true" (click)="mailSignUp()"
-              [disabled]="!formControl.valid" *ngIf="!waiting">
-                Sign up
+            <ion-col size="4" push="7">
+              <ion-button id="submitButton" shape="round" color="success" (click)="mailSignUp()"
+                          [disabled]="!formControl.valid" *ngIf="!waiting"
+                          [color]="formControl.valid?'success':'danger'">
+                <p>{{languageService.dictionary.data?.components.signUp.send}}</p>
+                <ion-icon name="send"></ion-icon>
               </ion-button>
               <ion-spinner name="lines" *ngIf="waiting"></ion-spinner>
             </ion-col>

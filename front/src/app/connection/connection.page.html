@@ -11,12 +11,12 @@
                [id]="devicePlatformService.currentPlatform==='mobile'?'ionSegmentMobile':'ionSegmentDesktop'">
     <ion-segment-button value="true" (click)="loadComponent('signIn')">
       <ion-label [id]="displayedComponent==='signIn'?'selected':''">
-        {{languageService.dictionary.data ? languageService.dictionary.data.components.connection.signIn : ''}}
+        {{languageService.dictionary.data?.components.connection.signIn}}
       </ion-label>
     </ion-segment-button>
     <ion-segment-button value="false" (click)="loadComponent('signUp')">
       <ion-label [id]="displayedComponent==='signUp'?'selected':''">
-        {{languageService.dictionary.data ? languageService.dictionary.data.components.connection.signUp : ''}}
+        {{languageService.dictionary.data?.components.connection.signUp}}
       </ion-label>
     </ion-segment-button>
   </ion-segment>

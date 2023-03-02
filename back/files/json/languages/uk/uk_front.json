@@ -13,7 +13,9 @@
         "emailOrUsername": "Email or username",
         "password": "Password",
         "wrongIdentifierOrPassword": "Wrong email or password",
-        "connected": "Connected"
+        "connected": "Connected",
+        "send": "Send",
+        "forgotPassword": "forgot password ?"
       }, "signUp": {
         "username": "Username",
         "email": "Email",
@@ -26,7 +28,8 @@
         "emailWrongFormat": "Wrong email format",
         "passwordWrongFormat": "Wrong password format",
         "mailSendingError": "Something went wrong with the email: if the problem persists, please contact us at this address : ",
-        "emailCopied": "Email copied"
+        "emailCopied": "Email copied",
+        "send": "Send"
       },
       "confAccount": {
         "accountCreated": "Account created, you are now connected",
