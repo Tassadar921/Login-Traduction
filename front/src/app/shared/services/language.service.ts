@@ -17,7 +17,7 @@ export class LanguageService {
 
   async init(){
     if(!await this.cookieService.getCookie('language')){
-      await this.cookieService.setCookie('language', 'uk');//language nav
+      await this.cookieService.setCookie('language', navigator.language.slice(0,2));
     }
     this.languagesList = await this.requestService.getLanguagesList();
     //checking language exists

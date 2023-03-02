@@ -38,23 +38,6 @@
           "tokenError": "Il y a eu un souci avec votre token personnel, veuillez recommencer"
         }
       },
-      "services": {
-        "inputChecking": {
-          "usernameTooShort": "Pseudonyme trop court",
-          "usernameTooLong": "Pseudonyme trop long",
-          "usernameContainsInvalidCharacter": "Pseudonyme contenant un caractère invalide",
-          "passwordTooShort": "Mot de passe trop court",
-          "passwordTooLong": "Mot de passe trop long",
-          "passwordContainsInvalidCharacter": "Mot de passe contenant un caractère invalide",
-          "passwordMissesUpperCase": "Mot de passe sans majuscule",
-          "passwordMissesLowerCase": "Mot de passe sans minuscule",
-          "passwordMissesNumber": "Mot de passe sans chiffre",
-          "passwordMissesSpecialChar": "Mot de passe sans caractère spécial",
-          "passwordsDontMatch": "Mots de passe différents",
-          "emailTooShort": "Email trop court",
-          "emailTooLong": "Email trop long",
-          "emailWrongFormat": "Email au mauvais format"
-        }
-      }
+      "services": {}
     }
   }
