@@ -38,4 +38,16 @@ module default {
             default := false 
         };
     }
+
+    type Message {
+        required property text -> str;
+        required property date -> datetime;
+        required property seen -> bool { 
+            default := false 
+        };
+        link sender -> User;
+        multi link receiver -> User {
+            on target delete allow;
+        };
+    }
 }

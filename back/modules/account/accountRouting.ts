@@ -59,6 +59,7 @@ module accountRouting {
 
     function initSocket(io : socketIO.Server<socketOptions.ClientToServerEvents, socketOptions.ServerToClientEvents, socketOptions.InterServerEvents, socketOptions.SocketData>) : void {
         const accountNotification = new AccountNotification();
+        const accountFriends = new AccountFriends(accountNotification);
 
         io.on('connection', (socket) => {
             console.log('-----new client-----')
@@ -87,11 +88,7 @@ module accountRouting {
                 
             });
             socket.on('sendMessage', async (username, message, date) => {
-                const toSocket = (await io.fetchSockets()).find((socketTmp) => socketTmp.data.username === username);
-                accountNotification.addNotifications(username, 'Nouveau message', message);
-                if(toSocket !== undefined) {
-                    io.to(toSocket?.id!).emit('sendMessage', socket.data.username!, message, date);
-                }
+                await accountFriends.sendMessage(socket, username, message, date);
             });
 
             socket.on('disconnect', async () => {

@@ -161,7 +161,7 @@ export class AccountBasic {
     //checks if the token is valid for the user
     public async checkSession(username : string, token : string, res : Response): Promise<void> {
         const result: [{ username: string }] | any = await accountBasicRequest.checkUserByToken(username, token, this.client);
-        if (result.length == 1) {
+        if (result.length == 1 && token != 'none') {
             res.json({status: 1});
         } else {
             res.json({status: 0});
