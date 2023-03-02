@@ -28,11 +28,16 @@
                   [(ngModel)]="password" type="text">
                 </ion-input>
               </ion-item>
-              <ion-fab style="top:35px; right:0;">
-                <ion-fab-button color="light" size="small" (click)="showPassword = !showPassword">
-                  <ion-icon [name]="showPassword?'eye-off':'eye'"></ion-icon>
-                </ion-fab-button>
-              </ion-fab>
+            </ion-col>
+            <ion-col size="1">
+              <ion-button color="light" size="small" fill="clear" class="eyes" (click)="showPassword = !showPassword">
+                <ion-icon [name]="showPassword?'eye-off':'eye'" slot="icon-only"></ion-icon>
+              </ion-button>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col style="text-align:right; margin-top:10px">
+              <p id="forgotPassword">forgot password ?</p>
             </ion-col>
           </ion-row>
           <ion-row>
@@ -56,3 +61,9 @@
     </ion-col>
   </ion-row>
 </ion-grid>
+
+<ion-popover trigger="forgotPassword">
+  <ng-template>
+    <app-forgot-password></app-forgot-password>
+  </ng-template>
+</ion-popover>

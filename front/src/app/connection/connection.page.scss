@@ -41,3 +41,27 @@ ion-item{
 #clickableMail:hover{
   cursor: pointer;
 }
+
+#forgotPassword{
+  color: #007bff;
+}
+
+#forgotPassword:hover{
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.eyes{
+  margin-top: 40px;
+  ion-icon{
+    color: #6666f6;
+    -webkit-transition: color 2s ease-out;
+  }
+}
+
+.eyes:hover{
+  margin-top: 40px;
+  ion-icon{
+    color: #c5e5fd;
+  }
+}

@@ -1,13 +1,12 @@
-.clickableIcon{
-  margin-top: 40px;
+#closeButton{
+  font-size: 1.4em;
   ion-icon{
     color: #6b6b1c;
     -webkit-transition: color 1s ease-out;
   }
 }
 
-.clickableIcon:hover{
-  margin-top: 40px;
+#closeButton:hover{
   ion-icon{
     color: #ffff00;
   }

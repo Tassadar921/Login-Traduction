@@ -1,6 +1,5 @@
-import createClient, { Client } from 'edgedb';
-import { uuid } from 'edgedb/dist/codecs/ifaces';
-import { Socket } from 'socket.io';
+import createClient, {Client} from 'edgedb';
+import {Socket} from 'socket.io';
 import AccountNotificationRequest from './accountNotificationRequest';
 
 import ioServer from '../../socket/socket';
@@ -16,43 +15,45 @@ export class AccountNotification{
         socket.data.token = token;
         socket.data.username = username;
         console.log(username, 'is connected and his token is :',token);
-
         return;
     }
 
     public async synchronizeNotifications(socket : Socket) : Promise<void>{
         const data = await AccountNotificationRequest.getNotifications(socket.data.token, this.client);
         socket.emit('synchronizeNotifications', data);
-
         return;
     }
 
     public async notificationIsSeen(socket : Socket, id : string) : Promise<void>{
-        if(!this.checkRegexUUID(id)) return;
-
-        const data = await AccountNotificationRequest.notificationIsSeen(id, this.client);
-        this.synchronizeNotifications(socket);
-        return;
+        if(!this.checkRegexUUID(id)) {
+            return;
+        }else {
+            const data = await AccountNotificationRequest.notificationIsSeen(id, this.client);
+            await this.synchronizeNotifications(socket);
+            return;
+        }
     }
 
     public async deleteNotification(socket : Socket, id : string) : Promise<void>{
-        if(!this.checkRegexUUID(id)) return;
-
-        await AccountNotificationRequest.deleteNotification(id, this.client);
-        this.synchronizeNotifications(socket);
-        return;
+        if(!this.checkRegexUUID(id)) {
+            return;
+        }else {
+            await AccountNotificationRequest.deleteNotification(id, this.client);
+            await this.synchronizeNotifications(socket);
+            return;
+        }
     }
 
     public async addNotifications(username : string, title : string, text : string) : Promise<void>{
-        const io = ioServer.io;
-        const socket = (await io.fetchSockets()).find((socketTmp) => socketTmp.data.username === username);
+        const socket = (await ioServer.io.fetchSockets()).find((socketTmp) => socketTmp.data.username === username);
         const date = new Date().toISOString()
         await AccountNotificationRequest.addNotifications(socket.data.token, title, text, date ,this.client);
         console.log("add");
 
-        if (socket !== undefined) {
-            this.synchronizeNotifications(socket);
+        if (socket) {
+            await this.synchronizeNotifications(socket);
         }
+        return;
     }
 
     private checkRegexUUID(uuid : string) {

@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {DevicePlatformService} from '../../shared/services/device-platform.service';
-import {InputCheckingService} from '../input-checking.service';
-import { RequestService } from 'src/app/shared/services/request.service';
+import {RequestService} from 'src/app/shared/services/request.service';
 import {CryptoService} from "../../shared/services/crypto.service";
 import {LanguageService} from '../../shared/services/language.service';
 import {environment} from '../../../environments/environment';
@@ -18,7 +17,6 @@ export class SignUpComponent implements OnInit {
   public showPassword = false;
   public showConfirmPassword = false;
   public output = '';
-  public focusing = false;
   public waiting = false;
   public supportEmail = '';
   public mailError = false;
@@ -26,7 +24,6 @@ export class SignUpComponent implements OnInit {
 
   constructor(
     public devicePlatformService: DevicePlatformService,
-    public inputCheckingService: InputCheckingService,
     private requestService: RequestService,
     private cryptoService: CryptoService,
     public languageService: LanguageService,
@@ -41,7 +38,9 @@ export class SignUpComponent implements OnInit {
           updateOn: 'change',
           validators: [
             Validators.required,
-            Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ0-9_-]{3,20}$')
+            Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ0-9_-]{3,20}$'),
+            Validators.minLength(3),
+            Validators.maxLength(20)
           ]}
       ), email: new FormControl(
       '',
@@ -49,7 +48,7 @@ export class SignUpComponent implements OnInit {
         updateOn: 'change',
         validators: [
           Validators.required,
-          Validators.pattern('^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$')
+          Validators.email
         ]}
     ), password: new FormControl(
         '',
@@ -57,7 +56,9 @@ export class SignUpComponent implements OnInit {
           updateOn: 'change',
           validators: [
             Validators.required,
-            Validators.pattern('^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*#?&\\.\\-_])[A-Za-z\\d@$!%*?&\\.\\-_]{8,}$')
+            Validators.pattern('^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*#?&\\.\\-_])[A-Za-z\\d@$!%*?&\\.\\-_]{8,}$'),
+            Validators.minLength(8)
+
           ]}
 
       ), confirmPassword: new FormControl(
@@ -66,37 +67,14 @@ export class SignUpComponent implements OnInit {
           updateOn: 'change',
           validators: [
             Validators.required,
-            Validators.pattern('^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*#?&\\.\\-_])[A-Za-z\\d@$!%*?&\\.\\-_]{8,}$')
+            Validators.pattern('^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*#?&\\.\\-_])[A-Za-z\\d@$!%*?&\\.\\-_]{8,}$'),
+            Validators.minLength(8)
           ]}
       )
     });
   }
 
   ngOnInit() {}
-
-  public checkUsername(): void {
-    this.output = this.inputCheckingService.checkUsername(this.formControl.controls.username.value);
-    this.focusing = false;
-  }
-
-  public checkEmail(): void {
-    this.output = this.inputCheckingService.checkEmail(this.formControl.controls.email.value);
-    this.focusing = false;
-  }
-
-  public checkPassword(password: boolean): void {
-    if (password) {
-      this.output = this.inputCheckingService.checkPassword(this.formControl.controls.password.value);
-    } else {
-      this.output = this.inputCheckingService.checkPassword(this.formControl.controls.confirmPassword.value);
-      if (!this.output) {
-        this.output = this.inputCheckingService.checkPasswords(
-          this.formControl.controls.password.value,
-          this.formControl.controls.confirmPassword.value);
-      }
-    }
-    this.focusing = false;
-  }
 
   public async mailSignUp(): Promise<void> {
     this.waiting = true;

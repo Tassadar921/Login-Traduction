@@ -18,11 +18,11 @@ const routes: Routes = [
   {
     path: 'socket',
     loadChildren: () => import('./socket/socket.module').then( m => m.SocketPageModule)
-  },  {
+  },
+  {
     path: 'home',
     loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
-  },
-
+  }
 ];
 
 @NgModule({

@@ -4,6 +4,9 @@
       <ion-card [id]="devicePlatformService.currentPlatform==='mobile'?'mobileContent':'desktopContent'">
         <ion-card-content [formGroup]="formControl">
           <ion-row>
+            <ion-col size="2">
+              <app-nomenclature [data]="'username'" [modalName]="'username'"></app-nomenclature>
+            </ion-col>
             <ion-col>
               <ion-item>
                 <ion-label position="floating">
@@ -17,6 +20,9 @@
             </ion-col>
           </ion-row>
           <ion-row>
+            <ion-col size="2">
+              <app-nomenclature [data]="'email'" [modalName]="'email'"></app-nomenclature>
+            </ion-col>
             <ion-col>
               <ion-item>
                 <ion-label position="floating">
@@ -30,6 +36,9 @@
             </ion-col>
           </ion-row>
           <ion-row>
+            <ion-col size="2">
+              <app-nomenclature [data]="'password'" [modalName]="'password'"></app-nomenclature>
+            </ion-col>
             <ion-col>
               <ion-item>
                 <ion-label position="floating">
@@ -40,14 +49,17 @@
                            formControlName="password" class="form-control">
                 </ion-input>
               </ion-item>
-              <ion-fab style="top:35px; right:0;">
-                <ion-fab-button color="light" size="small" (click)="showPassword = !showPassword">
-                  <ion-icon [name]="showPassword?'eye-off':'eye'"></ion-icon>
-                </ion-fab-button>
-              </ion-fab>
+            </ion-col>
+            <ion-col size="1">
+              <ion-button color="light" size="small" fill="clear" class="eyes" (click)="showPassword = !showPassword">
+                <ion-icon [name]="showPassword?'eye-off':'eye'" slot="icon-only"></ion-icon>
+              </ion-button>
             </ion-col>
           </ion-row>
           <ion-row>
+            <ion-col size="2">
+              <app-nomenclature [data]="'confPassword'" [modalName]="'confPassword'"></app-nomenclature>
+            </ion-col>
             <ion-col>
               <ion-item>
                 <ion-label position="floating">
@@ -58,11 +70,11 @@
                            formControlName="confirmPassword" class="form-control">
                 </ion-input>
               </ion-item>
-              <ion-fab style="top:35px; right:0;">
-                <ion-fab-button color="light" size="small" (click)="showConfirmPassword = !showConfirmPassword">
-                  <ion-icon [name]="showConfirmPassword?'eye-off':'eye'"></ion-icon>
-                </ion-fab-button>
-              </ion-fab>
+            </ion-col>
+            <ion-col size="1">
+              <ion-button color="light" size="small" fill="clear" class="eyes" (click)="showConfirmPassword = !showConfirmPassword">
+                <ion-icon [name]="showConfirmPassword?'eye-off':'eye'" slot="icon-only"></ion-icon>
+              </ion-button>
             </ion-col>
           </ion-row>
           <ion-row>
@@ -72,14 +84,12 @@
             </ion-col>
           </ion-row>
           <ion-row>
-            <ion-col *ngIf="!waiting">
+            <ion-col>
               <ion-button expand="block" id="submitButton" shape="round" color="success" strong="true" (click)="mailSignUp()"
-              [disabled]="!formControl.valid">
+              [disabled]="!formControl.valid" *ngIf="!waiting">
                 Sign up
               </ion-button>
-            </ion-col>
-            <ion-col *ngIf="waiting">
-              <ion-spinner name="lines"></ion-spinner>
+              <ion-spinner name="lines" *ngIf="waiting"></ion-spinner>
             </ion-col>
           </ion-row>
         </ion-card-content>
@@ -87,7 +97,3 @@
     </ion-col>
   </ion-row>
 </ion-grid>
-
-<ion-fab horizontal="start" vertical="bottom">
-  <app-nomenclature></app-nomenclature>
-</ion-fab>
