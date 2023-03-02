@@ -14,10 +14,21 @@ export class DevicePlatformService {
   }
 
   public calculatePlatform() {
-    if(this.platform.platforms().includes('mobile') || window.innerWidth < 900){
-      this.currentPlatform = 'mobile';
+    if(window.innerWidth <= 600){
+      this.currentPlatform = 'small';
+    }else if(window.innerWidth > 600 && window.innerWidth < 960){
+      this.currentPlatform = 'medium';
     }else{
-      this.currentPlatform = 'desktop';
+      this.currentPlatform = 'large';
     }
+    console.log(this.currentPlatform)
+  }
+
+  public getDeviceContentClass() {
+    return this.currentPlatform+'DeviceContent';
+  }
+
+  public getDeviceSegmentId() {
+    return this.currentPlatform+'DeviceSegment';
   }
 }

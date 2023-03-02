@@ -7,25 +7,42 @@ ion-card{
   border-radius:10%;
 }
 
-ion-label{
-  //text-align: left;
+#smallDeviceSegment{
+  position: absolute;
+  bottom:0;
+  width: 100%;
 }
 
-#desktopContent{
-  margin: 10% auto auto;
-  width:30%;
+#mediumDeviceSegment, #largeDeviceSegment{
 }
 
-#mobileContent{
-  margin: 25% auto auto;
+.smallDeviceContent{
+  width: 100%;
 }
 
-ion-item{
-  text-align:center;
+.mediumDeviceContent{
+  width: 70%;
+  margin:auto;
 }
 
-#content ion-item {
-  font-size: 1.5em;
+.largeDeviceContent{
+  width: 40%;
+  margin:auto;
+}
+
+#content {
+  margin-top: 100px;
+  ion-item{
+    font-size: 1.5em;
+    text-align:center;
+    border-radius: 20px;
+    margin-top: 5px;
+  }
+}
+
+app-nomenclature{
+  position: absolute;
+  left:-10px;
 }
 
 #selected{
@@ -62,13 +79,6 @@ ion-item{
   margin-top: 40px;
   ion-icon{
     color: #c5e5fd;
-  }
-}
-
-ion-card{
-  ion-item{
-    border-radius: 20px;
-    margin-top: 5px;
   }
 }
 

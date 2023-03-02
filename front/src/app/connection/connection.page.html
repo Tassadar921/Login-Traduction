@@ -2,27 +2,29 @@
 
   <app-moon-background></app-moon-background>
 
-  <ion-fab vertical="bottom" horizontal="end">
+  <ion-fab horizontal="end" [vertical]="devicePlatformService.currentPlatform==='small'?'top':'bottom'">
     <app-language></app-language>
   </ion-fab>
 
-<ion-item>
-  <ion-segment value="true" color="warning"
-               [id]="devicePlatformService.currentPlatform==='mobile'?'ionSegmentMobile':'ionSegmentDesktop'">
-    <ion-segment-button value="true" (click)="loadComponent('signIn')">
-      <ion-label [id]="displayedComponent==='signIn'?'selected':''">
-        {{languageService.dictionary.data?.components.connection.signIn}}
-      </ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="false" (click)="loadComponent('signUp')">
-      <ion-label [id]="displayedComponent==='signUp'?'selected':''">
-        {{languageService.dictionary.data?.components.connection.signUp}}
-      </ion-label>
-    </ion-segment-button>
-  </ion-segment>
-</ion-item>
+  <ion-item [id]="devicePlatformService.getDeviceSegmentId()">
+    <ion-segment value="true" color="warning"
+                 [class]="devicePlatformService.currentPlatform==='small'?
+               'smallDeviceSegment':devicePlatformService.currentPlatform==='medium'?
+                'mediumDeviceSegment':'largeDeviceSegment'">
+      <ion-segment-button value="true" (click)="loadComponent('signIn')">
+        <ion-label [id]="displayedComponent==='signIn'?'selected':''">
+          {{languageService.dictionary.data?.components.connection.signIn}}
+        </ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="false" (click)="loadComponent('signUp')">
+        <ion-label [id]="displayedComponent==='signUp'?'selected':''">
+          {{languageService.dictionary.data?.components.connection.signUp}}
+        </ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-item>
 
-  <app-sign-in [@signIn]="signInAnimationState"></app-sign-in>
-  <app-sign-up [@signIn]="signUpAnimationState" [hidden]="blockDisplaySignUpOnLoading"></app-sign-up>
-
+  <app-sign-in [class]="devicePlatformService.getDeviceContentClass()" [@signIn]="signInAnimationState"></app-sign-in>
+  <app-sign-up [class]="devicePlatformService.getDeviceContentClass()" [@signIn]="signUpAnimationState"
+               [hidden]="blockDisplaySignUpOnLoading"></app-sign-up>
 </ion-content>

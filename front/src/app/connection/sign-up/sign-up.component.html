@@ -1,7 +1,7 @@
 <ion-grid id="content">
   <ion-row>
     <ion-col>
-      <ion-card [id]="devicePlatformService.currentPlatform==='mobile'?'mobileContent':'desktopContent'">
+      <ion-card  [class]="devicePlatformService.getDeviceContentClass()">
         <ion-card-content [formGroup]="formControl">
           <ion-row>
             <ion-col size="1">
@@ -84,7 +84,7 @@
             </ion-col>
           </ion-row>
           <ion-row>
-            <ion-col size="4" push="7">
+            <ion-col size="4" push="6">
               <ion-button id="submitButton" shape="round" color="success" (click)="mailSignUp()"
                           [disabled]="!formControl.valid" *ngIf="!waiting"
                           [color]="formControl.valid?'success':'danger'">
