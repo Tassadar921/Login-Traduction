@@ -1,4 +1,6 @@
-<ion-icon name="information-circle" [id]="modalName" class="clickableIcon"></ion-icon>
+<ion-button color="light" fill="clear" [id]="modalName" class="clickableIcon" shape="round">
+  <ion-icon name="information-circle" slot="icon-only"></ion-icon>
+</ion-button>
 
 <ion-modal [trigger]="modalName">
   <ng-template>
@@ -11,12 +13,6 @@
         </ion-row>
       </ion-grid>
     </ion-content>
-    <ion-footer>
-      <ion-row>
-        <ion-col>
-            <ion-button shape="round" (click)="modalController.dismiss()">Close</ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-footer>
+    <app-modal-close-button></app-modal-close-button>
   </ng-template>
 </ion-modal>

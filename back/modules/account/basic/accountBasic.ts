@@ -12,7 +12,7 @@ export class AccountBasic {
     private readonly mailOptions: { from: string | undefined; to: string; subject: string; text: string; }
     private readonly urlTokenLength: number;
     private readonly sessionTokenLength: number;
-    private readonly urlTokenTimeoutDelay: number;
+    private readonly urlTokenExpiration: number;
 
     constructor() {
         this.client = createClient({});
@@ -36,7 +36,7 @@ export class AccountBasic {
 
         this.urlTokenLength = parseInt(process.env.URL_TOKEN_LENGTH!);
         this.sessionTokenLength = parseInt(process.env.SESSION_TOKEN_LENGTH!);
-        this.urlTokenTimeoutDelay = parseInt(process.env.URL_TOKEN_TIMEOUT_DELAY!);
+        this.urlTokenExpiration = parseInt(process.env.URL_TOKEN_EXPIRATION!);
     }
 
     public async mailSignUp(username: string, password: string, email: string, language: string, res: Response): Promise<void> {
@@ -52,7 +52,6 @@ export class AccountBasic {
             return;
         }else {
             let result: any = Object(await accountBasicRequest.checkUser(username, email, this.client));
-            console.log(result);
                 if (result[0]) {
                     if (result[0].username === username) {
                         res.json({status: -40});
@@ -93,7 +92,6 @@ export class AccountBasic {
 
             this.transporter.sendMail(this.mailOptions, async function (error) {
                 if (error) {
-                    console.log(error);
                     res.json({status: -1});
                     return;
                 } else {
@@ -194,7 +192,7 @@ export class AccountBasic {
         }
 
         let result2: any[] = await accountBasicRequest.checkResetPasswordUrlTokenByEmail(email, this.client);
-        
+
         switch (result2.length) {
             case 0:
                 break;
@@ -273,15 +271,13 @@ export class AccountBasic {
 
     //sends an email containing a unique token to create the account, effective for 10 minutes
     private deleteCreateAccountQueueUrlToken(urlToken: string): void {
-        const clientTmp = this.client;
-        setTimeout(async () => {await accountBasicRequest.deleteCreateAccountUrlToken(urlToken, clientTmp)}, this.urlTokenTimeoutDelay);
+        setTimeout(async () => {await accountBasicRequest.deleteCreateAccountUrlToken(urlToken, this.client)}, this.urlTokenExpiration);
         return;
     }
 
     //sends an email containing a unique token to reset the password, effective for 10 minutes
     private deleteMailResetPasswordQueueUrlToken(urlToken : string): void {
-        const clientTmp = this.client;
-        setTimeout(async () => {await accountBasicRequest.deleteResetPasswordUrlToken(urlToken, clientTmp)}, this.urlTokenTimeoutDelay);
+        setTimeout(async () => {await accountBasicRequest.deleteResetPasswordUrlToken(urlToken, this.client)}, this.urlTokenExpiration);
         return;
     }
 
