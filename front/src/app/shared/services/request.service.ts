@@ -61,7 +61,13 @@ export class RequestService {
 
   public async mailResetPassword(email: string): Promise<Object> {
     return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/mailResetPassword',
-      {email}
+      {email, language: await this.cookieService.getCookie('language')}
+    ));
+  }
+
+  public async resetPassword(token: string, password: string): Promise<Object> {
+    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/resetPassword',
+      {token, password}
     ));
   }
 

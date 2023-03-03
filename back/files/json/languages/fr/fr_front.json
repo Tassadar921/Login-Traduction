@@ -38,6 +38,7 @@
           "tokenError": "Il y a eu un souci avec votre token personnel, veuillez recommencer"
         },
         "forgotPassword": {
+          "enterYourEmail": "Entrez votre email de compte",
           "email": "Email",
           "emailSent": "Un email vous a été envoyé. Veuillez cliquer sur le lien pour réinitialiser votre mot de passe.",
           "emailNotFound": "Email non trouvé",

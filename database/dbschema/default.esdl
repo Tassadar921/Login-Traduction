@@ -25,7 +25,7 @@ module default {
         required property password -> str;
     }
 
-    type Password_Reset {
+    type Reset_Password {
         required property urlToken -> str;
         required property email -> str;
     }

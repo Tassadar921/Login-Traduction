@@ -134,9 +134,7 @@ module accountBasicRequest {
         return new Promise<any[]>((resolve) => {
             const result = client.query(`
                 SELECT Reset_Password {
-                    urlToken,
-                    username,
-                    password
+                    urlToken
                 }
                 FILTER .email = "${email}"
             `);
@@ -148,9 +146,7 @@ module accountBasicRequest {
         return new Promise<any[]>((resolve) => {
             const result = client.query(`
                 SELECT Reset_Password {
-                    username,
-                    email,
-                    password
+                    email
                 }
                 FILTER .urlToken = "${urlToken}"
             `);

@@ -15,7 +15,7 @@
                 "text" : "Welcome, <USERNAME>, to the Anglo-English Dictionary. Please click on the link below to activate your account. "
               }
             },
-            "resetPassword": {
+            "mailResetPasswordCreateUrlToken": {
               "mailOptions": {
                 "subject": "Welcome to the Anglo-English Dictionary",
                 "text" : "Welcome, <USERNAME>, to the Anglo-English Dictionary. Please click on the link below to reset your password. "

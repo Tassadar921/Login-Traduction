@@ -191,19 +191,15 @@ export class AccountBasic {
 
         const result0: any[] = await accountBasicRequest.checkUser('', email, this.client);
 
-        if (result0.length > 0) {
+        if (!result0.length) {
             res.json({status: 0});
             return;
         }
 
         let result2: any[] = await accountBasicRequest.checkResetPasswordUrlTokenByEmail(email, this.client);
 
-        switch (result2.length) {
-            case 0:
-                break;
-            default:
-                await accountBasicRequest.deleteResetPasswordUrlToken(result2[0].urlToken, this.client);
-                break;
+        if(result2.length) {
+            await accountBasicRequest.deleteResetPasswordUrlToken(result2[0].urlToken, this.client);
         }
 
         let urlToken = this.generateToken(this.urlTokenLength);
@@ -221,13 +217,13 @@ export class AccountBasic {
         const languageFile = await import('./files/json/languages/' + language + '/' + language + '_back.json', {assert: {type: 'json'}})
 
         this.mailOptions.to = email;
-        this.mailOptions.subject = languageFile.data.modules.account.basic.mailResetPasswordCreateUrlToken.mailOptions.subject;
-        this.mailOptions.text = languageFile.data.modules.account.basic.mailResetPasswordCreateUrlToken.mailOptions.text.replace('username', result0[0].username)
+        this.mailOptions.subject = languageFile.default.data.modules.account.basic.mailResetPasswordCreateUrlToken.mailOptions.subject;
+        this.mailOptions.text = languageFile.default.data.modules.account.basic.mailResetPasswordCreateUrlToken.mailOptions.text.replace('<USERNAME>', result0[0].username)
             + process.env.URL_FRONT
             + '/conf-account?urlToken='
             + urlToken;
 
-        //sends an email containing a unique token to delete the account, effective for 10 minutes
+        //sends an email containing a unique token to reset the password, effective for 10 minutes
 
         this.transporter.sendMail(this.mailOptions, async function (error) {
             if (error) {
@@ -278,8 +274,9 @@ export class AccountBasic {
     private deleteCreateAccountQueueUrlToken(urlToken: string): void {
         const client = this.client;
 
-        console.log("bonjour1");
-        setTimeout(async () => {await accountBasicRequest.deleteCreateAccountUrlToken(urlToken, client);         console.log("bonjour2");}, this.urlTokenExpiration);
+        setTimeout(async () => {
+            await accountBasicRequest.deleteCreateAccountUrlToken(urlToken, client);
+            }, this.urlTokenExpiration);
         return;
     }
 
