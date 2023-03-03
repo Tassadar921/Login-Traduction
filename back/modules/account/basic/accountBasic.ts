@@ -106,7 +106,7 @@ export class AccountBasic {
     public async createAccount(urlToken: string, res: Response): Promise<void> {
         const result = await accountBasicRequest.checkCreateAccountUrlTokenByUrlToken(urlToken, this.client);
         if (result.length > 0) {
-            await accountBasicRequest.deleteCreateAccountUrlToken(result[0].email, this.client);
+            await accountBasicRequest.deleteCreateAccountUrlToken(urlToken, this.client);
 
             let token = this.generateToken(this.sessionTokenLength);
             let result1: any[] = await accountBasicRequest.checkToken(token, this.client);
@@ -290,13 +290,14 @@ export class AccountBasic {
         return;
     }
 
-
+    //checks if the sessionToken
     private checkRegexSessionToken(sessionToken : string): boolean {
         const regex = new RegExp('/^[A-Za-z0-9]{'+this.sessionTokenLength+'}$/');
 
         return (regex).test(sessionToken);
     }
 
+    //checks if the urlToken is valid
     private checkRegexUrlToken(urlToken : string): boolean {
         const regex = new RegExp('/^[A-Za-z0-9]{'+this.urlTokenLength+'}$/');
 

@@ -45,7 +45,9 @@ module default {
         required property seen -> bool { 
             default := false 
         };
-        link sender -> User;
+        link sender -> User {
+            on target delete delete source;
+        };
         multi link receiver -> User {
             on target delete allow;
         };

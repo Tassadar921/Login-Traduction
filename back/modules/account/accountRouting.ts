@@ -13,7 +13,7 @@ module accountRouting {
         initHttp(app);
         initSocket(io);
 
-        console.log('accountRouting init');
+        console.log('accountRouting initialized');
     }
 
     function initHttp(app: Express): void {
