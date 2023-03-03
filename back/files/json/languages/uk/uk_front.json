@@ -38,6 +38,7 @@
         "tokenError": "Something went wrong with your personal token, please try again"
       },
       "forgotPassword": {
+        "enterYourEmail": "Enter your account email",
         "email": "Email",
         "emailSent": "An email has been sent to you. Please check your mails to reset your password.",
         "emailNotFound": "Email not found",

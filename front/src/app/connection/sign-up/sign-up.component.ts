@@ -58,7 +58,6 @@ export class SignUpComponent implements OnInit {
             Validators.required,
             Validators.pattern('^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*#?&\\.\\-_])[A-Za-z\\d@$!%*?&\\.\\-_]{8,}$'),
             Validators.minLength(8)
-
           ]}
 
       ), confirmPassword: new FormControl(

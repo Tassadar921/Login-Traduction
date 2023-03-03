@@ -32,21 +32,21 @@ signOut :             =>
 		{status: 1} no more token
 	}
 
-fastCheck :
+fastCheck : => CODED
 	(req.body.username, req.body.token) => 
 	{
 		{status : 0} no such token is allowed to this user
 		{status : 1} everything is fine
 	}
 
-resetPassword :
+resetPassword : => EN TRAIN
 	(req.body.token, req.body.password) => 
 	{
-		{status : 0} no such token is allowed to this user
+		{status : 0} no such token in db
 		{status : 1} success
 	}
 
-mailResetPassword :
+mailResetPassword : => CODED
 	(req.body.email, req.body.language) => 
 	{
 		{status : -2} bad mail shape

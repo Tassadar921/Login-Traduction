@@ -13,7 +13,7 @@ export class NomenclatureComponent implements OnInit {
 
   constructor(
     public modalController: ModalController,
-  ) { }
+  ) {}
 
   ngOnInit() {}
 

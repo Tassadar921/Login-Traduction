@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import {Platform} from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
@@ -7,9 +6,7 @@ import {Platform} from '@ionic/angular';
 export class DevicePlatformService {
 
   public currentPlatform: string = 'desktop';
-  constructor(
-    private platform: Platform
-  ) {
+  constructor() {
     this.calculatePlatform();
   }
 
@@ -21,7 +18,6 @@ export class DevicePlatformService {
     }else{
       this.currentPlatform = 'large';
     }
-    console.log(this.currentPlatform)
   }
 
   public getDeviceContentClass() {
