@@ -42,7 +42,8 @@ ion-card{
 
 app-nomenclature{
   position: absolute;
-  left:-10px;
+  left:0;
+  z-index: 2;
 }
 
 #selected{

@@ -46,6 +46,11 @@
           "mailSendingError": "Quelque chose s'est mal déroulé dans l'envoi du mail. Si le problème persiste, veuillez nous contacter à l'adresse suivante : ",
           "emailCopied": "Email copié",
           "send": "Envoyer"
+        },
+        "resetPassword": {
+          "enterNewPassword": "Entrez votre nouveau mot de passe",
+          "passwordResetSuccess": "Mot de passe réinitialisé, vous pouvez maintenant vous connecter",
+          "tokenError": "Il y a eu un souci avec votre token personnel, veuillez recommencer"
         }
       },
       "services": {}

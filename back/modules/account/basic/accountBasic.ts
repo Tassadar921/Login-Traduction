@@ -220,7 +220,7 @@ export class AccountBasic {
         this.mailOptions.subject = languageFile.default.data.modules.account.basic.mailResetPasswordCreateUrlToken.mailOptions.subject;
         this.mailOptions.text = languageFile.default.data.modules.account.basic.mailResetPasswordCreateUrlToken.mailOptions.text.replace('<USERNAME>', result0[0].username)
             + process.env.URL_FRONT
-            + '/conf-account?urlToken='
+            + '/reset-password?urlToken='
             + urlToken;
 
         //sends an email containing a unique token to reset the password, effective for 10 minutes

@@ -6,6 +6,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import * as dotenv from 'dotenv';
 
+// @ts-ignore
 import http from 'http';
 
 import accountRouting from './modules/account/accountRouting';

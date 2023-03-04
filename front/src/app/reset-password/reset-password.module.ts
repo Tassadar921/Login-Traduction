@@ -8,6 +8,7 @@ import { ResetPasswordPageRoutingModule } from './reset-password-routing.module'
 
 import { ResetPasswordPage } from './reset-password.page';
 import {NomenclatureModule} from "../shared/components/nomenclature/nomenclature.module";
+import {MoonBackgroundModule} from '../shared/components/moon-background/moon-background.module';
 
 @NgModule({
     imports: [
@@ -16,7 +17,8 @@ import {NomenclatureModule} from "../shared/components/nomenclature/nomenclature
         IonicModule,
         ResetPasswordPageRoutingModule,
         ReactiveFormsModule,
-        NomenclatureModule
+        NomenclatureModule,
+        MoonBackgroundModule
     ],
   declarations: [ResetPasswordPage]
 })

@@ -46,6 +46,11 @@
         "mailSendingError": "Something went wrong with the email: if the problem persists, please contact us at this address : ",
         "emailCopied": "Email copied",
         "send": "Send"
+      },
+      "resetPassword": {
+        "enterNewPassword": "Enter your new password",
+        "passwordResetSuccess": "Password reset, you can now sign in",
+        "tokenError": "Something went wrong with your personal token, please try again"
       }
     }
   },

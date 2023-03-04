@@ -36,8 +36,13 @@ export class ForgotPasswordComponent implements OnInit {
 
   public async mailResetPassword() {
     this.waiting = true;
+    this.output = '';
     const rtrn = await this.requestService.mailResetPassword(this.formControl.controls.email.value);
-    console.log(rtrn);
+    if(Object(rtrn).status===1){
+      this.output = '';
+    }else if(Object(rtrn).status===0){
+      this.output = '';
+    }
     this.waiting = false;
   }
 

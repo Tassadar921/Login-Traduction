@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {DevicePlatformService} from '../../shared/services/device-platform.service';
 import {RequestService} from 'src/app/shared/services/request.service';
-import {CryptoService} from "../../shared/services/crypto.service";
+import {CryptoService} from '../../shared/services/crypto.service';
 import {LanguageService} from '../../shared/services/language.service';
 import {environment} from '../../../environments/environment';
 import {Clipboard} from '@angular/cdk/clipboard';
 import {ToastService} from '../../shared/services/toast.service';
-import {FormGroup, FormControl, Validators} from '@angular/forms';
+import {FormGroup, Validators, FormBuilder, AbstractControlOptions} from '@angular/forms';
 
 @Component({
   selector: 'app-sign-up',
@@ -20,7 +20,7 @@ export class SignUpComponent implements OnInit {
   public waiting = false;
   public supportEmail = '';
   public mailError = false;
-  public formControl: any;
+  public formControl: FormGroup;
 
   constructor(
     public devicePlatformService: DevicePlatformService,
@@ -28,11 +28,12 @@ export class SignUpComponent implements OnInit {
     private cryptoService: CryptoService,
     public languageService: LanguageService,
     private toastService: ToastService,
-    public clipboard: Clipboard
+    public clipboard: Clipboard,
+    private formBuilder: FormBuilder
   ) {
     this.supportEmail = environment.supportEmail;
-    this.formControl = new FormGroup({
-      username: new FormControl(
+    this.formControl = formBuilder.group({
+      username: formBuilder.control(
         '',
         {
           updateOn: 'change',
@@ -41,16 +42,18 @@ export class SignUpComponent implements OnInit {
             Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ0-9_-]{3,20}$'),
             Validators.minLength(3),
             Validators.maxLength(20)
-          ]}
-      ), email: new FormControl(
-      '',
-      {
-        updateOn: 'change',
-        validators: [
-          Validators.required,
-          Validators.email
-        ]}
-    ), password: new FormControl(
+          ]
+        }
+      ), email: formBuilder.control(
+        '',
+        {
+          updateOn: 'change',
+          validators: [
+            Validators.required,
+            Validators.email
+          ]
+        }
+      ), password: formBuilder.control(
         '',
         {
           updateOn: 'change',
@@ -58,9 +61,9 @@ export class SignUpComponent implements OnInit {
             Validators.required,
             Validators.pattern('^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*#?&\\.\\-_])[A-Za-z\\d@$!%*?&\\.\\-_]{8,}$'),
             Validators.minLength(8)
-          ]}
-
-      ), confirmPassword: new FormControl(
+          ]
+        }
+      ), confirmPassword: formBuilder.control(
         '',
         {
           updateOn: 'change',
@@ -68,23 +71,43 @@ export class SignUpComponent implements OnInit {
             Validators.required,
             Validators.pattern('^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*#?&\\.\\-_])[A-Za-z\\d@$!%*?&\\.\\-_]{8,}$'),
             Validators.minLength(8)
-          ]}
+          ]
+        }
       )
-    });
+    }, {
+      validators: this.matchValidator('password', 'confirmPassword')
+    } as AbstractControlOptions);
   }
 
   ngOnInit() {}
 
+  public matchValidator(controlOne: string, controlTwo: string) {
+    return (formGroup: FormGroup) => {
+      const control1 = formGroup.controls[controlOne];
+      const control2 = formGroup.controls[controlTwo];
+      if (control1.errors && !control2.errors?.['match']) {
+        return;
+      }
+      if (control1.value !== control2.value) {
+        control2.setErrors({ match: true });
+
+      } else {
+        control2.setErrors(null);
+      }
+    }
+  }
+
   public async mailSignUp(): Promise<void> {
     this.waiting = true;
     this.mailError = false;
+    this.output = '';
     let rtrn;
     while (!rtrn || Object(rtrn).status === 3) {
       await this.cryptoService.setRsaPublicKey();
       rtrn = await this.requestService.mailSignUp(
-        this.formControl.controls.username.value,
-        this.formControl.controls.email.value,
-        this.cryptoService.rsaEncryptWithPublicKey(this.formControl.controls.password.value),
+        this.formControl.value.username,
+        this.formControl.value.email,
+        this.cryptoService.rsaEncryptWithPublicKey(this.formControl.value.password),
         this.cryptoService.getPublicKey()
       );
     }
