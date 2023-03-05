@@ -4,9 +4,10 @@ import {RequestService} from '../shared/services/request.service';
 import {ToastService} from '../shared/services/toast.service';
 import {LanguageService} from '../shared/services/language.service';
 import {CookieService} from '../shared/services/cookie.service';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormGroup} from '@angular/forms';
 import {CryptoService} from '../shared/services/crypto.service';
 import {DevicePlatformService} from '../shared/services/device-platform.service';
+import {FormValidatorsService} from '../shared/services/form-validators.service';
 
 @Component({
   selector: 'app-reset-password',
@@ -15,8 +16,9 @@ import {DevicePlatformService} from '../shared/services/device-platform.service'
 })
 export class ResetPasswordPage implements OnInit {
 
-  public formControl: any;
+  public formControl: FormGroup;
   public showPassword: boolean = false;
+  public showConfirmPassword: boolean = false;
   public waiting: boolean = false;
   public output: string = '';
   private urlToken: string = '';
@@ -29,19 +31,10 @@ export class ResetPasswordPage implements OnInit {
     public languageService: LanguageService,
     private cookieService: CookieService,
     private cryptoService: CryptoService,
-    public devicePlatformService: DevicePlatformService
+    public devicePlatformService: DevicePlatformService,
+    private formValidatorsService: FormValidatorsService,
   ) {
-    this.formControl = new FormGroup({
-      password: new FormControl('',
-        {
-          updateOn: 'change',
-          validators: [
-            Validators.required,
-            Validators.pattern('^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*#?&\\.\\-_])[A-Za-z\\d@$!%*?&\\.\\-_]{8,}$'),
-            Validators.minLength(8)
-          ]
-        })
-    });
+    this.formControl = this.formValidatorsService.getResetPasswordValidator();
   }
 
   ngOnInit() {
@@ -58,7 +51,7 @@ export class ResetPasswordPage implements OnInit {
         await this.cryptoService.setRsaPublicKey();
         rtrn = await this.requestService.resetPassword(
           this.urlToken,
-          this.cryptoService.rsaEncryptWithPublicKey(this.formControl.controls.password.value),
+          this.cryptoService.rsaEncryptWithPublicKey(this.formControl.value.password),
           this.cryptoService.getPublicKey()
         );
       }

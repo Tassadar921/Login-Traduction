@@ -6,7 +6,8 @@ import {LanguageService} from '../../shared/services/language.service';
 import {environment} from '../../../environments/environment';
 import {Clipboard} from '@angular/cdk/clipboard';
 import {ToastService} from '../../shared/services/toast.service';
-import {FormGroup, Validators, FormBuilder, AbstractControlOptions} from '@angular/forms';
+import {FormGroup} from '@angular/forms';
+import {FormValidatorsService} from '../../shared/services/form-validators.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -29,73 +30,13 @@ export class SignUpComponent implements OnInit {
     public languageService: LanguageService,
     private toastService: ToastService,
     public clipboard: Clipboard,
-    private formBuilder: FormBuilder
+    private formValidatorsService: FormValidatorsService,
   ) {
     this.supportEmail = environment.supportEmail;
-    this.formControl = formBuilder.group({
-      username: formBuilder.control(
-        '',
-        {
-          updateOn: 'change',
-          validators: [
-            Validators.required,
-            Validators.pattern('^[A-Za-zÀ-ÖØ-öø-ÿ0-9_-]{3,20}$'),
-            Validators.minLength(3),
-            Validators.maxLength(20)
-          ]
-        }
-      ), email: formBuilder.control(
-        '',
-        {
-          updateOn: 'change',
-          validators: [
-            Validators.required,
-            Validators.email
-          ]
-        }
-      ), password: formBuilder.control(
-        '',
-        {
-          updateOn: 'change',
-          validators: [
-            Validators.required,
-            Validators.pattern('^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*#?&\\.\\-_])[A-Za-z\\d@$!%*?&\\.\\-_]{8,}$'),
-            Validators.minLength(8)
-          ]
-        }
-      ), confirmPassword: formBuilder.control(
-        '',
-        {
-          updateOn: 'change',
-          validators: [
-            Validators.required,
-            Validators.pattern('^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@$!%*#?&\\.\\-_])[A-Za-z\\d@$!%*?&\\.\\-_]{8,}$'),
-            Validators.minLength(8)
-          ]
-        }
-      )
-    }, {
-      validators: this.matchValidator('password', 'confirmPassword')
-    } as AbstractControlOptions);
+    this.formControl = this.formValidatorsService.getSignUpValidator();
   }
 
   ngOnInit() {}
-
-  public matchValidator(controlOne: string, controlTwo: string) {
-    return (formGroup: FormGroup) => {
-      const control1 = formGroup.controls[controlOne];
-      const control2 = formGroup.controls[controlTwo];
-      if (control1.errors && !control2.errors?.['match']) {
-        return;
-      }
-      if (control1.value !== control2.value) {
-        control2.setErrors({ match: true });
-
-      } else {
-        control2.setErrors(null);
-      }
-    }
-  }
 
   public async mailSignUp(): Promise<void> {
     this.waiting = true;

@@ -50,7 +50,9 @@
       "resetPassword": {
         "enterNewPassword": "Enter your new password",
         "passwordResetSuccess": "Password reset, you can now sign in",
-        "tokenError": "Something went wrong with your personal token, please try again"
+        "tokenError": "Something went wrong with your personal token, please try again",
+        "newPassword": "New password",
+        "confirmPassword": "Confirm new password"
       }
     }
   },
