@@ -26,20 +26,20 @@ export class ResetPasswordPage implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private requestService: RequestService,
-    private router: Router,
     private toastService: ToastService,
     public languageService: LanguageService,
     private cookieService: CookieService,
     private cryptoService: CryptoService,
     public devicePlatformService: DevicePlatformService,
     private formValidatorsService: FormValidatorsService,
+    private router: Router
   ) {
     this.formControl = this.formValidatorsService.getResetPasswordValidator();
   }
 
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe(async params => {
-      this.urlToken = Object(params).token;
+      this.urlToken = Object(params).urlToken;
     });
   }
 
@@ -56,14 +56,11 @@ export class ResetPasswordPage implements OnInit {
         );
       }
       if (Object(rtrn).status === 1) {
-        this.output = this.languageService.dictionary.data?.components.resetPassword.passwordResetSuccess;
+        await this.toastService.displayToast(this.languageService.dictionary.data?.components.resetPassword.passwordResetSuccess, 'top');
+        await this.router.navigateByUrl('/connection');
       } else if (Object(rtrn).status === 0) {
         this.output = this.languageService.dictionary.data?.components.resetPassword.tokenError;
       }
+      this.waiting = false;
   }
-
-  public async backToConnection() {
-    await this.router.navigateByUrl('/connection');
-  }
-
 }

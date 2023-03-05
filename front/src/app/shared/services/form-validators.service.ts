@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {AbstractControlOptions, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AbstractControlOptions, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -84,6 +84,21 @@ export class FormValidatorsService {
     }, {
       validators: this.matchValidator('password', 'confirmPassword')
     } as AbstractControlOptions);
+  }
+
+  getForgotPasswordValidator(){
+    return this.formBuilder.group({
+      email: new FormControl(
+        '',
+        {
+          updateOn: 'change',
+          validators: [
+            Validators.required,
+            Validators.email
+          ]
+        }
+      )
+    });
   }
 
   private matchValidator(controlOne: string, controlTwo: string) {

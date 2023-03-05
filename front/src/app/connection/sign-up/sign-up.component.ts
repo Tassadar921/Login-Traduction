@@ -19,7 +19,7 @@ export class SignUpComponent implements OnInit {
   public showConfirmPassword = false;
   public output = '';
   public waiting = false;
-  public supportEmail = '';
+  public supportEmail = environment.supportEmail;
   public mailError = false;
   public formControl: FormGroup;
 
@@ -32,7 +32,6 @@ export class SignUpComponent implements OnInit {
     public clipboard: Clipboard,
     private formValidatorsService: FormValidatorsService,
   ) {
-    this.supportEmail = environment.supportEmail;
     this.formControl = this.formValidatorsService.getSignUpValidator();
   }
 

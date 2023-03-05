@@ -15,8 +15,8 @@
         "password": "Mot de passe",
         "wrongIdentifierOrPassword": "Mauvais identifiant ou mot de passe",
         "connected": "Connecté",
-        "send": "Envoyer",
-        "forgotPassword": "mot de passe oublié ?"
+        "forgotPassword": "mot de passe oublié ?",
+        "send": "Envoyer"
       },
       "signUp": {
         "username": "Pseudonyme",
@@ -41,7 +41,7 @@
         "enterYourEmail": "Entrez votre email de compte",
         "email": "Email",
         "emailSent": "Un email vous a été envoyé. Veuillez cliquer sur le lien pour réinitialiser votre mot de passe.",
-        "emailNotFound": "Email non trouvé",
+        "emailNotFound": "Email inconnu",
         "emailWrongFormat": "Email au mauvais format",
         "mailSendingError": "Quelque chose s'est mal déroulé dans l'envoi du mail. Si le problème persiste, veuillez nous contacter à l'adresse suivante : ",
         "emailCopied": "Email copié",
@@ -52,7 +52,8 @@
         "passwordResetSuccess": "Mot de passe réinitialisé, vous pouvez maintenant vous connecter",
         "tokenError": "Il y a eu un souci avec votre token personnel, veuillez recommencer",
         "newPassword": "Nouveau mot de passe",
-        "confirmPassword": "Confirmer mot de passe"
+        "confirmPassword": "Confirmer mot de passe",
+        "send": "Envoyer"
       }
     },
     "services": {}

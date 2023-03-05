@@ -1,7 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {FormGroup, FormControl, Validators} from '@angular/forms';
+import {FormGroup} from '@angular/forms';
 import {LanguageService} from '../../../shared/services/language.service';
 import {RequestService} from '../../../shared/services/request.service';
+import {FormValidatorsService} from '../../../shared/services/form-validators.service';
+import {environment} from '../../../../environments/environment';
+import {ToastService} from '../../../shared/services/toast.service';
+import {Clipboard} from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'app-forgot-password',
@@ -11,25 +15,19 @@ import {RequestService} from '../../../shared/services/request.service';
 export class ForgotPasswordComponent implements OnInit {
 
   public waiting: boolean = false;
-  public formControl: any;
+  public formControl: FormGroup;
   public output: string = '';
+  public mailError: boolean = false;
+  public supportEmail: string = environment.supportEmail;
 
   constructor(
     public languageService: LanguageService,
-    public requestService: RequestService
+    public requestService: RequestService,
+    private formValidatorsService: FormValidatorsService,
+    private toastService: ToastService,
+    private clipboard: Clipboard,
   ) {
-    this.formControl = new FormGroup({
-          email: new FormControl(
-            '',
-            {
-              updateOn: 'change',
-              validators: [
-                Validators.required,
-                Validators.email
-              ]
-            }
-          )
-    });
+    this.formControl = this.formValidatorsService.getForgotPasswordValidator();
   }
 
   ngOnInit() {}
@@ -37,13 +35,21 @@ export class ForgotPasswordComponent implements OnInit {
   public async mailResetPassword() {
     this.waiting = true;
     this.output = '';
-    const rtrn = await this.requestService.mailResetPassword(this.formControl.controls.email.value);
+    const rtrn = await this.requestService.mailResetPassword(this.formControl.value.email);
     if(Object(rtrn).status===1){
-      this.output = '';
+      this.output = this.languageService.dictionary.data?.components.forgotPassword.emailSent;
     }else if(Object(rtrn).status===0){
-      this.output = '';
+      this.output = this.languageService.dictionary.data?.components.forgotPassword.emailNotFound;
+    }else if(Object(rtrn).status===-1){
+      this.output = this.languageService.dictionary.data?.components.forgotPassword.mailSendingError;
+    }else if(Object(rtrn).status===-2){
+      this.output = this.languageService.dictionary.data?.components.forgotPassword.emailWrongFormat;
     }
     this.waiting = false;
   }
 
+  public async copyEmail(): Promise<void> {
+    this.clipboard.copy(this.supportEmail);
+    await this.toastService.displayToast(this.languageService.dictionary.data.components.signUp.emailCopied, 'top');
+  }
 }

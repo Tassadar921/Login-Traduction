@@ -65,9 +65,9 @@ export class RequestService {
     ));
   }
 
-  public async resetPassword(token: string, password: string, publicKey: string): Promise<Object> {
+  public async resetPassword(urlToken: string, password: string, publicKey: string): Promise<Object> {
     return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/resetPassword',
-      {token, password, publicKey}
+      {urlToken, password, publicKey}
     ));
   }
 
