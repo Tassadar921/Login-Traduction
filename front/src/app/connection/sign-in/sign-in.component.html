@@ -7,7 +7,8 @@
             <ion-col>
               <ion-item>
                 <ion-label position="floating">Email or username</ion-label>
-                <ion-input></ion-input>
+                <ion-input placeholder="Username" [(ngModel)]="username"
+                (ionBlur)="checkUsername()" (ionFocus)="focusing = true"></ion-input>
               </ion-item>
             </ion-col>
           </ion-row>
@@ -15,7 +16,8 @@
             <ion-col>
               <ion-item>
                 <ion-label position="floating">Password</ion-label>
-                <ion-input placeholder="Password" [type]="showPassword?'text':'password'"></ion-input>
+                <ion-input placeholder="Password" [type]="showPassword?'text':'password'"
+                [(ngModel)]="password" (ionBlur)="checkPassword()" (ionFocus)="focusing = true"></ion-input>
               </ion-item>
               <ion-fab style="top:35px; right:0;">
                 <ion-fab-button color="light" size="small" (click)="showPassword = !showPassword">
@@ -32,7 +34,7 @@
           <ion-row>
             <ion-col>
               <ion-button expand="block" id="submitButton" shape="round" color="success" strong="true"
-                          (click)="signIn()">
+                          (click)="signIn()" *ngIf="username && password && !output && !focusing">
                 Sign in
               </ion-button>
             </ion-col>

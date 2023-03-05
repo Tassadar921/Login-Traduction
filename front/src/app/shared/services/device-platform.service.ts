@@ -14,7 +14,7 @@ export class DevicePlatformService {
   }
 
   public calculatePlatform() {
-    if(this.platform.platforms().includes('mobile') || window.innerWidth < 600){
+    if(this.platform.platforms().includes('mobile') || window.innerWidth < 900){
       this.currentPlatform = 'mobile';
     }else{
       this.currentPlatform = 'desktop';
