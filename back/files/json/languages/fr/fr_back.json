@@ -1,13 +1,27 @@
-  {
-    "header":
-      {
-        "tag": "fr",
-        "side": "backend",
-        "fullName": "Français"
+{
+  "header": {
+    "tag": "fr",
+    "side": "backend",
+    "fullName": "Français"
+  },
+  "data": {
+    "modules": {
+      "account": {
+        "basic": {
+          "mailCreateAccountCreateUrlToken": {
+            "mailOptions": {
+              "subject": "Bienvenue dans le Dictionnaire Francais",
+              "text" : "Bienvenue, <USERNAME>, dans le Dictionnaire Francais. Veuillez cliquer sur le lien ci-dessous pour créer votre compte. "
+            }
+          },
+          "mailResetPasswordCreateUrlToken": {
+            "mailOptions": {
+              "subject": "Bienvenue dans le Dictionnaire Francais",
+              "text" : "Bienvenue, <USERNAME>, dans le Dictionnaire Francais. Veuillez cliquer sur le lien ci-dessous pour réinitialiser votre mot de passe. "
+            }
+          } 
+        }
       }
-  ,
-    "data": {
-      "components": {},
-      "services": {}
     }
   }
+}
