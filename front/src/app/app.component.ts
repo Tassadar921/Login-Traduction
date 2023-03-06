@@ -30,5 +30,6 @@ export class AppComponent implements OnInit {
         await this.cookieService.disconnect();
       }
     }
+    console.log(await this.requestService.getTranslation('g'));
   }
 }
