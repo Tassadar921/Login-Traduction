@@ -48,7 +48,11 @@ module accountRouting {
             await account.mailResetPasswordCreateUrlToken(req.body.email, req.body.language, res);
         });
         app.post('/resetPassword', async function (req: Request, res: Response) {
-            await account.resetPassword(req.body.urlToken, req.body.password, res);
+            if(req.body.publicKey!==publicKey) {
+                await res.json({status: -1});
+            } else {
+                await account.resetPassword(req.body.urlToken, decrypt(req.body.password), res);
+            }
         });
         app.post('/checkSession', async function (req: Request, res: Response) {
             await account.checkSession(req.body.username, req.body.token, res);

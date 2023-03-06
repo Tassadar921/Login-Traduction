@@ -1,53 +1,61 @@
-  {
-    "header":
-      {
-        "tag": "fr",
-        "side": "frontend",
-        "fullName": "Français"
-      }
-  ,
-    "data": {
-      "components": {
-        "connection": {
-          "signIn": "Connexion",
-          "signUp": "Inscription"
-        }, "signIn": {
-          "emailOrUsername": "Email ou pseudonyme",
-          "password": "Mot de passe",
-          "wrongIdentifierOrPassword": "Mauvais identifiant ou mot de passe",
-          "connected": "Connecté",
-          "send": "Envoyer",
-          "forgotPassword": "mot de passe oublié ?"
-        }, "signUp": {
-          "username": "Pseudonyme",
-          "email": "Email",
-          "password": "Mot de passe",
-          "confirmPassword": "Confirmer le mot de passe",
-          "checkYourMails": "Un email vous a été envoyé. Veuillez cliquer sur le lien pour confirmer votre inscription.",
-          "usernameAlreadyExists": "Pseudonyme déjà existant",
-          "emailAlreadyExists": "Email déjà existant",
-          "usernameWrongFormat": "Pseudonyme au mauvais format",
-          "emailWrongFormat": "Email au mauvais format",
-          "passwordWrongFormat": "Mot de passe au mauvais format",
-          "mailSendingError": "Quelque chose s'est mal déroulé dans l'envoi du mail. Si le problème persiste, veuillez nous contacter à l'adresse suivante : ",
-          "emailCopied": "Email copié",
-          "send": "Envoyer"
-        },
-        "confAccount": {
-          "accountCreated": "Compte créé, vous êtes maintenant connecté",
-          "tokenError": "Il y a eu un souci avec votre token personnel, veuillez recommencer"
-        },
-        "forgotPassword": {
-          "enterYourEmail": "Entrez votre email de compte",
-          "email": "Email",
-          "emailSent": "Un email vous a été envoyé. Veuillez cliquer sur le lien pour réinitialiser votre mot de passe.",
-          "emailNotFound": "Email non trouvé",
-          "emailWrongFormat": "Email au mauvais format",
-          "mailSendingError": "Quelque chose s'est mal déroulé dans l'envoi du mail. Si le problème persiste, veuillez nous contacter à l'adresse suivante : ",
-          "emailCopied": "Email copié",
-          "send": "Envoyer"
-        }
+{
+  "header": {
+    "tag": "fr",
+    "side": "frontend",
+    "fullName": "Français"
+  },
+  "data": {
+    "components": {
+      "connection": {
+        "signIn": "Connexion",
+        "signUp": "Inscription"
       },
-      "services": {}
-    }
+      "signIn": {
+        "emailOrUsername": "Email ou pseudonyme",
+        "password": "Mot de passe",
+        "wrongIdentifierOrPassword": "Mauvais identifiant ou mot de passe",
+        "connected": "Connecté",
+        "forgotPassword": "mot de passe oublié ?",
+        "send": "Envoyer"
+      },
+      "signUp": {
+        "username": "Pseudonyme",
+        "email": "Email",
+        "password": "Mot de passe",
+        "confirmPassword": "Confirmer le mot de passe",
+        "checkYourMails": "Un email vous a été envoyé. Veuillez cliquer sur le lien pour confirmer votre inscription.",
+        "usernameAlreadyExists": "Pseudonyme déjà existant",
+        "emailAlreadyExists": "Email déjà existant",
+        "usernameWrongFormat": "Pseudonyme au mauvais format",
+        "emailWrongFormat": "Email au mauvais format",
+        "passwordWrongFormat": "Mot de passe au mauvais format",
+        "mailSendingError": "Quelque chose s'est mal déroulé dans l'envoi du mail. Si le problème persiste, veuillez nous contacter à l'adresse suivante : ",
+        "emailCopied": "Email copié",
+        "send": "Envoyer"
+      },
+      "confAccount": {
+        "accountCreated": "Compte créé, vous êtes maintenant connecté",
+        "tokenError": "Il y a eu un souci avec votre token personnel, veuillez recommencer"
+      },
+      "forgotPassword": {
+        "enterYourEmail": "Entrez votre email de compte",
+        "email": "Email",
+        "emailSent": "Un email vous a été envoyé. Veuillez cliquer sur le lien pour réinitialiser votre mot de passe.",
+        "emailNotFound": "Email inconnu",
+        "emailWrongFormat": "Email au mauvais format",
+        "mailSendingError": "Quelque chose s'est mal déroulé dans l'envoi du mail. Si le problème persiste, veuillez nous contacter à l'adresse suivante : ",
+        "emailCopied": "Email copié",
+        "send": "Envoyer"
+      },
+      "resetPassword": {
+        "enterNewPassword": "Entrez votre nouveau mot de passe",
+        "passwordResetSuccess": "Mot de passe réinitialisé, vous pouvez maintenant vous connecter",
+        "tokenError": "Il y a eu un souci avec votre token personnel, veuillez recommencer",
+        "newPassword": "Nouveau mot de passe",
+        "confirmPassword": "Confirmer mot de passe",
+        "send": "Envoyer"
+      }
+    },
+    "services": {}
   }
+}

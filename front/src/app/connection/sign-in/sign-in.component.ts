@@ -36,6 +36,7 @@ export class SignInComponent implements OnInit {
 
   public async signIn(): Promise<void> {
     this.waiting = true;
+    this.output = '';
     const rtrn = await this.requestService.signIn(
       this.identifier,
       this.cryptoService.sha256(this.password)

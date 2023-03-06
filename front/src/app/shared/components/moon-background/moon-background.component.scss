@@ -33,7 +33,7 @@
   }
 }
 
-.background-container{
+#background-container{
   position: fixed;
   top: 0;
   left:0;
@@ -41,7 +41,7 @@
   right: 0;
 }
 
-.stars {
+#stars {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -51,7 +51,7 @@
   z-index: 0;
 }
 
-.twinkling{
+#twinkling{
   width:10000px;
   height: 100%;
   position: absolute;
@@ -68,7 +68,7 @@
 
 }
 
-.clouds{
+#clouds{
   width:10000px;
   height: 100%;
   background-size: 1000px 1000px;
@@ -84,9 +84,11 @@
   -webkit-animation:move-background 150s linear infinite;
   animation:move-background 150s linear infinite;
 }
-img{
-  height: 70vh;
-  width:70vh;
+#moon{
+  min-height: 400px;
+  min-width:400px;
+  height: 60vw;
+  width: 60vw;
   position: absolute;
   z-index: 3;
   right: 20px;
