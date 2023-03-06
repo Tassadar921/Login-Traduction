@@ -3,7 +3,7 @@
     "composite": true,                    /* Enable constraints that allow a TypeScript project to be used with project references. */
     "target": "esnext",                          /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', or 'ESNEXT'. */
     "module": "esnext",                     /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'. */
-    "outDir": "./",     /* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */
+    "outDir": "build",     /* Specify JSX code generation: 'preserve', 'react-native', or 'react'. */
     "baseUrl": "./",                       /* Base directory to resolve non-absolute module names. */
     "declaration": true,                   /* Generates corresponding '.d.ts' file. */
     "strict": true,                           /* Enable all strict type-checking options. */
@@ -14,7 +14,7 @@
     "skipLibCheck": true,                     /* Skip type checking of declaration files. */
     "forceConsistentCasingInFileNames": true,  /* Disallow inconsistently-cased references to the same file. */
     "resolveJsonModule": true,               /* Include modules imported with '.json' extension. */
-    "rootDirs": ["src", "compil"], /* List of root folders whose combined content represents the structure of the project at runtime. */
+    "rootDirs": ["modules","server.ts", "compil"], /* List of root folders whose combined content represents the structure of the project at runtime. */
     "paths": {
       "@files/*": ["files/*"],
     },
