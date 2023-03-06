@@ -45,7 +45,7 @@ export class AccountNotification{
     }
 
     public async addNotifications(username : string, title : string, text : string) : Promise<void>{
-        const socket = (await ioServer.io.fetchSockets()).find((socketTmp) => socketTmp.data.username === username);
+        const socket = (await ioServer.io.fetchSockets()).find((socketTmp : Socket) => socketTmp.data.username === username);
         const date = new Date().toISOString()
         await AccountNotificationRequest.addNotifications(socket.data.token, title, text, date ,this.client);
         console.log("add");

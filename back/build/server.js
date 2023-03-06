@@ -63524,189 +63524,174 @@ var accountBasicRequest;
 ((accountBasicRequest2) => {
   async function checkUser(username, email, client) {
     return new Promise((resolve) => {
-      const result = client.query(`
+      resolve(client.query(`
                 SELECT User {
                     username,
                     email,
                 }
                 FILTER .email = "${email}" OR .username = "${username}"
-            `);
-      resolve(result);
+            `));
     });
   }
   accountBasicRequest2.checkUser = checkUser;
   async function checkUserAndPassword(identifier, password, client) {
     return new Promise((resolve) => {
-      const result = client.query(`
+      resolve(client.query(`
                 SELECT User {
                     username,
                     email,
                 }
                 FILTER ( .email = "${identifier}" OR .username = "${identifier}") AND .password = "${password}"
-            `);
-      resolve(result);
+            `));
     });
   }
   accountBasicRequest2.checkUserAndPassword = checkUserAndPassword;
   async function checkUserByToken(username, token, client) {
     return new Promise((resolve) => {
-      const result = client.query(`
+      resolve(client.query(`
                 SELECT User {
                     username,
                 }
                 FILTER .token = "${token}" AND .username = "${username}"
-            `);
-      resolve(result);
+            `));
     });
   }
   accountBasicRequest2.checkUserByToken = checkUserByToken;
   async function checkToken(token, client) {
     return new Promise((resolve) => {
-      const result = client.query(`
+      resolve(client.query(`
                 SELECT User {
                     password,
                 }
                 FILTER .token = "${token}"
-            `);
-      resolve(result);
+            `));
     });
   }
   accountBasicRequest2.checkToken = checkToken;
   async function updateUserToken(username, token, client) {
     return new Promise((resolve) => {
-      const result = client.query(`
+      resolve(client.query(`
                 UPDATE User
                 FILTER .username = "${username}"
                 SET {
                     token := "${token}",
                 }
-            `);
-      resolve(result);
+            `));
     });
   }
   accountBasicRequest2.updateUserToken = updateUserToken;
   async function createUser(username, email, password, token, client) {
     return new Promise((resolve) => {
-      const result = client.query(`
+      resolve(client.query(`
                 insert User {
                     username := "${username}",
                     email := "${email}",
                     password := "${password}",
                     token := "${token}"
                 }
-            `);
-      resolve(result);
+            `));
     });
   }
   accountBasicRequest2.createUser = createUser;
   async function checkCreateAccountUrlTokenByUrlToken(urlToken, client) {
     return new Promise((resolve) => {
-      const result = client.query(`
+      resolve(client.query(`
                 SELECT User_Creation {
                     username,
                     email,
                     password
                 }
                 FILTER .urlToken = "${urlToken}"
-            `);
-      resolve(result);
+            `));
     });
   }
   accountBasicRequest2.checkCreateAccountUrlTokenByUrlToken = checkCreateAccountUrlTokenByUrlToken;
   async function checkCreateAccountUrlTokenByEmail(email, client) {
     return new Promise((resolve) => {
-      const result = client.query(`
+      resolve(client.query(`
                 SELECT User_Creation {
                     urlToken,
                     username,
                     password
                 }
                 FILTER .email = "${email}"
-            `);
-      resolve(result);
+            `));
     });
   }
   accountBasicRequest2.checkCreateAccountUrlTokenByEmail = checkCreateAccountUrlTokenByEmail;
   async function createCreateAccountUrlToken(urlToken, username, email, password, client) {
     return new Promise((resolve) => {
-      const result = client.query(`
+      resolve(client.query(`
                 insert User_Creation {
                     urlToken := "${urlToken}",
                     username := "${username}",
                     email := "${email}",
                     password := "${password}"
                 }
-            `);
-      resolve(result);
+            `));
     });
   }
   accountBasicRequest2.createCreateAccountUrlToken = createCreateAccountUrlToken;
   async function deleteCreateAccountUrlToken(urlToken, client) {
     return new Promise((resolve) => {
-      const result = client.query(`
+      resolve(client.query(`
                 delete User_Creation
                     filter .urlToken = "${urlToken}";
-            `);
-      resolve(result);
+            `));
     });
   }
   accountBasicRequest2.deleteCreateAccountUrlToken = deleteCreateAccountUrlToken;
   async function checkResetPasswordUrlTokenByEmail(email, client) {
     return new Promise((resolve) => {
-      const result = client.query(`
+      resolve(client.query(`
                 SELECT Reset_Password {
                     urlToken
                 }
                 FILTER .email = "${email}"
-            `);
-      resolve(result);
+            `));
     });
   }
   accountBasicRequest2.checkResetPasswordUrlTokenByEmail = checkResetPasswordUrlTokenByEmail;
   async function checkResetPasswordUrlTokenByUrlToken(urlToken, client) {
     return new Promise((resolve) => {
-      const result = client.query(`
+      resolve(client.query(`
                 SELECT Reset_Password {
                     email
                 }
                 FILTER .urlToken = "${urlToken}"
-            `);
-      resolve(result);
+            `));
     });
   }
   accountBasicRequest2.checkResetPasswordUrlTokenByUrlToken = checkResetPasswordUrlTokenByUrlToken;
   async function deleteResetPasswordUrlToken(urlToken, client) {
     return new Promise((resolve) => {
-      const result = client.query(`
+      resolve(client.query(`
                 delete Reset_Password
                     filter .urlToken = "${urlToken}";
-            `);
-      resolve(result);
+            `));
     });
   }
   accountBasicRequest2.deleteResetPasswordUrlToken = deleteResetPasswordUrlToken;
   async function createResetPasswordUrlToken(urlToken, email, client) {
     return new Promise((resolve) => {
-      const result = client.query(`
+      resolve(client.query(`
                 insert Reset_Password {
                     urlToken := "${urlToken}",
                     email := "${email}"
                 }
-            `);
-      resolve(result);
+            `));
     });
   }
   accountBasicRequest2.createResetPasswordUrlToken = createResetPasswordUrlToken;
   async function resetPassword(email, password, client) {
     return new Promise((resolve) => {
-      const result = client.query(`
+      resolve(client.query(`
                 UPDATE User
                 FILTER .email = "${email}"
                 SET {
                     password := "${password}",
                 }
-            `);
-      resolve(result);
+            `));
     });
   }
   accountBasicRequest2.resetPassword = resetPassword;
@@ -63815,14 +63800,15 @@ var AccountBasic = class {
       res.json({ status: 0 });
       return;
     } else {
+      let username = result[0].username;
       let token = this.generateToken(this.sessionTokenLength);
-      let result1 = await accountBasicRequest_default.checkToken(token, this.client);
-      while (result1.length > 0) {
+      result = await accountBasicRequest_default.checkToken(token, this.client);
+      while (result.length > 0) {
         token = this.generateToken(this.sessionTokenLength);
-        result1 = await accountBasicRequest_default.checkToken(token, this.client);
+        result = await accountBasicRequest_default.checkToken(token, this.client);
       }
-      await accountBasicRequest_default.updateUserToken(result[0].username, token, this.client);
-      res.json({ status: 1, token, username: result[0].username });
+      await accountBasicRequest_default.updateUserToken(username, token, this.client);
+      res.json({ status: 1, token, username });
       return;
     }
   }
@@ -63846,7 +63832,7 @@ var AccountBasic = class {
       return;
     }
     const result = await accountBasicRequest_default.checkUserByToken(username, sessionToken, this.client);
-    if (result.length == 1 && sessionToken != "none") {
+    if (result.length && sessionToken !== "none") {
       res.json({ status: 1 });
       return;
     } else {
@@ -63861,43 +63847,49 @@ var AccountBasic = class {
       res.json({ status: -2 });
       return;
     }
-    const result0 = await accountBasicRequest_default.checkUser("", email, this.client);
-    if (!result0.length) {
+    let result = await accountBasicRequest_default.checkUser("", email, this.client);
+    if (!result.length) {
       res.json({ status: 0 });
       return;
-    }
-    let result2 = await accountBasicRequest_default.checkResetPasswordUrlTokenByEmail(email, this.client);
-    if (result2.length) {
-      await accountBasicRequest_default.deleteResetPasswordUrlToken(result2[0].urlToken, this.client);
-    }
-    let urlToken = this.generateToken(this.urlTokenLength);
-    let result3 = await accountBasicRequest_default.checkResetPasswordUrlTokenByUrlToken(urlToken, this.client);
-    while (result3.length > 0) {
-      urlToken = this.generateToken(this.urlTokenLength);
-      result3 = await accountBasicRequest_default.checkResetPasswordUrlTokenByUrlToken(urlToken, this.client);
-    }
-    await accountBasicRequest_default.createResetPasswordUrlToken(urlToken, email, this.client);
-    this.deleteMailResetPasswordQueueUrlToken(urlToken);
-    const languageFile = await import("./files/json/languages/" + language + "/" + language + "_back.json", { assert: { type: "json" } });
-    this.mailOptions.to = email;
-    this.mailOptions.subject = languageFile.default.data.modules.account.basic.mailResetPasswordCreateUrlToken.mailOptions.subject;
-    this.mailOptions.text = languageFile.default.data.modules.account.basic.mailResetPasswordCreateUrlToken.mailOptions.text.replace("<USERNAME>", result0[0].username) + process.env.URL_FRONT + "/conf-account?urlToken=" + urlToken;
-    this.transporter.sendMail(this.mailOptions, async function(error) {
-      if (error) {
-        res.json({ status: -1 });
-        return;
-      } else {
-        res.json({ status: 1 });
-        return;
+    } else {
+      let username = result[0].username;
+      result = await accountBasicRequest_default.checkResetPasswordUrlTokenByEmail(email, this.client);
+      if (result.length) {
+        await accountBasicRequest_default.deleteResetPasswordUrlToken(result[0].urlToken, this.client);
       }
-    });
+      let urlToken = this.generateToken(this.urlTokenLength);
+      result = await accountBasicRequest_default.checkResetPasswordUrlTokenByUrlToken(urlToken, this.client);
+      while (result.length) {
+        urlToken = this.generateToken(this.urlTokenLength);
+        result = await accountBasicRequest_default.checkResetPasswordUrlTokenByUrlToken(urlToken, this.client);
+      }
+      await accountBasicRequest_default.createResetPasswordUrlToken(urlToken, email, this.client);
+      this.deleteMailResetPasswordQueueUrlToken(urlToken);
+      const languageFile = await import("./files/json/languages/" + language + "/" + language + "_back.json", { assert: { type: "json" } });
+      this.mailOptions.to = email;
+      this.mailOptions.subject = languageFile.default.data.modules.account.basic.mailResetPasswordCreateUrlToken.mailOptions.subject;
+      this.mailOptions.text = languageFile.default.data.modules.account.basic.mailResetPasswordCreateUrlToken.mailOptions.text.replace("<USERNAME>", username) + process.env.URL_FRONT + "/reset-password?urlToken=" + urlToken;
+      this.transporter.sendMail(this.mailOptions, async function(error) {
+        if (error) {
+          res.json({ status: -1 });
+          return;
+        } else {
+          res.json({ status: 1 });
+          return;
+        }
+      });
+    }
   }
   //resets the password of the account linked to the email, himself linked to the token
   async resetPassword(urlToken, password, res) {
     const result = await accountBasicRequest_default.checkResetPasswordUrlTokenByUrlToken(urlToken, this.client);
-    if (result.length > 0) {
+    if (result.length) {
       await accountBasicRequest_default.deleteResetPasswordUrlToken(urlToken, this.client);
-      await accountBasicRequest_default.resetPassword(result[0].email, password, this.client);
+      await accountBasicRequest_default.resetPassword(
+        result[0].email,
+        await this.hashSha256(await this.hashSha256(password)),
+        this.client
+      );
       res.json({ status: 1 });
       return;
     } else {
@@ -63933,9 +63925,12 @@ var AccountBasic = class {
   //sends an email containing a unique token to reset the password, effective for 10 minutes
   deleteMailResetPasswordQueueUrlToken(urlToken) {
     const client = this.client;
-    setTimeout(async () => {
-      await accountBasicRequest_default.deleteResetPasswordUrlToken(urlToken, client);
-    }, this.urlTokenExpiration);
+    setTimeout(
+      async () => {
+        await accountBasicRequest_default.deleteResetPasswordUrlToken(urlToken, client);
+      },
+      this.urlTokenExpiration
+    );
     return;
   }
   //checks if the sessionToken
@@ -64180,7 +64175,11 @@ var accountRouting;
       await account.mailResetPasswordCreateUrlToken(req.body.email, req.body.language, res);
     });
     app2.post("/resetPassword", async function(req, res) {
-      await account.resetPassword(req.body.urlToken, req.body.password, res);
+      if (req.body.publicKey !== publicKey) {
+        await res.json({ status: -1 });
+      } else {
+        await account.resetPassword(req.body.urlToken, decrypt(req.body.password), res);
+      }
     });
     app2.post("/checkSession", async function(req, res) {
       await account.checkSession(req.body.username, req.body.token, res);
@@ -64234,9 +64233,15 @@ var Languages = class {
   }
   //sends the json of the language id selectedLanguage
   async getDictionary(language, res) {
-    const translation = await import("./files/json/languages/" + language + "/" + language + "_front.json", { assert: { type: "json" } });
-    await res.json(translation.default);
-    return;
+    const languagesList = await Promise.resolve().then(() => __toESM(require_languagesList()));
+    if (!languagesList.default.data.find((lang) => lang.id === language)) {
+      await res.json({ status: 0 });
+      return;
+    } else {
+      const translation = await import("./files/json/languages/" + language + "/" + language + "_front.json", { assert: { type: "json" } });
+      await res.json(translation.default);
+      return;
+    }
   }
 };
 

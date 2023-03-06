@@ -13,7 +13,7 @@ export class Languages{
     //sends the json of the language id selectedLanguage
     async getDictionary (language : string, res : Response) {
         // @ts-ignore
-        const languagesList = await import('files/json/languages/languagesList.json', {assert: {type: 'json'}});
+        const languagesList = await import('@files/json/languages/languagesList.json', {assert: {type: 'json'}});
         if(!languagesList.default.data.find((lang : any) => lang.id === language)){
             await res.json({status: 0});
             return;

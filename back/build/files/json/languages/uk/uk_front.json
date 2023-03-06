@@ -15,8 +15,8 @@
         "password": "Password",
         "wrongIdentifierOrPassword": "Wrong email or password",
         "connected": "Connected",
-        "send": "Send",
-        "forgotPassword": "forgot password ?"
+        "forgotPassword": "forgot password ?",
+        "send": "Send"
       },
       "signUp": {
         "username": "Username",
@@ -41,10 +41,18 @@
         "enterYourEmail": "Enter your account email",
         "email": "Email",
         "emailSent": "An email has been sent to you. Please check your mails to reset your password.",
-        "emailNotFound": "Email not found",
+        "emailNotFound": "Unknown email",
         "emailWrongFormat": "Wrong email format",
         "mailSendingError": "Something went wrong with the email: if the problem persists, please contact us at this address : ",
         "emailCopied": "Email copied",
+        "send": "Send"
+      },
+      "resetPassword": {
+        "enterNewPassword": "Enter your new password",
+        "passwordResetSuccess": "Password reset, you can now sign in",
+        "tokenError": "Something went wrong with your personal token, please try again",
+        "newPassword": "New password",
+        "confirmPassword": "Confirm new password",
         "send": "Send"
       }
     }
