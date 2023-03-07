@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {DevicePlatformService} from '../../shared/services/device-platform.service';
 import {InputCheckingService} from '../input-checking.service';
+import { RequestService } from 'src/app/shared/services/request.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -19,7 +20,8 @@ export class SignUpComponent implements OnInit {
   public focusing = false;
   constructor(
     public devicePlatformService: DevicePlatformService,
-    public inputCheckingService: InputCheckingService
+    public inputCheckingService: InputCheckingService,
+    private requestService: RequestService
   ) {}
 
   ngOnInit() {}
@@ -50,8 +52,9 @@ export class SignUpComponent implements OnInit {
     this.focusing = false;
   }
 
-  public signUp() {
-
+  public async mailSignUp() {
+    const rtrn = await this.requestService.mailSignUp(this.username, this.email, this.password);
+    console.log(rtrn);
   }
 
 }

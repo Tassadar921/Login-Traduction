@@ -24,13 +24,13 @@ export class RequestService {
   }
 
   public async signIn(identifier: string, password: string): Promise<any> {
-    return await lastValueFrom(this.http.post(environment.apiUrl + '/signIn/',
+    return await lastValueFrom(this.http.post(environment.apiUrl + '/signIn',
       {identifier, password}
     ));
   }
 
-  public async signUp(username: string, email: string, password: string): Promise<any> {
-    return await lastValueFrom(this.http.post(environment.apiUrl + '/signUp/',
+  public async mailSignUp(username: string, email: string, password: string): Promise<any> {
+    return await lastValueFrom(this.http.post(environment.apiUrl + '/mailSignUp',
       {username, email, password, language: await this.cookieService.getCookie('language')},
     ));
   }

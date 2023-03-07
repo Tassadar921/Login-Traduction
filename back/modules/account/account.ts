@@ -65,9 +65,11 @@ export class Account {
 
         setTimeout(this.mailDeleteUrlToken, 600000, urlToken);
 
-        const languageFile = await import('./files/json/languages/' + language + '/' + language + '_back.json', {assert: {type: 'json'}})
+        const languageFile = Object(await import('./files/json/languages/' + language + '/' + language + '_back.json', {assert: {type: 'json'}})).default;
 
-        console.log(languageFile.data.modules.account);
+        console.log(languageFile);
+        console.log(languageFile.header);
+        console.log(languageFile.data);
 
         this.mailOptions.to = email;
         this.mailOptions.subject = languageFile.data.modules.account.mailCreateAccountCreateUrlToken.mailOptions.subject;
