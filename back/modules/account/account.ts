@@ -67,23 +67,18 @@ export class Account {
 
         const languageFile = Object(await import('./files/json/languages/' + language + '/' + language + '_back.json', {assert: {type: 'json'}})).default;
 
-        console.log(languageFile);
-        console.log(languageFile.header);
-        console.log(languageFile.data);
-
         this.mailOptions.to = email;
         this.mailOptions.subject = languageFile.data.modules.account.mailCreateAccountCreateUrlToken.mailOptions.subject;
-        this.mailOptions.text = languageFile.data.modules.account.mailCreateAccountCreateUrlToken.mailOptions.subject.replace('username', username)
+        this.mailOptions.text = languageFile.data.modules.account.mailCreateAccountCreateUrlToken.mailOptions.text.replace('<USERNAME>', username)
             + process.env.URL_FRONT
             + 'conf-account?urlToken='
             + urlToken;
 
         //sends an email containing a unique token to delete the account, effective for 10 minutes
 
-        console.log(this.mailOptions);
-
         this.transporter.sendMail(this.mailOptions, async function (error) {
             if (error) {
+                console.log(error);
                 res.json({status: -1});
             } else {
                 res.json({status: 1});
