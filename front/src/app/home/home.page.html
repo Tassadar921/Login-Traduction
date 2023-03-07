@@ -1,9 +1,27 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>home</ion-title>
-  </ion-toolbar>
-</ion-header>
+<div class="container" [class.example-is-mobile]="mobileQuery.matches">
+  <mat-toolbar color="primary" class="toolbar">
+    <ion-button fill="clear" (click)="snav.toggle()">
+      <ion-icon name="menu" slot="icon-only"></ion-icon>
+    </ion-button>
+    <h1 class="app-name">Responsive App</h1>
+  </mat-toolbar>
 
-<ion-content>
+  <mat-sidenav-container class="sidenav-container"
+                         [style.margin-top.px]="mobileQuery.matches ? 56 : 0">
+    <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'"
+                 [fixedInViewport]="mobileQuery.matches" fixedTopGap="56">
+      <mat-nav-list>
+        <a mat-list-item>page1</a>
+      </mat-nav-list>
+    </mat-sidenav>
 
-</ion-content>
+    <mat-sidenav-content>
+      <p>bouh</p>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
+
+
+<!-- Copyright 2023 Google LLC. All Rights Reserved.
+    Use of this source code is governed by an MIT-style license that
+    can be found in the LICENSE file at https://angular.io/license -->
