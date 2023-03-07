@@ -117,7 +117,7 @@ export class AccountBasic {
 
             await accountBasicRequest.createUser(result[0].username, result[0].email, result[0].password, token, this.client);
 
-            res.json({status: 1, token, username: result[0].username});
+            res.json({status: 1, token, username: result[0].username, permission: ""});
             return;
         } else {
             res.json({status: 0});
@@ -128,7 +128,7 @@ export class AccountBasic {
     //signIn, identifier can be either username or email
     public async signIn(identifier: string, password: string, res: Response): Promise<void> {
 
-        let result = await accountBasicRequest.checkUserAndPassword(identifier, await this.hashSha256(password), this.client);
+        const result = await accountBasicRequest.checkUserAndPassword(identifier, await this.hashSha256(password), this.client);
 
         if (!result.length) {
             res.json({status: 0});
@@ -136,15 +136,16 @@ export class AccountBasic {
         } else {
             let username = result[0].username;
             let token = this.generateToken(this.sessionTokenLength);
-            result = await accountBasicRequest.checkToken(token, this.client);
+            let result1 = await accountBasicRequest.checkToken(token, this.client);
             while (result.length > 0) {
                 token = this.generateToken(this.sessionTokenLength);
-                result = await accountBasicRequest.checkToken(token, this.client);
+                result1 = await accountBasicRequest.checkToken(token, this.client);
             }
 
             await accountBasicRequest.updateUserToken(username, token, this.client);
+            const result2 = await accountBasicRequest.checkPermission(username, this.client);
 
-            res.json({status: 1, token, username: username});
+            res.json({status: 1, token, username: username, permission: result1[0].permission});
             return;
         }
     }

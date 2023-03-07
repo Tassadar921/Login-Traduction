@@ -63695,6 +63695,17 @@ var accountBasicRequest;
     });
   }
   accountBasicRequest2.resetPassword = resetPassword;
+  async function checkPermission(username, client) {
+    return new Promise((resolve) => {
+      resolve(client.query(`
+                SELECT Permission {
+                    name
+                }
+                FILTER User.username = "${username}"
+            `));
+    });
+  }
+  accountBasicRequest2.checkPermission = checkPermission;
 })(accountBasicRequest || (accountBasicRequest = {}));
 var accountBasicRequest_default = accountBasicRequest;
 
@@ -63786,7 +63797,7 @@ var AccountBasic = class {
         result1 = await accountBasicRequest_default.checkToken(token, this.client);
       }
       await accountBasicRequest_default.createUser(result[0].username, result[0].email, result[0].password, token, this.client);
-      res.json({ status: 1, token, username: result[0].username });
+      res.json({ status: 1, token, username: result[0].username, permission: "" });
       return;
     } else {
       res.json({ status: 0 });
@@ -63795,20 +63806,21 @@ var AccountBasic = class {
   }
   //signIn, identifier can be either username or email
   async signIn(identifier, password, res) {
-    let result = await accountBasicRequest_default.checkUserAndPassword(identifier, await this.hashSha256(password), this.client);
+    const result = await accountBasicRequest_default.checkUserAndPassword(identifier, await this.hashSha256(password), this.client);
     if (!result.length) {
       res.json({ status: 0 });
       return;
     } else {
       let username = result[0].username;
       let token = this.generateToken(this.sessionTokenLength);
-      result = await accountBasicRequest_default.checkToken(token, this.client);
+      let result1 = await accountBasicRequest_default.checkToken(token, this.client);
       while (result.length > 0) {
         token = this.generateToken(this.sessionTokenLength);
-        result = await accountBasicRequest_default.checkToken(token, this.client);
+        result1 = await accountBasicRequest_default.checkToken(token, this.client);
       }
       await accountBasicRequest_default.updateUserToken(username, token, this.client);
-      res.json({ status: 1, token, username });
+      const result2 = await accountBasicRequest_default.checkPermission(username, this.client);
+      res.json({ status: 1, token, username, permission: result1[0].permission });
       return;
     }
   }

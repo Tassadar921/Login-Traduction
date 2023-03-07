@@ -173,6 +173,17 @@ module accountBasicRequest {
             `));
         });
     }
+
+    export async function checkPermission(username : string, client : Client) {
+        return new Promise<any[]>((resolve) => {
+            resolve(client.query(`
+                SELECT Permission {
+                    name
+                }
+                FILTER User.username = "${username}"
+            `));
+        });
+    }
 }
 
 export default accountBasicRequest;
