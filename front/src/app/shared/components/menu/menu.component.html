@@ -1,0 +1,61 @@
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #menu [class]="devicePlatformService.getDeviceContentClass()">
+    <ion-item color="dark" class="menuBlock" button="true" *ngIf="devicePlatformService.currentPlatform==='small'">
+      <ion-row>
+        <ion-col size="1">
+          <ion-icon name="person"></ion-icon>
+        </ion-col>
+        <ion-col>
+          <p>account</p>
+        </ion-col>
+        <ion-col size="1">
+          <ion-icon name="arrow-forward"></ion-icon>
+        </ion-col>
+      </ion-row>
+    </ion-item>
+    <ion-item color="dark" class="menuBlock" button="true">
+      <ion-row>
+        <ion-col size="1">
+          <ion-icon name="people"></ion-icon>
+        </ion-col>
+        <ion-col>
+          <p>friends</p>
+        </ion-col>
+        <ion-col size="1">
+          <ion-icon name="arrow-forward"></ion-icon>
+        </ion-col>
+      </ion-row>
+    </ion-item>
+    <ion-item color="dark" class="menuBlock" button="true">
+      <ion-row>
+        <ion-col size="1">
+          <ion-icon name="send"></ion-icon>
+        </ion-col>
+        <ion-col>
+          <p>messages</p>
+        </ion-col>
+        <ion-col size="1">
+          <ion-icon name="arrow-forward"></ion-icon>
+        </ion-col>
+      </ion-row>
+    </ion-item>
+    <ion-item button="true" (click)="menu.toggle()" color="dark" id="menuFooter">
+      <ion-footer>
+        <ion-row>
+          <ion-col size="2">
+            <ion-icon name="arrow-back"></ion-icon>
+          </ion-col>
+          <ion-col>
+            <p>Close</p>
+          </ion-col>
+        </ion-row>
+      </ion-footer>
+    </ion-item>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <ion-button fill="clear" (click)="menu.toggle()">
+      <ion-icon name="menu" slot="icon-only"></ion-icon>
+    </ion-button>
+  </mat-sidenav-content>
+</mat-sidenav-container>

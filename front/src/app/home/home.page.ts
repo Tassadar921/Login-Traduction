@@ -1,5 +1,5 @@
-import {ChangeDetectorRef, Component} from '@angular/core';
-import {MediaMatcher} from '@angular/cdk/layout';
+import {Component} from '@angular/core';
+import {DevicePlatformService} from "../shared/services/device-platform.service";
 
 /** @title Sidenav with custom escape and backdrop click behavior */
 @Component({
@@ -9,13 +9,7 @@ import {MediaMatcher} from '@angular/cdk/layout';
 })
 
 export class HomePage {
-
-  mobileQuery: MediaQueryList;
-  private readonly _mobileQueryListener: () => void;
-
-  constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher) {
-    this.mobileQuery = media.matchMedia('(max-width: 600px)');
-    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
-    this.mobileQuery.addListener(this._mobileQueryListener);
-  }
+  constructor(
+    public devicePlatformService: DevicePlatformService
+  ) {}
 }
