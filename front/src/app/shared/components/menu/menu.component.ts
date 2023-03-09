@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {DevicePlatformService} from "../../services/device-platform.service";
 
 @Component({
@@ -13,5 +13,4 @@ export class MenuComponent implements OnInit {
   ) {}
 
   ngOnInit() {}
-
 }

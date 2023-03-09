@@ -11,7 +11,7 @@ import {DefaultMenuComponent} from "./default-menu/default-menu.component";
 
 @NgModule({
   declarations: [MenuComponent, MobileMenuComponent, DefaultMenuComponent],
-  imports: [CommonModule, IonicModule, ModalCloseButtonModule, MatSidenavModule],
+    imports: [CommonModule, IonicModule, ModalCloseButtonModule, MatSidenavModule],
   exports: [MenuComponent]
 })
 export class MenuModule { }

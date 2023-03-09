@@ -1,3 +1,17 @@
-p{
-  margin-top:5px;
+#toolbar {
+  border-bottom: none;
+  -webkit-transition: border-bottom 2s ease-in-out;
+  margin-bottom: 30px;
+    p {
+      height:100%;
+      margin-top: 10px;
+    }
+  p:hover{
+    font-weight: bold;
+  }
+}
+
+#toolbar:hover{
+  cursor: pointer;
+  border-bottom: solid 1px #8b7e7e;
 }

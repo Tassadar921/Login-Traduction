@@ -1,18 +1,1 @@
-<app-menu></app-menu>
-<ion-content>
-  <ion-grid>
-    <ion-row>
-      <ion-col>
-        test content
-      </ion-col>
-      <ion-col>
-        234
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col>
-        azerty
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-</ion-content>
+<app-menu [style]="devicePlatformService.currentPlatform==='small'?'':'height:35px;'"></app-menu>

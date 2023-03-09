@@ -20,6 +20,14 @@ export class DevicePlatformService {
     }
   }
 
+  public getDeviceTheme(){
+    if(window.matchMedia("(prefers-color-scheme: dark)").matches){
+      return 'dark';
+    }else{
+      return 'light';
+    }
+  }
+
   public getDeviceContentClass() {
     return this.currentPlatform+'DeviceContent';
   }

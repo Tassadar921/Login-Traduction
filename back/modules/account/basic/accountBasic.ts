@@ -117,7 +117,7 @@ export class AccountBasic {
 
             await accountBasicRequest.createUser(result[0].username, result[0].email, result[0].password, token, this.client);
 
-            res.json({status: 1, token, username: result[0].username, permission: ""});
+            res.json({status: 1, token, username: result[0].username, permission: undefined});
             return;
         } else {
             res.json({status: 0});
@@ -137,15 +137,15 @@ export class AccountBasic {
             let username = result[0].username;
             let token = this.generateToken(this.sessionTokenLength);
             let result1 = await accountBasicRequest.checkToken(token, this.client);
-            while (result.length > 0) {
+
+            while (result1.length > 0) {
                 token = this.generateToken(this.sessionTokenLength);
                 result1 = await accountBasicRequest.checkToken(token, this.client);
             }
-
             await accountBasicRequest.updateUserToken(username, token, this.client);
             const result2 = await accountBasicRequest.checkPermission(username, this.client);
 
-            res.json({status: 1, token, username: username, permission: result1[0].permission});
+            res.json({status: 1, token, username: username, permission: result2[0]?.permission});
             return;
         }
     }
@@ -303,9 +303,9 @@ export class AccountBasic {
 
     //checks if the sessionToken
     private checkRegexSessionToken(sessionToken: string): boolean {
-        const regex = new RegExp('/^[A-Za-z0-9]{' + this.sessionTokenLength + '}$/');
-
-        return (regex).test(sessionToken);
+        const regex = new RegExp('^[A-Za-z0-9]{' + this.sessionTokenLength + '}$');
+        console.log(regex);
+        return (/^[A-Za-z0-9]{ + this.sessionTokenLength + }$/).test(sessionToken);
     }
 
     //checks if the urlToken is valid
