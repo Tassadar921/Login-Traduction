@@ -1,34 +1,13 @@
-h1.app-name {
-  margin-left: 8px;
-}
-
-.sidenav-container {
-  flex: 1;
-}
-
-mat-sidenav{
-  border-right: 1px solid white;
-  background-color: var(--ion-color-light);
-}
-
-.smallDeviceContent{
+app-mobile-menu, app-default-menu{
   width:100%;
+  z-index: 100;
 }
 
-.mediumDeviceContent{
-  width:50%;
+app-mobile-menu{
+  position:absolute;
+  height:100%;
 }
 
-.largeDeviceContent{
-  width:30%;
-}
+app-default-menu{
 
-.menuBlock{
-  margin-bottom:20px;
-  border-bottom: solid 1px white;
-}
-
-#menuFooter{
-  position: absolute;
-  bottom: 0;
 }
