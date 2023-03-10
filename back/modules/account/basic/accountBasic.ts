@@ -304,8 +304,8 @@ export class AccountBasic {
     //checks if the sessionToken
     private checkRegexSessionToken(sessionToken: string): boolean {
         const regex = new RegExp('^[A-Za-z0-9]{' + this.sessionTokenLength + '}$');
-        console.log(regex);
-        return (/^[A-Za-z0-9]{ + this.sessionTokenLength + }$/).test(sessionToken);
+        
+        return (regex).test(sessionToken);
     }
 
     //checks if the urlToken is valid
