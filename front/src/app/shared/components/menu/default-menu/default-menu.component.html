@@ -1,0 +1,16 @@
+<ion-grid>
+  <ion-row id="toolbar">
+    <ion-col>
+        <p>Messages</p>
+    </ion-col>
+    <ion-col>
+        <p>Friends</p>
+    </ion-col>
+    <ion-col size="1">
+      <ion-button fill="clear">
+        <ion-icon name="person" [color]="cookieService.getUsername()?'success':'danger'">
+        </ion-icon>
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-grid>

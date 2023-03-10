@@ -35,8 +35,9 @@ export class SignInComponent implements OnInit {
   ngOnInit() {}
 
   public async signIn(): Promise<void> {
-    this.waiting = true;
+    // this.waiting = true;
     this.output = '';
+    console.log('wesh')
     const rtrn = await this.requestService.signIn(
       this.identifier,
       this.cryptoService.sha256(this.password)
