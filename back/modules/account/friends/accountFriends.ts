@@ -6,7 +6,7 @@ import createClient, { Client } from 'edgedb';
 
 export class AccountFriends{
     private accountNotification: AccountNotification;
-    private client: any;
+    private client: Client;
     constructor(accountNotification : AccountNotification) {
         this.client = createClient({});
         this.accountNotification = accountNotification;
@@ -15,11 +15,22 @@ export class AccountFriends{
     public async sendMessage(socket : Socket, username : string, message : string, date : Date) {
         const toSocket = (await ioServer.io.fetchSockets()).find((socketTmp: Socket ) => socketTmp.data.username === username);
         this.accountNotification.addNotifications(username, 'Nouveau message', message);
+        
+        const dateISO = new Date(date).toISOString()
 
-        accountFriendsRequest.newMessage(socket.data.username, username, message, date, this.client);
+        accountFriendsRequest.newMessage(socket.data.username, username, message, dateISO, this.client);
 
         if(toSocket !== undefined) {
-            ioServer.io.to(toSocket?.id!).emit('sendMessage', socket.data.username!, message, date);
+            ioServer.io.to(toSocket?.id!).emit('message');
         }
+
+        return
+    }
+
+    public async getMessage(socket : Socket) {
+        const request = await accountFriendsRequest.getMessage(socket.data.username, this.client);
+
+        socket.emit('getMessage', request);
+        return
     }
 }

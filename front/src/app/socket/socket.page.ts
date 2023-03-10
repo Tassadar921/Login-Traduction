@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { UserBuildConditionals } from 'ionicons/dist/types/stencil-public-runtime';
 
@@ -11,7 +12,8 @@ import { emit } from 'process';
 export class SocketPage implements OnInit {
   private id = "";
   notification : [{id : string, title : string, text : string, date : Date, seen : boolean}] | undefined;
-  lastMessage : {username : string, message : string, date : Date} | undefined;
+  lastMessage : [{sender : {username : string}, seen : boolean, date : Date, text : string}] | undefined;
+  messageSuccess : boolean = false;
 
   constructor(private socket: Socket) {
     this.socket.on("initSocketData", () => {
@@ -25,9 +27,18 @@ export class SocketPage implements OnInit {
         this.notification = data.map((notification : any) => {notification.date = new Date(notification.date); return notification;});
         this.id = data[0].id;
       }
+      else {
+        this.notification = undefined;
+      }
     });
-    this.socket.on('sendMessage', (username : string, message : string, date : string) => {
-      this.lastMessage = {username, message, date : new Date(date)};
+
+    this.socket.on('message', () => {
+      this.socket.emit('getChat');
+      this.socket.emit('synchronizeNotifications');
+    });
+
+    this.socket.on('getMessage', (data : any) => {
+      this.lastMessage = data.map((lastMessage : any) => {lastMessage.date = new Date(lastMessage.date); return lastMessage;})
     });
   }
 
@@ -38,7 +49,6 @@ export class SocketPage implements OnInit {
   public emit1() {
     this.socket.emit('synchronizeNotifications');
   }
-
   public emit2() {
     this.socket.emit('notificationIsSeen', this.id);
   }
@@ -50,5 +60,9 @@ export class SocketPage implements OnInit {
   }
   public emit5() {
     this.socket.emit('sendMessage', "oui", "texte", Date.now());
+    this.messageSuccess = false;
+  }
+  public emit6() {
+    this.socket.emit('getChat');
   }
 }
