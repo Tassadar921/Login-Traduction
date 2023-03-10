@@ -304,14 +304,12 @@ export class AccountBasic {
     //checks if the sessionToken
     private checkRegexSessionToken(sessionToken: string): boolean {
         const regex = new RegExp('^[A-Za-z0-9]{' + this.sessionTokenLength + '}$');
-        
         return (regex).test(sessionToken);
     }
 
     //checks if the urlToken is valid
     private checkRegexUrlToken(urlToken: string): boolean {
-        const regex = new RegExp('/^[A-Za-z0-9]{' + this.urlTokenLength + '}$/');
-
+        const regex = new RegExp('^[A-Za-z0-9]{' + this.urlTokenLength + '}$');
         return (regex).test(urlToken);
     }
 

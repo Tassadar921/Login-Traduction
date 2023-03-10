@@ -15,12 +15,10 @@ export class MobileMenuComponent implements OnInit {
 
   constructor(
     public devicePlatformService: DevicePlatformService,
-    public cookieService: CookieService,
+    public cookieService: CookieService
   ) {}
 
-  ngOnInit() {
-    console.log(this.cookieService.getUsername());
-  }
+  ngOnInit() {}
 
   public async toggleSidenav() {
     this.sidenavIsOpen = !this.sidenavIsOpen;

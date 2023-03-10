@@ -1,16 +1,14 @@
-<ion-grid>
-  <ion-row id="toolbar">
-    <ion-col>
-        <p>Messages</p>
-    </ion-col>
-    <ion-col>
-        <p>Friends</p>
-    </ion-col>
-    <ion-col size="1">
-      <ion-button fill="clear">
-        <ion-icon name="person" [color]="cookieService.getUsername()?'success':'danger'">
-        </ion-icon>
-      </ion-button>
-    </ion-col>
-  </ion-row>
-</ion-grid>
+<ion-row>
+  <ion-col size="8">
+    <nav>
+      <a [class]="router.url.includes('home')?'bold':''">Home</a>
+      <a>Friends</a>
+      <a>Messages</a>
+      <div id="indicator"></div>
+    </nav>
+  </ion-col>
+  <ion-col></ion-col>
+  <ion-col size="2">
+    <a id="account"><ion-icon name="person"></ion-icon></a>
+  </ion-col>
+</ion-row>

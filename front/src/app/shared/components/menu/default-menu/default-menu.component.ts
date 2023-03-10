@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {CookieService} from "../../../services/cookie.service";
 import {DevicePlatformService} from "../../../services/device-platform.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-default-menu',
@@ -11,11 +12,10 @@ export class DefaultMenuComponent implements OnInit {
 
   constructor(
     public cookieService: CookieService,
-    public devicePlatformService: DevicePlatformService
-  ) { }
+    public devicePlatformService: DevicePlatformService,
+    public router: Router
+  ) {}
 
-  ngOnInit() {
-    console.log(window.matchMedia("(prefers-color-scheme: dark)").matches);
-  }
+  ngOnInit() {}
 
 }

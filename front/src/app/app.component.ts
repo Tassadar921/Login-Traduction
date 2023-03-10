@@ -22,6 +22,7 @@ export class AppComponent implements OnInit {
   async ngOnInit() {
     await this.languageService.init();
     await this.cryptoService.setRsaPublicKey();
+    console.log('test')
     if(await this.cookieService.getCookie('token')) {
       console.log(await this.cookieService.getCookie('token'));
       console.log(await this.cookieService.getCookie('username'));
