@@ -22,26 +22,20 @@ export class AppComponent implements OnInit {
   async ngOnInit() {
     await this.languageService.init();
     await this.cryptoService.setRsaPublicKey();
-    console.log('test')
     if(await this.cookieService.getCookie('token')) {
-      console.log(await this.cookieService.getCookie('token'));
-      console.log(await this.cookieService.getCookie('username'));
-      console.log('on a un token');
       let rtrn = await this.requestService.checkSession(
         await this.cookieService.getCookie('username'), await this.cookieService.getCookie('token')
       );
-      console.log(rtrn);
       if(!Object(rtrn).status){
-        // await this.cookieService.disconnect();
+        await this.cookieService.disconnect();
       }else{
-        console.log('et il est bon')
         await this.cookieService.connect(
           await this.cookieService.getCookie('username'),
           await this.cookieService.getCookie('token')
         );
       }
     }else{
-      // await this.cookieService.disconnect();
+      await this.cookieService.disconnect();
     }
   }
 }

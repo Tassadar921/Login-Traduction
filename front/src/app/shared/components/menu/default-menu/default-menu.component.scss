@@ -1,5 +1,5 @@
 ion-row {
-  border-bottom: 1px solid #949494;
+  border-bottom: 1px solid rgba(148, 148, 148, 0.5);
   height: 50px;
 
   .bold{
@@ -38,7 +38,7 @@ ion-row {
   #indicator {
     position: absolute;
     left: 5%;
-    bottom: 0;
+    bottom: -1vh;
     width: 30px;
     height: 3px;
     border-radius: 5px;
@@ -59,12 +59,12 @@ ion-row {
   }
 
   nav a:nth-child(2):hover ~ #indicator {
-    left: 34%;
+    left: 38%;
     background: linear-gradient(130deg, #00e2ff, #89ff00);
   }
 
   nav a:nth-child(3):hover ~ #indicator {
-    left: 70%;
+    left: 72%;
     background: linear-gradient(130deg, purple, palevioletred);
   }
 
