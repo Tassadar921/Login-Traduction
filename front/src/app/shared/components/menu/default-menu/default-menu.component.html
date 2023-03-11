@@ -9,6 +9,6 @@
   </ion-col>
   <ion-col></ion-col>
   <ion-col size="2">
-    <a id="account"><ion-icon name="person"></ion-icon></a>
+      <ion-icon name="person" [id]="cookieService.getUsername()?'connectedIcon':'disconnectedIcon'"></ion-icon>
   </ion-col>
 </ion-row>

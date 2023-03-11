@@ -59,18 +59,29 @@ ion-row {
   }
 
   nav a:nth-child(2):hover ~ #indicator {
-    left: 38%;
+    left: 37.5%;
     background: linear-gradient(130deg, #00e2ff, #89ff00);
   }
 
   nav a:nth-child(3):hover ~ #indicator {
-    left: 72%;
+    left: 67.5%;
     background: linear-gradient(130deg, purple, palevioletred);
   }
 
   ion-icon {
-    margin-top: 5px;
+    margin-top: 10px;
     font-size: 30px;
-    color: #949494;
+  }
+
+  #connectedIcon{
+    color: green;
+  }
+  #disconnectedIcon{
+    color: red;
+  }
+
+  #connectedIcon:hover, #disconnectedIcon:hover {
+    cursor: pointer;
+    color: #fff;
   }
 }
