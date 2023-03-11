@@ -28,6 +28,8 @@ module accountRouting {
             });
         }
 
+        /*----------------------------------------Basic----------------------------------------*/
+        
         app.get('/getPublicKey', async function (req: Request, res: Response) {
             await res.json({publicKey});
         });
@@ -58,6 +60,16 @@ module accountRouting {
             await account.checkSession(req.body.username, req.body.token, res);
         });
 
+        /*----------------------------------------Friends----------------------------------------*/
+
+        app.post('/addFriend', async function (req: Request, res: Response) {
+            
+        });
+
+        /*----------------------------------------Notification----------------------------------------*/
+
+
+
         return;
     }
 
@@ -75,7 +87,7 @@ module accountRouting {
 
             /*------------------------------------Notification------------------------------------*/
             socket.on('synchronizeNotifications', async () => {
-                await accountNotification.synchronizeNotifications(socket);
+                await accountNotification.synchronizeNotificationsWithSocket(socket);
             });
             socket.on('notificationIsSeen', async (id) => {
                 await accountNotification.notificationIsSeen(socket, id);

@@ -38,11 +38,11 @@ module AccountNotificationRequest {
         });
     }
 
-    export async function addNotifications(token : string, title : string, text : string, date : string, client : Client) {
+    export async function addNotifications(username : string, title : string, text : string, date : string, client : Client) {
         return new Promise<any[]>((resolve) => {
             const result = client.query(`
                 UPDATE User 
-                filter .token = "${token}"
+                filter .username = "${username}"
                 SET {
                     notifications += (INSERT Notification { 
                         title := "${title}",

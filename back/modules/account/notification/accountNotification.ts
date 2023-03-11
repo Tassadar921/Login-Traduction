@@ -1,6 +1,7 @@
 import createClient, {Client} from 'edgedb';
-import {Socket} from 'socket.io';
+import {RemoteSocket, Socket} from 'socket.io';
 import AccountNotificationRequest from './accountNotificationRequest';
+import socketOptions from 'modules/socket/socketOptions';
 
 import ioServer from '../../socket/socket';
 
@@ -18,9 +19,27 @@ export class AccountNotification{
         return;
     }
 
-    public async synchronizeNotifications(socket : Socket) : Promise<void>{
+    public async synchronizeNotificationsWithSocket(socket : Socket) : Promise<void>{
         const data = await AccountNotificationRequest.getNotifications(socket.data.token, this.client);
+
         socket.emit('synchronizeNotifications', data);
+        return;
+    }
+
+    private async synchronizeNotificationsWithRemoteSocket(socket : RemoteSocket<socketOptions.ServerToClientEvents, socketOptions.SocketData>) : Promise<void>{
+        const data = await AccountNotificationRequest.getNotifications(socket.data.token, this.client);
+
+        socket.emit('synchronizeNotifications', data);
+        return;
+    }
+
+    public async synchronizeNotificationsWithUsername(username : string) : Promise<void>{
+        const socketOfUsername = (await ioServer.io.fetchSockets()).find((socketTmp ) => socketTmp.data.username === username);
+        if(socketOfUsername !== undefined) {
+            const data = await AccountNotificationRequest.getNotifications(socketOfUsername.data.token, this.client);
+
+            socketOfUsername.emit('synchronizeNotifications', data);    
+        }
         return;
     }
 
@@ -29,7 +48,7 @@ export class AccountNotification{
             return;
         }else {
             const data = await AccountNotificationRequest.notificationIsSeen(id, this.client);
-            await this.synchronizeNotifications(socket);
+            await this.synchronizeNotificationsWithSocket(socket);
             return;
         }
     }
@@ -39,19 +58,18 @@ export class AccountNotification{
             return;
         }else {
             await AccountNotificationRequest.deleteNotification(id, this.client);
-            await this.synchronizeNotifications(socket);
+            await this.synchronizeNotificationsWithSocket(socket);
             return;
         }
     }
 
     public async addNotifications(username : string, title : string, text : string) : Promise<void>{
-        const socket = (await ioServer.io.fetchSockets()).find((socketTmp : Socket) => socketTmp.data.username === username);
+        const socketOfUsername = (await ioServer.io.fetchSockets()).find((socketTmp ) => socketTmp.data.username === username);
         const date = new Date().toISOString()
-        await AccountNotificationRequest.addNotifications(socket.data.token, title, text, date ,this.client);
-        console.log("add");
+        await AccountNotificationRequest.addNotifications(username, title, text, date ,this.client);
 
-        if (socket) {
-            await this.synchronizeNotifications(socket);
+        if(socketOfUsername !== undefined) {
+            await this.synchronizeNotificationsWithRemoteSocket(socketOfUsername);
         }
         return;
     }

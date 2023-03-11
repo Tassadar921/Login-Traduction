@@ -1,9 +1,6 @@
-import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { UserBuildConditionals } from 'ionicons/dist/types/stencil-public-runtime';
-
 import {Socket} from "ngx-socket-io";
-import { emit } from 'process';
+
 @Component({
   selector: 'app-socket',
   templateUrl: './socket.page.html',

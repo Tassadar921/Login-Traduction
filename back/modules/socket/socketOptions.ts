@@ -1,6 +1,7 @@
 module socketOptions {
     export interface ServerToClientEvents {
         emitNotif: (data: [{name : string, text : string, date:Date}]) => void;
+        synchronizeNotifications: (data: any[]) => void;
         sendMessage: (username: string, message: string, date: Date) => void;
         initSocketData: () => void;
     }

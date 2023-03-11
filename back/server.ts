@@ -9,6 +9,8 @@ import * as dotenv from 'dotenv';
 // @ts-ignore
 import http from 'http';
 
+import boot from './modules/boot/boot';
+
 import accountRouting from './modules/account/accountRouting';
 import languagesRouting from './modules/languages/languagesRouting';
 import ioServer from './modules/socket/socket';
@@ -31,10 +33,14 @@ ioServer.init(server)
 
 const io = ioServer.io;
 
-languagesRouting.init(app);
-accountRouting.init(app,io);
+/*-----------------------------------------Boot Method--------------------------------------------*/
 
-if (server.listen(process.env.PORT || 8080)) {
-    console.log('=========== SERVER STARTED FOR HTTP RQ ===========');
-    console.log('    =============   PORT: 8080   =============');
-}
+boot.start().then(() => {
+    languagesRouting.init(app);
+    accountRouting.init(app,io);
+    
+    if (server.listen(process.env.PORT || 8080)) {
+        console.log('=========== SERVER STARTED FOR HTTP RQ ===========');
+        console.log('    =============   PORT: 8080   =============');
+    }
+});

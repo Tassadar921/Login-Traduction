@@ -12,16 +12,20 @@ export class AccountFriends{
         this.accountNotification = accountNotification;
     }
 
+    public async addFriend(socket : Socket, username : string) {
+        
+    }
+
     public async sendMessage(socket : Socket, username : string, message : string, date : Date) {
-        const toSocket = (await ioServer.io.fetchSockets()).find((socketTmp: Socket ) => socketTmp.data.username === username);
+        const socketOfUsername = (await ioServer.io.fetchSockets()).find((socketTmp) => socketTmp.data.username === username);
         this.accountNotification.addNotifications(username, 'Nouveau message', message);
         
         const dateISO = new Date(date).toISOString()
 
         accountFriendsRequest.newMessage(socket.data.username, username, message, dateISO, this.client);
 
-        if(toSocket !== undefined) {
-            ioServer.io.to(toSocket?.id!).emit('message');
+        if(socketOfUsername !== undefined) {
+            ioServer.io.to(socketOfUsername.id).emit('message');
         }
 
         return

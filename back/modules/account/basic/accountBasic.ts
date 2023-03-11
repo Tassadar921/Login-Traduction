@@ -40,7 +40,6 @@ export class AccountBasic {
     }
 
     public async mailSignUp(username: string, password: string, email: string, language: string, res: Response): Promise<void> {
-
         if (!this.checkRegexEmail(email)) {
             res.json({status: -20});
             return;
@@ -282,7 +281,7 @@ export class AccountBasic {
     }
 
     //sends an email containing a unique token to create the account, effective for 10 minutes
-    private deleteCreateAccountQueueUrlToken(urlToken: string): void {
+    public deleteCreateAccountQueueUrlToken(urlToken: string): void {
         const client = this.client;
 
         setTimeout(async () => {
@@ -292,7 +291,7 @@ export class AccountBasic {
     }
 
     //sends an email containing a unique token to reset the password, effective for 10 minutes
-    private deleteMailResetPasswordQueueUrlToken(urlToken: string): void {
+    public deleteMailResetPasswordQueueUrlToken(urlToken: string): void {
         const client = this.client;
         setTimeout(async () => {
                 await accountBasicRequest.deleteResetPasswordUrlToken(urlToken, client)
@@ -309,7 +308,8 @@ export class AccountBasic {
 
     //checks if the urlToken is valid
     private checkRegexUrlToken(urlToken: string): boolean {
-        const regex = new RegExp('^[A-Za-z0-9]{' + this.urlTokenLength + '}$');
+        const regex = new RegExp('/^[A-Za-z0-9]{' + this.urlTokenLength + '}$/');
+
         return (regex).test(urlToken);
     }
 
