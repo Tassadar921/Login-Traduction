@@ -11,9 +11,9 @@ export class DevicePlatformService {
   }
 
   public calculatePlatform() {
-    if(window.innerWidth <= 600){
+    if(window.innerWidth <= 700){
       this.currentPlatform = 'small';
-    }else if(window.innerWidth > 600 && window.innerWidth < 960){
+    }else if(window.innerWidth > 700 && window.innerWidth < 960){
       this.currentPlatform = 'medium';
     }else{
       this.currentPlatform = 'large';
