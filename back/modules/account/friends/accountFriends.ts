@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io';
 import { AccountNotification } from '../notification/accountNotification';
-import ioServer from '../../socket/socket';
+import ioServer from '../../common/socket/socket';
 import accountFriendsRequest from './accountFriendsRequest';
 import createClient, { Client } from 'edgedb';
 

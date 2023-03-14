@@ -2,11 +2,13 @@ import {Express, Request, Response} from "express";
 import EncryptRsa from "encrypt-rsa";
 import * as socketIO from "socket.io";
 
-import socketOptions from "../socket/socketOptions";
+import socketOptions from "../common/socket/socketOptions";
 
-import { AccountBasic } from "./basic/accountBasic";
+import { AccountResetPassword } from "./resetPassword/accountResetPassword";
 import { AccountFriends } from "./friends/accountFriends";
 import { AccountNotification } from "./notification/accountNotification";
+import { AccountSignIn } from "./signIn/accountSignIn";
+import { AccountSignUp } from "./signUp/accountSignUp";
 
 module accountRouting {
     export function init(app: Express, io : socketIO.Server<socketOptions.ClientToServerEvents, socketOptions.ServerToClientEvents, socketOptions.InterServerEvents, socketOptions.SocketData>): void {
@@ -17,7 +19,9 @@ module accountRouting {
     }
 
     function initHttp(app: Express): void {
-        const account = new AccountBasic();
+        const accountResetPassword = new AccountResetPassword();
+        const accountSignIn = new AccountSignIn();
+        const accountSignUp = new AccountSignUp();
         const encryptRsa = new EncryptRsa();
         const {publicKey, privateKey} = encryptRsa.createPrivateAndPublicKeys();
 
@@ -33,31 +37,45 @@ module accountRouting {
         app.get('/getPublicKey', async function (req: Request, res: Response) {
             await res.json({publicKey});
         });
-        app.post('/mailSignUp', async function (req: Request, res: Response) {
+
+        /*----------------------------------------SignUp----------------------------------------*/
+
+        app.post('/signUp', async function (req: Request, res: Response) {
             if(req.body.publicKey!==publicKey) {
                 await res.json({status: -3});
             } else {
-                await account.mailSignUp(req.body.username, decrypt(req.body.password), req.body.email, req.body.language, res);
+                await accountSignUp.createUserCreation(req.body.username, decrypt(req.body.password), req.body.email, req.body.language, res);
             }
         });
-        app.post('/createAccount', async function (req: Request, res: Response) {
-            await account.createAccount(req.body.urlToken, res);
-        });
+        app.post('/confirmSignUp', async function (req: Request, res: Response) {
+            await accountSignUp.createUser(req.body.urlToken, res);
+        });        
+
+        /*----------------------------------------Login----------------------------------------*/
+
         app.post('/signIn', async function (req: Request, res: Response) {
-            await account.signIn(req.body.identifier, req.body.password, res);
+            await accountSignIn.signIn(req.body.identifier, req.body.password, res);
         });
+
+        app.post('/signOut', async function (req: Request, res: Response) {
+            await accountSignIn.signOut(req.body.username, req.body.token, res);
+        });
+
+        app.post('/checkSession', async function (req: Request, res: Response) {
+            await accountSignIn.checkSession(req.body.username, req.body.token, res);
+        });
+
+        /*----------------------------------------ResetPassword----------------------------------------*/
+
         app.post('/mailResetPassword', async function (req: Request, res: Response) {
-            await account.mailResetPasswordCreateUrlToken(req.body.email, req.body.language, res);
+            await accountResetPassword.mailResetPasswordCreateUrlToken(req.body.email, req.body.language, res);
         });
         app.post('/resetPassword', async function (req: Request, res: Response) {
             if(req.body.publicKey!==publicKey) {
                 await res.json({status: -1});
             } else {
-                await account.resetPassword(req.body.urlToken, decrypt(req.body.password), res);
+                await accountResetPassword.resetPassword(req.body.urlToken, decrypt(req.body.password), res);
             }
-        });
-        app.post('/checkSession', async function (req: Request, res: Response) {
-            await account.checkSession(req.body.username, req.body.token, res);
         });
 
         /*----------------------------------------Friends----------------------------------------*/
@@ -86,6 +104,7 @@ module accountRouting {
             });
 
             /*------------------------------------Notification------------------------------------*/
+
             socket.on('synchronizeNotifications', async () => {
                 await accountNotification.synchronizeNotificationsWithSocket(socket);
             });
@@ -100,6 +119,7 @@ module accountRouting {
             });
 
             /*----------------------------------------Chat----------------------------------------*/
+            
             socket.on('getChat', async () => {
                 await accountFriends.getMessage(socket);                
             });

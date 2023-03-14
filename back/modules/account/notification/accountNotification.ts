@@ -1,9 +1,9 @@
 import createClient, {Client} from 'edgedb';
 import {RemoteSocket, Socket} from 'socket.io';
 import AccountNotificationRequest from './accountNotificationRequest';
-import socketOptions from 'modules/socket/socketOptions';
+import socketOptions from 'modules/common/socket/socketOptions';
 
-import ioServer from '../../socket/socket';
+import ioServer from '../../common/socket/socket';
 
 export class AccountNotification{
     private readonly client: Client;
