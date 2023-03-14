@@ -7,10 +7,11 @@ import {ModalCloseButtonModule} from '../modal-close-button/modal-close-button.m
 import {MatSidenavModule} from "@angular/material/sidenav";
 import {MobileMenuComponent} from "./mobile-menu/mobile-menu.component";
 import {DefaultMenuComponent} from "./default-menu/default-menu.component";
+import {DefaultMenuItemComponent} from "./default-menu/default-menu-item/default-menu-item.component";
 
 
 @NgModule({
-  declarations: [MenuComponent, MobileMenuComponent, DefaultMenuComponent],
+    declarations: [MenuComponent, MobileMenuComponent, DefaultMenuComponent, DefaultMenuItemComponent],
     imports: [CommonModule, IonicModule, ModalCloseButtonModule, MatSidenavModule],
   exports: [MenuComponent]
 })

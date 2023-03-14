@@ -1,38 +1,15 @@
 ion-row {
   border-bottom: 1px solid rgba(148, 148, 148, 0.5);
-  height: 50px;
+  height: 40px;
 
   .bold{
     font-weight: bold;
   }
 
   nav {
+    text-align: left;
     margin: 20px auto;
-    display: table;
     transform: translateY(-50%);
-  }
-
-
-  nav a {
-    display: table-cell;
-    border-right: solid 5vw transparent;
-    border-top: solid 7px transparent;
-    width: 33.333%;
-    text-align: center;
-    color: #949494;
-    text-decoration: none;
-    transition: 0.2s ease color;
-
-  }
-
-  nav a:hover {
-    cursor: pointer;
-  }
-
-  nav a:before, nav a:after {
-    border-radius: 50%;
-    transform: scale(0);
-    transition: 0.2s ease transform;
   }
 
   #indicator {
@@ -45,31 +22,23 @@ ion-row {
     transition: 0.2s ease left;
   }
 
-  nav a:hover {
-    color: #fff;
-  }
-
-  nav a:hover:before,
-  nav a:hover:after {
-    transform: scale(1);
-  }
-
-  nav a:nth-child(1):hover ~ #indicator {
+  app-default-menu-item:nth-child(1):hover ~ #indicator {
+    left: 23%;
     background: linear-gradient(130deg, yellow, red);
   }
 
-  nav a:nth-child(2):hover ~ #indicator {
+  app-default-menu-item:nth-child(2):hover ~ #indicator {
     left: 37.5%;
     background: linear-gradient(130deg, #00e2ff, #89ff00);
   }
 
-  nav a:nth-child(3):hover ~ #indicator {
-    left: 67.5%;
+  app-default-menu-item:nth-child(3):hover ~ #indicator {
+    left: 55%;
     background: linear-gradient(130deg, purple, palevioletred);
   }
 
   ion-icon {
-    margin-top: 10px;
+    margin-top: 7px;
     font-size: 30px;
   }
 

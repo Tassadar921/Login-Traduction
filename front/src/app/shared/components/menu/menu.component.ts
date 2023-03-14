@@ -8,6 +8,12 @@ import {DevicePlatformService} from "../../services/device-platform.service";
 })
 export class MenuComponent implements OnInit {
 
+  public menuItems = [
+    'Home',
+    'Friends',
+    'Messages',
+  ]
+
   constructor(
     public devicePlatformService: DevicePlatformService
   ) {}

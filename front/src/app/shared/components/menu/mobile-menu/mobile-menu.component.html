@@ -1,7 +1,7 @@
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav #menu>
     <ion-row style="margin-bottom:20px;">
-      <ion-col size="1">
+      <ion-col size="4">
         <ion-button fill="clear" (click)="toggleSidenav()">
           <ion-icon name="close" slot="icon-only"></ion-icon>
         </ion-button>
@@ -9,7 +9,7 @@
       <ion-col>
         <p>{{cookieService.getUsername()}}</p>
       </ion-col>
-      <ion-col size="1"></ion-col>
+      <ion-col size="4"></ion-col>
     </ion-row>
     <ion-item class="menuBlock" button="true" [color]="devicePlatformService.getDeviceTheme()==='dark'?'':'dark'">
       <ion-row>

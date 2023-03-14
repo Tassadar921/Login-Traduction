@@ -1,0 +1,11 @@
+p{
+  margin-left: 20px;
+  display:inline-block;
+  color: #a09797;
+  -webkit-transition: color 1s ease;
+}
+
+p:hover{
+  color: #fff;
+  cursor: pointer;
+}

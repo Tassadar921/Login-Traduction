@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {CookieService} from "../../../services/cookie.service";
 import {DevicePlatformService} from "../../../services/device-platform.service";
 import {Router} from "@angular/router";
@@ -9,6 +9,8 @@ import {Router} from "@angular/router";
   styleUrls: ['./default-menu.component.scss'],
 })
 export class DefaultMenuComponent implements OnInit {
+
+  @Input() menuItems: string[] = [];
 
   constructor(
     public cookieService: CookieService,
