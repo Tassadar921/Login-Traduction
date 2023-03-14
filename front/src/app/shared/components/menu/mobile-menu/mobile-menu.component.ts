@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {DevicePlatformService} from '../../../services/device-platform.service';
 import {CookieService} from '../../../services/cookie.service';
 import {MatSidenav} from '@angular/material/sidenav';
@@ -12,6 +12,7 @@ export class MobileMenuComponent implements OnInit {
 
   public sidenavIsOpen = false;
   @ViewChild('menu') sidenav!: MatSidenav;
+  @Input() menuItems: any[] = [];
 
   constructor(
     public devicePlatformService: DevicePlatformService,

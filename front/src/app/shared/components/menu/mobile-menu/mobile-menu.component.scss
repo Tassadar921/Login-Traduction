@@ -1,5 +1,5 @@
 h1.app-name {
-  margin-left: 8px;
+  margin-left: 5%;
 }
 
 .sidenav-container {
@@ -8,14 +8,11 @@ h1.app-name {
 }
 
 mat-sidenav{
-  border-right: 1px solid white;
-  //background-color: var(--ion-color-light);
   width:100%;
 }
 
 .menuBlock{
   margin-bottom:20px;
-  border-bottom: solid 1px white;
 }
 
 #menuFooter{
@@ -24,6 +21,7 @@ mat-sidenav{
   width: 100%;
 }
 
-ion-col{
-  border: 1px solid white;
+#username{
+  margin-top: 10px;
+  font-weight: bold;
 }

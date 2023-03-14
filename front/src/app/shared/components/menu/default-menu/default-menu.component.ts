@@ -10,7 +10,7 @@ import {Router} from "@angular/router";
 })
 export class DefaultMenuComponent implements OnInit {
 
-  @Input() menuItems: string[] = [];
+  @Input() menuItems: any[] = [];
 
   constructor(
     public cookieService: CookieService,
