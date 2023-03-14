@@ -91,6 +91,8 @@ export class AccountSignUp {
 
         //sends an email containing a unique token to delete the account, effective for 10 minutes
 
+        console.log(this.mailOptions);
+
         this.transporter.sendMail(this.mailOptions, async function (error) {
             if (error) {
                 res.json({status: -1});
