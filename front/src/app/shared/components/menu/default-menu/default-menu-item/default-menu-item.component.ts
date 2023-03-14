@@ -7,7 +7,7 @@ import {Component, Input, OnInit} from '@angular/core';
 })
 export class DefaultMenuItemComponent implements OnInit {
 
-  @Input() itemName: any = {};
+  @Input() menuItem: any = {};
 
   constructor() { }
 

@@ -19,7 +19,9 @@ export class MobileMenuComponent implements OnInit {
     public cookieService: CookieService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log('test');
+  }
 
   public async toggleSidenav() {
     this.sidenavIsOpen = !this.sidenavIsOpen;

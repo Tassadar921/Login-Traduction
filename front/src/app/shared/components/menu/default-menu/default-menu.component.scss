@@ -23,17 +23,17 @@ ion-row {
   }
 
   app-default-menu-item:nth-child(1):hover ~ #indicator {
-    left: 5vw;
+    left: calc(5vw + 50px);
     background: linear-gradient(130deg, yellow, red);
   }
 
   app-default-menu-item:nth-child(2):hover ~ #indicator {
-    left: calc(10vw + 100px);
+    left: calc(10vw + 150px);
     background: linear-gradient(130deg, #00e2ff, #89ff00);
   }
 
   app-default-menu-item:nth-child(3):hover ~ #indicator {
-    left: calc(15vw + 200px);
+    left: calc(15vw + 250px);
     background: linear-gradient(130deg, purple, palevioletred);
   }
 

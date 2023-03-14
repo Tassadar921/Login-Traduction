@@ -11,21 +11,7 @@
       </ion-col>
       <ion-col size="4"></ion-col>
     </ion-row>
-    <ion-item class="menuBlock" button="true"
-              [color]="devicePlatformService.getDeviceTheme()==='dark'?'':'dark'"
-              *ngFor="let menuItem of menuItems">
-      <ion-row>
-        <ion-col size="1">
-          <ion-icon [name]="menuItem.icon"></ion-icon>
-        </ion-col>
-        <ion-col>
-          <p>{{menuItem.name}}</p>
-        </ion-col>
-        <ion-col size="1">
-          <ion-icon name="arrow-forward"></ion-icon>
-        </ion-col>
-      </ion-row>
-    </ion-item>
+    <app-mobile-menu-item *ngFor="let menuItem of menuItems" [menuItem]="menuItem"></app-mobile-menu-item>
     <ion-item class="menuBlock" id="menuFooter" button="true" color="danger">
       <ion-row>
         <ion-col size="1"></ion-col>
