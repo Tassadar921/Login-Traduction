@@ -37,14 +37,14 @@ export class SignUpComponent implements OnInit {
 
   ngOnInit() {}
 
-  public async mailSignUp(): Promise<void> {
+  public async signUp(): Promise<void> {
     this.waiting = true;
     this.mailError = false;
     this.output = '';
     let rtrn;
     while (!rtrn || Object(rtrn).status === 3) {
       await this.cryptoService.setRsaPublicKey();
-      rtrn = await this.requestService.mailSignUp(
+      rtrn = await this.requestService.signUp(
         this.formControl.value.username,
         this.formControl.value.email,
         this.cryptoService.rsaEncryptWithPublicKey(this.formControl.value.password),

@@ -85,7 +85,7 @@
           </ion-row>
           <ion-row>
             <ion-col size="4" push="6">
-              <ion-button id="submitButton" shape="round" color="success" (click)="mailSignUp()"
+              <ion-button id="submitButton" shape="round" color="success" (click)="signUp()"
                           [disabled]="!formControl.valid" *ngIf="!waiting"
                           [color]="formControl.valid?'success':'danger'">
                 <p>{{languageService.dictionary.data?.components.signUp.send}}</p>

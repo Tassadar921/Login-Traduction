@@ -23,7 +23,7 @@ export class ConfAccountPage implements OnInit {
 
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe(async params => {
-      const rtrn = await this.requestService.createAccount(Object(params).urlToken);
+      const rtrn = await this.requestService.confirmSignUp(Object(params).urlToken);
       if(Object(rtrn).status) {
         await this.cookieService.connect(Object(rtrn).username, Object(rtrn).token);
         await this.toastService.displayToast(

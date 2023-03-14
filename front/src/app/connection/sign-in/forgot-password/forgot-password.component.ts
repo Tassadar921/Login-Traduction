@@ -32,10 +32,10 @@ export class ForgotPasswordComponent implements OnInit {
 
   ngOnInit() {}
 
-  public async mailResetPassword() {
+  public async resetPassword() {
     this.waiting = true;
     this.output = '';
-    const rtrn = await this.requestService.mailResetPassword(this.formControl.value.email);
+    const rtrn = await this.requestService.resetPassword(this.formControl.value.email);
     if(Object(rtrn).status===1){
       this.output = this.languageService.dictionary.data?.components.forgotPassword.emailSent;
     }else if(Object(rtrn).status===0){

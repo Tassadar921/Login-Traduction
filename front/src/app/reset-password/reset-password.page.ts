@@ -43,13 +43,13 @@ export class ResetPasswordPage implements OnInit {
     });
   }
 
-  public async resetPassword() {
+  public async confirmResetPassword() {
     this.waiting = true;
     this.output = '';
       let rtrn;
       while (!rtrn || Object(rtrn).status === -1) {
         await this.cryptoService.setRsaPublicKey();
-        rtrn = await this.requestService.resetPassword(
+        rtrn = await this.requestService.confirmResetPassword(
           this.urlToken,
           this.cryptoService.rsaEncryptWithPublicKey(this.formControl.value.password),
           this.cryptoService.getPublicKey()

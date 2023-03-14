@@ -41,8 +41,8 @@ export class RequestService {
   {status : -1} problem with the mail
 	{status : 0} a user exist
 	{status : 1} success*/
-  public async mailSignUp(username: string, email: string, password: string, publicKey: string): Promise<Object> {
-    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/mailSignUp',
+  public async signUp(username: string, email: string, password: string, publicKey: string): Promise<Object> {
+    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/signUp',
       {username, password, email, language: await this.cookieService.getCookie('language'), publicKey},
     ));
   }
@@ -53,19 +53,19 @@ export class RequestService {
     ));
   }
 
-  public async createAccount(urlToken: string): Promise<Object> {
-    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/createAccount',
+  public async confirmSignUp(urlToken: string): Promise<Object> {
+    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/confirmSignUp',
       {urlToken}
     ));
   }
 
-  public async mailResetPassword(email: string): Promise<Object> {
+  public async resetPassword(email: string): Promise<Object> {
     return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/mailResetPassword',
       {email, language: await this.cookieService.getCookie('language')}
     ));
   }
 
-  public async resetPassword(urlToken: string, password: string, publicKey: string): Promise<Object> {
+  public async confirmResetPassword(urlToken: string, password: string, publicKey: string): Promise<Object> {
     return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/resetPassword',
       {urlToken, password, publicKey}
     ));
