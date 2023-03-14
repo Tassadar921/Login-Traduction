@@ -13,7 +13,7 @@ import boot from './modules/boot/boot';
 
 import accountRouting from './modules/account/accountRouting';
 import languagesRouting from './modules/languages/languagesRouting';
-import ioServer from './modules/socket/socket';
+import ioServer from './modules/common/socket/socket';
 
 dotenv.config();
 

@@ -1,14 +1,17 @@
 import createClient from "edgedb";
-import { AccountBasic } from "modules/account/basic/accountBasic";
+import { AccountSignUp } from "modules/account/signUp/accountSignUp";
+import { AccountResetPassword } from "modules/account/resetPassword/accountResetPassword";
 import resetTablesRequest from "./resetTablesRequest";
 
 export class ResetTables {
     private client;
-    private accountBasic;
+    private accountSignUp;
+    accountResetPassword: AccountResetPassword;
 
     constructor() {
         this.client = createClient({});
-        this.accountBasic = new AccountBasic;
+        this.accountSignUp = new AccountSignUp();
+        this.accountResetPassword = new AccountResetPassword();
     }
 
     public async startReset(): Promise<void> {
@@ -19,7 +22,7 @@ export class ResetTables {
         const tableResetPassword = await resetTablesRequest.resetResetPassword(this.client);
         if(tableResetPassword !== undefined) {
             tableResetPassword.forEach(element => {
-                this.accountBasic.deleteMailResetPasswordQueueUrlToken(element.urlToken);
+                this.accountSignUp.deleteUserCreation(element.urlToken);
             });
             console.log('');
             console.log(tableResetPassword.length + ' urlToken(s) reseted from the mailResetPasswordQueue')
@@ -29,7 +32,7 @@ export class ResetTables {
         const tableUserCreation = await resetTablesRequest.resetUserCreation(this.client);
         if(tableUserCreation !== undefined) {
             tableUserCreation.forEach(element => {
-                this.accountBasic.deleteCreateAccountQueueUrlToken(element.urlToken);
+                this.accountResetPassword.deleteResetPassword(element.urlToken);
             });
             console.log('');
             console.log(tableUserCreation.length + ' urlToken(s) reseted from the mailUserCreationQueue')
