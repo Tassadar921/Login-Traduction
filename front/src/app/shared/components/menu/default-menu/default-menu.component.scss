@@ -37,9 +37,13 @@ ion-row {
     background: linear-gradient(130deg, purple, palevioletred);
   }
 
-  ion-icon {
-    margin-top: 7px;
-    font-size: 30px;
+  ion-item {
+    width: 60px;
+    height: 40px;
+    ion-icon {
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
   }
 
   #connectedIcon{
@@ -50,7 +54,6 @@ ion-row {
   }
 
   #connectedIcon:hover, #disconnectedIcon:hover {
-    cursor: pointer;
     color: #fff;
   }
 }

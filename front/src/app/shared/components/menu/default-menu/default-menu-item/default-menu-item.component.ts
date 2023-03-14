@@ -1,4 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-default-menu-item',
@@ -9,8 +10,9 @@ export class DefaultMenuItemComponent implements OnInit {
 
   @Input() menuItem: any = {};
 
-  constructor() { }
+  constructor(
+    public router: Router
+  ) { }
 
   ngOnInit() {}
-
 }
