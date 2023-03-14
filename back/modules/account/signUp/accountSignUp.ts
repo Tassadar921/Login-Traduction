@@ -117,7 +117,7 @@ export class AccountSignUp {
 
             await accountSignInRequest.createUser(result[0].username, result[0].email, result[0].password, token, this.client);
 
-            res.json({status: 1, token, username: result[0].username, permission: undefined});
+            res.json({status: 1, sessionToken: token, username: result[0].username, permission: undefined});
             return;
         } else {
             res.json({status: 0});

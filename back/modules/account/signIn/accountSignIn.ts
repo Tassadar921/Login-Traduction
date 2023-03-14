@@ -35,7 +35,7 @@ export class AccountSignIn {
             await accountSignInRequest.updateUserToken(username, token, this.client);
             const result2 = await accountSignInRequest.getPermissionByUsername(username, this.client);
 
-            res.json({status: 1, token, username: username, permission: result2[0]?.permission});
+            res.json({status: 1, sessionToken: token, username: username, permission: result2[0]?.permission});
             return;
         }
     }

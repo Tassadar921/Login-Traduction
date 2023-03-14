@@ -67,10 +67,10 @@ module accountRouting {
 
         /*----------------------------------------ResetPassword----------------------------------------*/
 
-        app.post('/mailResetPassword', async function (req: Request, res: Response) {
+        app.post('/resetPassword', async function (req: Request, res: Response) {
             await accountResetPassword.mailResetPasswordCreateUrlToken(req.body.email, req.body.language, res);
         });
-        app.post('/resetPassword', async function (req: Request, res: Response) {
+        app.post('/confirmResetPassword', async function (req: Request, res: Response) {
             if(req.body.publicKey!==publicKey) {
                 await res.json({status: -1});
             } else {
@@ -119,7 +119,7 @@ module accountRouting {
             });
 
             /*----------------------------------------Chat----------------------------------------*/
-            
+
             socket.on('getChat', async () => {
                 await accountFriends.getMessage(socket);                
             });
