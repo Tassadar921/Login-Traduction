@@ -1,5 +1,5 @@
-<app-mobile-menu *ngIf="devicePlatformService.currentPlatform==='small'">
+<app-mobile-menu [menuItems]="menuItems" *ngIf="devicePlatformService.currentPlatform==='small'">
 </app-mobile-menu>
 
-<app-default-menu *ngIf="devicePlatformService.currentPlatform!=='small'">
+<app-default-menu [menuItems]="menuItems" *ngIf="devicePlatformService.currentPlatform!=='small'">
 </app-default-menu>

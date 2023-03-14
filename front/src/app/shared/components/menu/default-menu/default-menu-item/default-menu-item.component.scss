@@ -1,0 +1,13 @@
+p{
+  text-align:center;
+  margin-left: 5vw;
+  display:inline-block;
+  color: #a09797;
+  -webkit-transition: color 1s ease;
+  width:110px;
+}
+
+p:hover{
+  color: #fff;
+  cursor: pointer;
+}

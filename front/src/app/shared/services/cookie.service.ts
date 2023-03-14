@@ -23,7 +23,6 @@ export class CookieService {
   setCookie = async (key: string, value: any) => await Preferences.set({key, value});
 
   public async connect(username: string, token: string) {
-    console.log(username, token);
     await this.setCookie('username', username);
     await this.setCookie('token', token);
     this.username = username;
