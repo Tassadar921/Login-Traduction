@@ -91,8 +91,6 @@ export class AccountSignUp {
 
         //sends an email containing a unique token to delete the account, effective for 10 minutes
 
-        console.log(this.mailOptions);
-
         this.transporter.sendMail(this.mailOptions, async function (error) {
             if (error) {
                 res.json({status: -1});
@@ -106,20 +104,21 @@ export class AccountSignUp {
 
     //creates the account with datas in the queue linked to token
     public async createUser(urlToken: string, res: Response): Promise<void> {
-        let result = await accountSignInRequest.getUsernameAndEmailAndPasswordByUrlToken(urlToken, this.client);
-        if (result.length > 0) {
+        let resultInfosUser = Object(await accountSignInRequest.getUsernameAndEmailAndPasswordByUrlToken(urlToken, this.client));
+
+        if (resultInfosUser.length > 0) {
             await accountSignInRequest.deleteUserCreationByUrlToken(urlToken, this.client);
 
             let token = this.generateToken(this.sessionTokenLength);
-            result = await accountSignInRequest.getUsernameBySessionToken(token, this.client);
-            while (result.length > 0) {
+            let resultExistingSessionToken = await accountSignInRequest.getUsernameBySessionToken(token, this.client);
+            while (resultExistingSessionToken.length > 0) {
                 token = this.generateToken(this.sessionTokenLength);
-                result = await accountSignInRequest.getUsernameBySessionToken(token, this.client);
+                resultExistingSessionToken = await accountSignInRequest.getUsernameBySessionToken(token, this.client);
             }
 
-            await accountSignInRequest.createUser(result[0].username, result[0].email, result[0].password, token, this.client);
+            await accountSignInRequest.createUser(resultInfosUser[0].username, resultInfosUser[0].email, resultInfosUser[0].password, token, this.client);
 
-            res.json({status: 1, sessionToken: token, username: result[0].username, permission: undefined});
+            res.json({status: 1, sessionToken: token, username: resultInfosUser[0].username, permission: undefined});
             return;
         } else {
             res.json({status: 0});
