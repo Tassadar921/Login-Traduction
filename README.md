@@ -52,4 +52,5 @@ edgedb project init <EDGEDB_INSTANCE>
 ```
 
 Enjoy !
+Made in collaboration with @melian-e (https://github.com/melian-e)
 
