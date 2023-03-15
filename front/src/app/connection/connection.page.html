@@ -8,7 +8,8 @@
     </ion-fab-button>
   </ion-fab>
 
-  <ion-item [id]="devicePlatformService.getDeviceSegmentId()">
+  <ion-item [id]="devicePlatformService.getDeviceSegmentId()"
+            [color]="devicePlatformService.getDeviceTheme()==='light'?'dark':'light'">
     <ion-segment value="true" color="warning"
                  [class]="devicePlatformService.currentPlatform==='small'?
                'smallDeviceSegment':devicePlatformService.currentPlatform==='medium'?
@@ -33,7 +34,7 @@
 
 <ion-modal trigger="language">
   <ng-template>
-    <ion-content>
+    <ion-content [color]="devicePlatformService.getDeviceTheme()==='dark'?'':'dark'">
       <app-language></app-language>
     </ion-content>
     <app-modal-close-button></app-modal-close-button>

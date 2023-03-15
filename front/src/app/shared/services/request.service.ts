@@ -90,9 +90,9 @@ export class RequestService {
     {status : 0} no such token is allowed to this user
 		{status : 1} everything is fine
   */
-  public async checkSession(username: string, token: string): Promise<Object> {
+  public async checkSession(username: string, sessionToken: string): Promise<Object> {
     return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/checkSession',
-      {username, token}
+      {username, sessionToken}
     ));
   }
 }

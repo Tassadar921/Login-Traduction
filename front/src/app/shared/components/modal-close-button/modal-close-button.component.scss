@@ -1,13 +1,9 @@
-#closeButton{
-  font-size: 1.3em;
-  ion-icon{
-    color: #6b6b1c;
-    -webkit-transition: color 1s ease-out;
-  }
+ion-icon {
+  color: #6b6b1c;
+  -webkit-transition: color 1s ease-out;
+  font-size: 2em;
 }
 
-#closeButton:hover{
-  ion-icon{
-    color: #ffff00;
-  }
+ion-icon:hover {
+  color: #ffff00;
 }
