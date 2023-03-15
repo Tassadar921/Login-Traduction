@@ -1,3 +1,10 @@
+//----------------------------------------Notification----------------------------------------
+//Version 1.0.0 
+//This module manage the request to the database for accountResetPassword.ts
+//Version log :
+//1.0.0 - 15/03/2023 - Iémélian RAMBEAU - Creation of the first version
+//--------------------------------------------------------------------------------------------
+
 import { Client } from "edgedb";
 
 module accountResetPasswordRequest {

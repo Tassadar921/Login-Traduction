@@ -1,3 +1,10 @@
+//----------------------------------------socket----------------------------------------
+//Version 1.0.0 
+//This module contains the ioServer so that it can be called from anywhere in the project
+//Version log :
+//1.0.0 - 15/03/2023 - Iémélian RAMBEAU - Creation of the first version
+//--------------------------------------------------------------------------------------
+
 import * as socketIO from 'socket.io';
 import http from 'http';
 

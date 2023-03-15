@@ -1,3 +1,10 @@
+//----------------------------------------SignIn----------------------------------------
+//Version 1.0.0 
+//This class is used to manage the connection of the user
+//Version log :
+//1.0.0 - 15/03/2023 - Iémélian RAMBEAU - Creation of the first version
+//--------------------------------------------------------------------------------------
+
 import {Response} from 'express';
 import {Client, createClient} from 'edgedb';
 import accountSignInRequest from './accountSignInRequest';
@@ -18,7 +25,7 @@ export class AccountSignIn {
     //signIn, identifier can be either username or email
     public async signIn(identifier: string, password: string, res: Response): Promise<void> {
 
-        const result = await accountSignInRequest.getPermissionByPasswordAndIdentifier(identifier, await this.hashSha256(password), this.client);
+        const result = await accountSignInRequest.getUsernameByPasswordAndIdentifier(identifier, await this.hashSha256(password), this.client);
 
         if (!result.length) {
             res.json({status: 0});
@@ -44,7 +51,7 @@ export class AccountSignIn {
     public async signOut(username: string, token: string, res: Response): Promise<void> {
         let result: [{ username: string, email: string }] | any;
 
-        result = await accountSignInRequest.getPermissionByTokenAndUsername(username, token, this.client);
+        result = await accountSignInRequest.getUserByTokenAndUsername(username, token, this.client);
 
         if (result.length == 0) {
             res.json({status: 0});
@@ -63,7 +70,7 @@ export class AccountSignIn {
                 return;
             }
     
-            const result: [{ username: string }] | any = await accountSignInRequest.getPermissionByTokenAndUsername(username, sessionToken, this.client);
+            const result: any = await accountSignInRequest.getUserByTokenAndUsername(username, sessionToken, this.client);
             if (result.length && sessionToken !== 'none') {
                 res.json({status: 1});
                 return;

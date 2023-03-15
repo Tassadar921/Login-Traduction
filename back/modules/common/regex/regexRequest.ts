@@ -1,3 +1,10 @@
+//----------------------------------------regexRequest----------------------------------------
+//Version 1.0.0 
+//This module contains all the regex used in the project
+//Version log :
+//1.0.0 - 15/03/2023 - Iémélian RAMBEAU - Creation of the first version
+//--------------------------------------------------------------------------------------
+
 export module regexRequest {
     const urlTokenLength = parseInt(process.env.URL_TOKEN_LENGTH!);
     const sessionTokenLength = parseInt(process.env.SESSION_TOKEN_LENGTH!);

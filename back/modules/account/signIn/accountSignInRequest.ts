@@ -1,21 +1,28 @@
+//----------------------------------------SignIn----------------------------------------
+//Version 1.0.0 
+//This module manage the request to the database for accountSignIn.ts
+//Version log :
+//1.0.0 - 15/03/2023 - Iémélian RAMBEAU - Creation of the first version
+//--------------------------------------------------------------------------------------
+
 import { Client } from "edgedb";
 
 module accountLoginRequest {
-    export async function getPermissionByPasswordAndIdentifier(identifier : string, password : string, client : Client) {
-        return new Promise<any[]>((resolve) => {
-            resolve(client.query(`
-                SELECT User
-                FILTER ( .email = "${identifier}" OR .username = "${identifier}") AND .password = "${password}"
-            `));
-        });
-    }
-
-    export async function getPermissionByTokenAndUsername(username : string, token : string, client : Client) {
+    export async function getUsernameByPasswordAndIdentifier(identifier : string, password : string, client : Client) {
         return new Promise<any[]>((resolve) => {
             resolve(client.query(`
                 SELECT User {
                     username,
                 }
+                FILTER ( .email = "${identifier}" OR .username = "${identifier}") AND .password = "${password}"
+            `));
+        });
+    }
+
+    export async function getUserByTokenAndUsername(username : string, token : string, client : Client) {
+        return new Promise<any[]>((resolve) => {
+            resolve(client.query(`
+                SELECT User
                 FILTER .token = "${token}" AND .username = "${username}"
             `));
         });

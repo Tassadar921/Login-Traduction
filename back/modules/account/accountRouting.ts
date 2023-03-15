@@ -1,3 +1,10 @@
+//----------------------------------------accountRouting----------------------------------------
+//Version 1.0.0 
+//This module manage the routing for all the account module
+//Version log :
+//1.0.0 - 15/03/2023 - Iémélian RAMBEAU - Creation of the first version
+//--------------------------------------------------------------------------------------
+
 import {Express, Request, Response} from "express";
 import EncryptRsa from "encrypt-rsa";
 import * as socketIO from "socket.io";
@@ -9,11 +16,14 @@ import { AccountFriends } from "./friends/accountFriends";
 import { AccountNotification } from "./notification/accountNotification";
 import { AccountSignIn } from "./signIn/accountSignIn";
 import { AccountSignUp } from "./signUp/accountSignUp";
+import ioServer from "modules/common/socket/socket";
 
 module accountRouting {
-    export function init(app: Express, io : socketIO.Server<socketOptions.ClientToServerEvents, socketOptions.ServerToClientEvents, socketOptions.InterServerEvents, socketOptions.SocketData>): void {
+    export function init(app: Express): void {
+
+        
         initHttp(app);
-        initSocket(io);
+        initSocket(ioServer.io);
 
         console.log('accountRouting initialized');
     }

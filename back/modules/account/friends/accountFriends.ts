@@ -1,3 +1,10 @@
+//----------------------------------------Friends----------------------------------------
+//Version 1.0.0
+//This class is used to manage the friends of the user and their messages
+//Version log :
+//1.0.0 - 15/03/2023 - Iémélian RAMBEAU - Creation of the first version
+//---------------------------------------------------------------------------------------
+
 import { Socket } from 'socket.io';
 import { AccountNotification } from '../notification/accountNotification';
 import ioServer from '../../common/socket/socket';
@@ -7,6 +14,7 @@ import createClient, { Client } from 'edgedb';
 export class AccountFriends{
     private accountNotification: AccountNotification;
     private client: Client;
+
     constructor(accountNotification : AccountNotification) {
         this.client = createClient({});
         this.accountNotification = accountNotification;

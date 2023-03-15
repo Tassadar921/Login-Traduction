@@ -1,3 +1,10 @@
+//----------------------------------------socketOptions----------------------------------------
+//Version 1.0.0 
+//This module contains all the interfaces used for the ts socket
+//Version log :
+//1.0.0 - 15/03/2023 - Iémélian RAMBEAU - Creation of the first version
+//--------------------------------------------------------------------------------------
+
 module socketOptions {
     export interface ServerToClientEvents {
         emitNotif: (data: [{name : string, text : string, date:Date}]) => void;

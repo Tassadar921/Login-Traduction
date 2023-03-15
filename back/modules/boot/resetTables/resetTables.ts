@@ -1,3 +1,10 @@
+//----------------------------------------Tables----------------------------------------
+//Version 1.0.0 
+//This class reset all the timouts in case they weren't able to be launched on the last use of the server
+//Version log :
+//1.0.0 - 15/03/2023 - Iémélian RAMBEAU - Creation of the first version
+//--------------------------------------------------------------------------------------
+
 import createClient from "edgedb";
 import { AccountSignUp } from "modules/account/signUp/accountSignUp";
 import { AccountResetPassword } from "modules/account/resetPassword/accountResetPassword";
@@ -17,9 +24,8 @@ export class ResetTables {
     public async startReset(): Promise<void> {
         console.log('');
         console.log('=========== RESETING ALL TABLES ===========');
-        console.log('Reset of all the timeout in case they weren\'t able to be launched on the last use of the server.')
 
-        const tableResetPassword = await resetTablesRequest.resetResetPassword(this.client);
+        const tableResetPassword = await resetTablesRequest.getUrlTokenFromResetPassword(this.client);
         if(tableResetPassword !== undefined) {
             tableResetPassword.forEach(element => {
                 this.accountSignUp.deleteUserCreation(element.urlToken);
@@ -29,7 +35,7 @@ export class ResetTables {
         }
         console.log('----------- Reset of Reset_Password table done -----------')
 
-        const tableUserCreation = await resetTablesRequest.resetUserCreation(this.client);
+        const tableUserCreation = await resetTablesRequest.getUrlTokenFromUserCreation(this.client);
         if(tableUserCreation !== undefined) {
             tableUserCreation.forEach(element => {
                 this.accountResetPassword.deleteResetPassword(element.urlToken);

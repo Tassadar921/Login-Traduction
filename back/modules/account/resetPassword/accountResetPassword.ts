@@ -1,3 +1,10 @@
+//----------------------------------------ResetPassword----------------------------------------
+//Version 1.0.0 
+//This class is used to manage the reset of the user's password
+//Version log :
+//1.0.0 - 15/03/2023 - Iémélian RAMBEAU - Creation of the first version
+//---------------------------------------------------------------------------------------------
+
 import * as nodemailer from 'nodemailer';
 import {Response} from 'express';
 import {Client, createClient} from 'edgedb';

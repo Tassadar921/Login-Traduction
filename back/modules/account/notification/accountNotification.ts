@@ -1,3 +1,10 @@
+//----------------------------------------Notification----------------------------------------
+//Version 1.0.0 
+//This class is used to manage the notifications of the user
+//Version log :
+//1.0.0 - 15/03/2023 - Iémélian RAMBEAU - Creation of the first version
+//--------------------------------------------------------------------------------------------
+
 import createClient, {Client} from 'edgedb';
 import {RemoteSocket, Socket} from 'socket.io';
 import AccountNotificationRequest from './accountNotificationRequest';

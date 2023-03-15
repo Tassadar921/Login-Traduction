@@ -1,12 +1,8 @@
-// @ts-ignore
 import express from 'express';
-// @ts-ignore
 import bodyParser from 'body-parser';
-// @ts-ignore
 import cors from 'cors';
 import * as dotenv from 'dotenv';
 
-// @ts-ignore
 import http from 'http';
 
 import boot from './modules/boot/boot';
@@ -14,6 +10,7 @@ import boot from './modules/boot/boot';
 import accountRouting from './modules/account/accountRouting';
 import languagesRouting from './modules/languages/languagesRouting';
 import ioServer from './modules/common/socket/socket';
+import { initialize } from 'esbuild';
 
 dotenv.config();
 
@@ -31,13 +28,13 @@ const server = http.createServer(app);
 
 ioServer.init(server)
 
-const io = ioServer.io;
-
-/*-----------------------------------------Boot Method--------------------------------------------*/
+/*-----------------------------------------Boot start Method--------------------------------------------*/
+//boot.start() is a method that is called when the server is booting, 
+//it is used for the website to function properly even after a rash restart
 
 boot.start().then(() => {
     languagesRouting.init(app);
-    accountRouting.init(app,io);
+    accountRouting.init(app);
     
     if (server.listen(process.env.PORT || 8080)) {
         console.log('=========== SERVER STARTED FOR HTTP RQ ===========');
