@@ -24,18 +24,21 @@ export class AccountSignIn {
             res.json({status: 0});
             return;
         } else {
+            console.log(result);
             let username = result[0].username;
-            let token = this.generateToken(this.sessionTokenLength);
-            let result1 = await accountSignInRequest.getUsernameBySessionToken(token, this.client);
+            let sessionToken = this.generateToken(this.sessionTokenLength);
+            let result1 = await accountSignInRequest.getUsernameBySessionToken(sessionToken, this.client);
 
             while (result1.length > 0) {
-                token = this.generateToken(this.sessionTokenLength);
-                result1 = await accountSignInRequest.getUsernameBySessionToken(token, this.client);
+                sessionToken = this.generateToken(this.sessionTokenLength);
+                result1 = await accountSignInRequest.getUsernameBySessionToken(sessionToken, this.client);
             }
-            await accountSignInRequest.updateUserToken(username, token, this.client);
+            await accountSignInRequest.updateUserToken(username, sessionToken, this.client);
             const result2 = await accountSignInRequest.getPermissionByUsername(username, this.client);
 
-            res.json({status: 1, sessionToken: token, username: username, permission: result2[0]?.permission});
+            console.log('username : ', username);
+
+            res.json({status: 1, sessionToken, username, permission: result2[0]?.permission});
             return;
         }
     }

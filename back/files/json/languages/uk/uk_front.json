@@ -13,7 +13,7 @@
       "signIn": {
         "emailOrUsername": "Email or username",
         "password": "Password",
-        "wrongIdentifierOrPassword": "Wrong email or password",
+        "wrongIdentifierOrPassword": "Wrong identifier or password",
         "connected": "Connected",
         "forgotPassword": "forgot password ?",
         "send": "Send"
