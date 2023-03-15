@@ -10,6 +10,7 @@ export class DevicePlatformService {
     this.calculatePlatform();
   }
 
+  //updates currentPlatform in function of the window size
   public calculatePlatform() {
     if(window.innerWidth <= 700){
       this.currentPlatform = 'small';
@@ -20,6 +21,7 @@ export class DevicePlatformService {
     }
   }
 
+  //returns the current platform theme
   public getDeviceTheme(){
     if(window.matchMedia("(prefers-color-scheme: dark)").matches){
       return 'dark';
@@ -28,10 +30,12 @@ export class DevicePlatformService {
     }
   }
 
+  //returns the current platform content class
   public getDeviceContentClass() {
     return this.currentPlatform+'DeviceContent';
   }
 
+  //returns the current platform segment id
   public getDeviceSegmentId() {
     return this.currentPlatform+'DeviceSegment';
   }

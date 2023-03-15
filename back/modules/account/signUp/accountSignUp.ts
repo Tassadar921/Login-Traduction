@@ -100,6 +100,7 @@ export class AccountSignUp {
 
         this.transporter.sendMail(this.mailOptions, async function (error) {
             if (error) {
+                console.log(error);
                 res.json({status: -1});
                 return;
             } else {

@@ -10,6 +10,7 @@ export class FormValidatorsService {
     private formBuilder: FormBuilder
   ) {}
 
+  //signup validator containing username, email, password and confirmPassword
   public getSignUpValidator(){
     return this.formBuilder.group({
       username: this.formBuilder.control(
@@ -58,6 +59,7 @@ export class FormValidatorsService {
     } as AbstractControlOptions);
   }
 
+  //resetPassword validator containing password and confirmPassword
   public getResetPasswordValidator(){
     return this.formBuilder.group({
       password: this.formBuilder.control(
@@ -86,6 +88,7 @@ export class FormValidatorsService {
     } as AbstractControlOptions);
   }
 
+  //forgotPassword validator containing email
   getForgotPasswordValidator(){
     return this.formBuilder.group({
       email: new FormControl(
@@ -101,6 +104,7 @@ export class FormValidatorsService {
     });
   }
 
+  //custom matching validator, checks if controlOne and controlTwo are equal
   private matchValidator(controlOne: string, controlTwo: string) {
     return (formGroup: FormGroup) => {
       const control1 = formGroup.controls[controlOne];

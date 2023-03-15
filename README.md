@@ -1,6 +1,7 @@
-This project is a connection and  translation module, including both front (Ionic framework based on angular) and back (Node JS express server + Edgedb project files).
+This project is a connection and translation module, including both
+front (Ionic framework based on Angular) and back (Node JS express server + Edgedb project files).
 
-In order to launch it, run those commands in a terminal (make sure you've got Node JS installed and updated) :
+It's compatible with Windows and Linux.
 
 First of all, create a .env file in /back containing the following lines :
 
@@ -18,10 +19,15 @@ URL_FRONT=<string>
 
 Fill the brackets with the appropriate values.
 
+In order to launch it, run those commands in a terminal
+(make sure you've got Node JS installed and updated) :
+
 ```
 - npm i @angular/cli -g
 - npm i @ionic/cli -g
 ```
+
+It'll install Angular and Ionic on your computer.
 
 Make sure you have EdgeDB installed on your computer (https://edgedb.com/download).
 - In the /database folder :
@@ -31,14 +37,14 @@ edgedb project init <EDGEDB_INSTANCE>
 ```
 
 
-- go in the /back folder:
+- Now go in the /back folder:
 
 ```
 - npm i
-- node server.js
+- npm run start
 ```
 
-- in another terminal, go in the /front folder:
+- In another terminal, go in the /front folder:
 
 ```
 - npm i
@@ -46,4 +52,5 @@ edgedb project init <EDGEDB_INSTANCE>
 ```
 
 Enjoy !
+Made in collaboration with @melian-e (https://github.com/melian-e)
 

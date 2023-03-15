@@ -1,4 +1,4 @@
-SignUp :           => CODED
+signUp :
 	(req.body.username, req.body.password, req.body.email, req.body.language) => 
 	{
         {status : -40} username already exists
@@ -11,42 +11,42 @@ SignUp :           => CODED
 		{status : 1} success
 	}
 
-confirmSignUp :       => CODED
+confirmSignUp :
 	(req.body.urlToken) => 
 	{
 		{status : 0} no such token is allowed
 		{status: 1, sessionToken, username, permission} success
 	}
 
-signIn :             => CODED
+signIn :
 	(req.body.identifier, req.body.password) =>
 	{
 		{status : 0} wrong identifier or password
 		{status: 1, sessionToken, username, permission} success
 	}
 
-signOut :             =>
+signOut :
 	(req.body.username, req.body.sessionToken) =>
 	{
 		{status : 0} no match for token username
 		{status: 1} no more token
 	}
 
-checkSession : => CODED
+checkSession :
 	(req.body.username, req.body.sessionToken) => 
 	{
 		{status : 0} no such token is allowed to this user
 		{status : 1} everything is fine
 	}
 
-confirmResetPassword : => EN TRAIN
+confirmResetPassword :
 	(req.body.urlToken, req.body.password) => 
 	{
 		{status : 0} no such token in db
 		{status : 1} success
 	}
 
-resetPassword : => CODED
+resetPassword :
 	(req.body.email, req.body.language) => 
 	{
 		{status : -2} bad mail shape

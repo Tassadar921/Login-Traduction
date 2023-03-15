@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
+import {DevicePlatformService} from "../../services/device-platform.service";
 
 @Component({
   selector: 'app-modal-close-button',
@@ -9,7 +10,8 @@ import { ModalController } from '@ionic/angular';
 export class ModalCloseButtonComponent implements OnInit {
 
   constructor(
-    public modalController: ModalController
+    public modalController: ModalController,
+    public devicePlatformService: DevicePlatformService
   ) { }
 
   ngOnInit() {}

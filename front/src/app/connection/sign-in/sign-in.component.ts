@@ -20,7 +20,6 @@ export class SignInComponent implements OnInit {
   public identifier:string = '';
   public password:string = '';
   public waiting:boolean = false;
-  public displayForgotPassword:boolean = false;
 
   constructor(
     public devicePlatformService: DevicePlatformService,
@@ -44,7 +43,8 @@ export class SignInComponent implements OnInit {
     if(Object(rtrn).status === 0){
       this.output = this.languageService.dictionary.data.components.signIn.wrongIdentifierOrPassword;
     }else{
-      await this.cookieService.connect(Object(rtrn).username, Object(rtrn).token);
+      console.log(rtrn);
+      await this.cookieService.connect(Object(rtrn).username, Object(rtrn).sessionToken);
       await this.toastService.displayToast(
         this.languageService.dictionary.data.components.signIn.connected, 'top'
       );
