@@ -27,7 +27,7 @@ export class AppComponent implements OnInit {
         await this.cookieService.getCookie('username'), await this.cookieService.getCookie('token')
       );
       if(!Object(rtrn).status){
-        await this.cookieService.disconnect();
+        // await this.cookieService.disconnect();
       }else{
         await this.cookieService.connect(
           await this.cookieService.getCookie('username'),
@@ -35,7 +35,7 @@ export class AppComponent implements OnInit {
         );
       }
     }else{
-      await this.cookieService.disconnect();
+      // await this.cookieService.disconnect();
     }
   }
 }

@@ -67,6 +67,7 @@ export class SignUpComponent implements OnInit {
     } else if (Object(rtrn).status === -41) {
       this.output = this.languageService.dictionary.data.components.signUp.emailAlreadyExists;
     }
+    console.log(rtrn);
     this.waiting = false;
   }
 

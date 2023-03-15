@@ -8,6 +8,8 @@ import {DevicePlatformService} from "../../services/device-platform.service";
 })
 export class MenuComponent implements OnInit {
 
+  //menu items dynamically generated from this array
+  //put the name from here : https://ionic.io/ionicons
   public menuItems = [
     {name: 'Home', icon: 'home', link: '/home'},
     {name: 'Messages', icon: 'send', link: '/messages'},
