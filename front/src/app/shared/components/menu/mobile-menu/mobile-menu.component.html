@@ -12,7 +12,7 @@
       <ion-col size="4"></ion-col>
     </ion-row>
     <app-mobile-menu-item *ngFor="let menuItem of menuItems" [menuItem]="menuItem"></app-mobile-menu-item>
-    <ion-item class="menuBlock" id="menuFooter" button="true" color="danger">
+    <ion-item class="menuBlock" id="menuFooter" button="true" color="danger" (click)="signOut()">
       <ion-row>
         <ion-col size="1"></ion-col>
         <ion-col>

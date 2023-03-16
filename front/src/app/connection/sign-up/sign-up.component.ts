@@ -35,7 +35,13 @@ export class SignUpComponent implements OnInit {
     this.formControl = this.formValidatorsService.getSignUpValidator();
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    document.addEventListener('keydown', async (event) => {
+      if(event.key === 'Enter' && this.formControl.valid){
+        await this.signUp();
+      }
+    });
+  }
 
   public async signUp(): Promise<void> {
     this.waiting = true;

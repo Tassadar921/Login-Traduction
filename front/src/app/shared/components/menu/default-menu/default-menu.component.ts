@@ -11,6 +11,7 @@ import {Router} from "@angular/router";
 export class DefaultMenuComponent implements OnInit {
 
   @Input() menuItems: any[] = [];
+  @Input() signOut!: Promise<void>;
 
   constructor(
     public cookieService: CookieService,

@@ -25,4 +25,8 @@ export class MobileMenuComponent implements OnInit {
     this.sidenavIsOpen = !this.sidenavIsOpen;
     await this.sidenav.toggle();
   }
+
+  @Input() public async signOut() {
+    console.log('là')
+  }
 }

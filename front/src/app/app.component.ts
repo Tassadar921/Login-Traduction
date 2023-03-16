@@ -28,15 +28,15 @@ export class AppComponent implements OnInit {
         await this.cookieService.getCookie('sessionToken')
       );
       if(!Object(rtrn).status){
-        await this.cookieService.disconnect();
+        await this.cookieService.signOut();
       }else{
-        await this.cookieService.connect(
+        await this.cookieService.signIn(
           await this.cookieService.getCookie('username'),
           await this.cookieService.getCookie('sessionToken')
         );
       }
     }else{
-      await this.cookieService.disconnect();
+      await this.cookieService.signOut();
     }
   }
 }

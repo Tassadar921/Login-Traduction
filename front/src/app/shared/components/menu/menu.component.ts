@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {DevicePlatformService} from "../../services/device-platform.service";
 import {RequestService} from "../../services/request.service";
+import {CookieService} from '../../services/cookie.service';
 
 @Component({
   selector: 'app-menu',
@@ -19,12 +20,19 @@ export class MenuComponent implements OnInit {
 
   constructor(
     public devicePlatformService: DevicePlatformService,
-    public requestService: RequestService
+    public requestService: RequestService,
+    private cookieService: CookieService,
   ) {}
 
   ngOnInit() {}
 
-  public async disconnect() {
-    await this.requestService.signOut();
+  public async signOut() {
+    const rtrn = await this.requestService.signOut(
+      await this.cookieService.getCookie('username'),
+      await this.cookieService.getCookie('sessionToken')
+    );
+    if (Object(rtrn).status === 1) {
+      await this.cookieService.signOut();
+    }
   }
 }

@@ -48,15 +48,18 @@ export class AccountSignIn {
     }
 
     //delete the token of the user
-    public async signOut(username: string, token: string, res: Response): Promise<void> {
+    public async signOut(username: string, sessionToken: string, res: Response): Promise<void> {
         let result: [{ username: string, email: string }] | any;
 
-        result = await accountSignInRequest.getUserByTokenAndUsername(username, token, this.client);
+        result = await accountSignInRequest.getUserByTokenAndUsername(username, sessionToken, this.client);
+        console.log(result);
 
-        if (result.length == 0) {
+        if (!result.length) {
+            console.log('ici')
             res.json({status: 0});
             return;
-        } else if (result.length > 0) {
+        } else {
+            console.log('là')
             await accountSignInRequest.updateUserToken(username, 'none', this.client);
             res.json({status: 1});
             return;
@@ -69,7 +72,6 @@ export class AccountSignIn {
                 res.json({status: 0});
                 return;
             }
-            console.log('là');
     
             const result: any = await accountSignInRequest.getUserByTokenAndUsername(username, sessionToken, this.client);
             if (result.length && sessionToken !== 'none') {

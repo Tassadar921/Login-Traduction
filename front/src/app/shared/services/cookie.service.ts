@@ -23,14 +23,14 @@ export class CookieService {
   setCookie = async (key: string, value: any) => await Preferences.set({key, value});
 
   //connects user by setting cookies session token and username
-  public async connect(username: string, sessionToken: string) {
+  public async signIn(username: string, sessionToken: string) {
     await this.setCookie('username', username);
     await this.setCookie('sessionToken', sessionToken);
     this.username = username;
   }
 
   //disconnects user by removing cookies session token and username
-  disconnect = async (popover: boolean = false) => {
+  public async signOut(popover: boolean = false)  {
     this.username = '';
     await Preferences.remove({ key: 'username' });
     await Preferences.remove({ key: 'sessionToken' });
