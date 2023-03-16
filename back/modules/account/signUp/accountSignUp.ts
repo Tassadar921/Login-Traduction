@@ -112,6 +112,11 @@ export class AccountSignUp {
 
     //creates the account with datas in the queue linked to token
     public async createUser(urlToken: string, res: Response): Promise<void> {
+        if(!regexRequest.checkRegexUrlToken(urlToken, this.urlTokenLength)) {
+            res.json({status: 0});
+            return;
+        }
+
         let resultInfosUser = Object(await accountSignInRequest.getUsernameAndEmailAndPasswordByUrlToken(urlToken, this.client));
 
         if (resultInfosUser.length > 0) {

@@ -33,6 +33,10 @@ export module regexRequest {
     export function checkRegexPassword(password: string): boolean {
         return (/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&\.\-_])[A-Za-z\d@$!%*?&\.\-_]{8,}$/).test(password);
     }
+
+    export function checkRegexUUID(uuid : string) {
+        return (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/).test(uuid);
+    }
 }
 
 export default regexRequest;

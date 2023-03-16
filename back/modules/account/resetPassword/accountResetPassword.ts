@@ -48,6 +48,7 @@ export class AccountResetPassword {
     //sends an email containing a unique token to reset the password, effective for 10 minutes
     //temporary linking the token and email in the resetPassword queue
     public async mailResetPasswordCreateUrlToken(email: string, language: string, res: Response): Promise<void> {
+        //check if the email is syntactically correct
         if (!regexRequest.checkRegexEmail(email)) {
             res.json({status: -2});
             return;

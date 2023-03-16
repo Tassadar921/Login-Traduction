@@ -11,6 +11,7 @@ import AccountNotificationRequest from './accountNotificationRequest';
 import socketOptions from 'modules/common/socket/socketOptions';
 
 import ioServer from '../../common/socket/socket';
+import regexRequest from 'modules/common/regex/regexRequest';
 
 export class AccountNotification{
     private readonly client: Client;
@@ -20,6 +21,7 @@ export class AccountNotification{
     }
 
     public async initSocketData(socket : Socket, username : string, token : string) : Promise<void>{
+        //initialise the socket data after the connection
         socket.data.token = token;
         socket.data.username = username;
         console.log(username, 'is connected and his token is :',token);
@@ -27,43 +29,50 @@ export class AccountNotification{
     }
 
     public async synchronizeNotificationsWithSocket(socket : Socket) : Promise<void>{
-        const data = await AccountNotificationRequest.getNotifications(socket.data.token, this.client);
+        //get the notifications from the database for the user
+        const dataNotification = await AccountNotificationRequest.getNotifications(socket.data.token, this.client);
 
-        socket.emit('synchronizeNotifications', data);
+        socket.emit('synchronizeNotifications', dataNotification);
         return;
     }
 
     private async synchronizeNotificationsWithRemoteSocket(socket : RemoteSocket<socketOptions.ServerToClientEvents, socketOptions.SocketData>) : Promise<void>{
-        const data = await AccountNotificationRequest.getNotifications(socket.data.token, this.client);
+        //get the notifications from the database and send it to a specific user (remoteSocket)
+        const dataNotification = await AccountNotificationRequest.getNotifications(socket.data.token, this.client);
 
-        socket.emit('synchronizeNotifications', data);
+        socket.emit('synchronizeNotifications', dataNotification);
         return;
     }
 
     public async synchronizeNotificationsWithUsername(username : string) : Promise<void>{
+        //get the notifications from the database and send it to a specific user (username)
         const socketOfUsername = (await ioServer.io.fetchSockets()).find((socketTmp ) => socketTmp.data.username === username);
         if(socketOfUsername !== undefined) {
-            const data = await AccountNotificationRequest.getNotifications(socketOfUsername.data.token, this.client);
+            const dataNotification = await AccountNotificationRequest.getNotifications(socketOfUsername.data.token, this.client);
 
-            socketOfUsername.emit('synchronizeNotifications', data);    
+            socketOfUsername.emit('synchronizeNotifications', dataNotification);    
         }
         return;
     }
 
     public async notificationIsSeen(socket : Socket, id : string) : Promise<void>{
-        if(!this.checkRegexUUID(id)) {
+        //verify that the uuid is syntactically correct
+        if(!regexRequest.checkRegexUUID(id)) {
             return;
         }else {
-            const data = await AccountNotificationRequest.notificationIsSeen(id, this.client);
+            //set the notification to seen
+            await AccountNotificationRequest.notificationIsSeen(id, this.client);
             await this.synchronizeNotificationsWithSocket(socket);
             return;
         }
     }
 
     public async deleteNotification(socket : Socket, id : string) : Promise<void>{
-        if(!this.checkRegexUUID(id)) {
+        //verify that the uuid is syntactically correct
+        if(!regexRequest.checkRegexUUID(id)) {
             return;
         }else {
+            //delete the notification
             await AccountNotificationRequest.deleteNotification(id, this.client);
             await this.synchronizeNotificationsWithSocket(socket);
             return;
@@ -71,17 +80,19 @@ export class AccountNotification{
     }
 
     public async addNotifications(username : string, title : string, text : string) : Promise<void>{
+        //start by finding the socket if it exists else get undefined (if the user is not connected)
         const socketOfUsername = (await ioServer.io.fetchSockets()).find((socketTmp ) => socketTmp.data.username === username);
-        const date = new Date().toISOString()
+
+        //convert the date to ISO format
+        const date = new Date().toISOString();
+
+        //add the notification to the database
         await AccountNotificationRequest.addNotifications(username, title, text, date ,this.client);
 
+        //if the user is connected, synchronize the notifications with the socket
         if(socketOfUsername !== undefined) {
             await this.synchronizeNotificationsWithRemoteSocket(socketOfUsername);
         }
         return;
-    }
-
-    private checkRegexUUID(uuid : string) {
-        return (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/).test(uuid);
     }
 }
