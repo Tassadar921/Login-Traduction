@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {DevicePlatformService} from "../../services/device-platform.service";
+import {RequestService} from "../../services/request.service";
 
 @Component({
   selector: 'app-menu',
@@ -17,8 +18,13 @@ export class MenuComponent implements OnInit {
   ]
 
   constructor(
-    public devicePlatformService: DevicePlatformService
+    public devicePlatformService: DevicePlatformService,
+    public requestService: RequestService
   ) {}
 
   ngOnInit() {}
+
+  public async disconnect() {
+    await this.requestService.signOut();
+  }
 }

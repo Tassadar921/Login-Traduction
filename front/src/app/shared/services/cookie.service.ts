@@ -24,8 +24,6 @@ export class CookieService {
 
   //connects user by setting cookies session token and username
   public async connect(username: string, sessionToken: string) {
-    console.log(username);
-    console.log(sessionToken);
     await this.setCookie('username', username);
     await this.setCookie('sessionToken', sessionToken);
     this.username = username;

@@ -86,6 +86,12 @@ export class RequestService {
     ));
   }
 
+  public async signOut(username: string, sessionToken: string): Promise<Object> {
+    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/signOut',
+      {username, sessionToken}
+    ));
+  }
+
   /*
     {status : 0} no such token is allowed to this user
 		{status : 1} everything is fine
