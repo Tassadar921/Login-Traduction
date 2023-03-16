@@ -6,12 +6,14 @@
 //--------------------------------------------------------------------------------------
 
 import { ResetTables } from "./resetTables/resetTables";
+import {regexRequest} from "../common/regex/regexRequest";
 
 module boot {
     export async function start() {
         const resetTables = new ResetTables();
 
         await resetTables.startReset();
+        regexRequest.initRegexRequest();
     }
 
 }

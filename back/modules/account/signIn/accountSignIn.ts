@@ -31,7 +31,6 @@ export class AccountSignIn {
             res.json({status: 0});
             return;
         } else {
-            console.log(result);
             let username = result[0].username;
             let sessionToken = this.generateToken(this.sessionTokenLength);
             let result1 = await accountSignInRequest.getUsernameBySessionToken(sessionToken, this.client);
@@ -42,8 +41,6 @@ export class AccountSignIn {
             }
             await accountSignInRequest.updateUserToken(username, sessionToken, this.client);
             const result2 = await accountSignInRequest.getPermissionByUsername(username, this.client);
-
-            console.log('username : ', username);
 
             res.json({status: 1, sessionToken, username, permission: result2[0]?.permission});
             return;

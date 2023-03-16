@@ -6,8 +6,13 @@
 //--------------------------------------------------------------------------------------
 
 export module regexRequest {
-    const urlTokenLength = parseInt(process.env.URL_TOKEN_LENGTH!);
-    const sessionTokenLength = parseInt(process.env.SESSION_TOKEN_LENGTH!);
+    let urlTokenLength: number;
+    let sessionTokenLength: number;
+
+    export function initRegexRequest(){
+        sessionTokenLength = parseInt(process.env.SESSION_TOKEN_LENGTH!);
+        urlTokenLength = parseInt(process.env.URL_TOKEN_LENGTH!);
+    }
 
     //checks if the sessionToken
     export function checkRegexSessionToken(sessionToken: string): boolean {
