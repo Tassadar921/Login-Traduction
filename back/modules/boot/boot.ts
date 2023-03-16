@@ -13,7 +13,6 @@ module boot {
         const resetTables = new ResetTables();
 
         await resetTables.startReset();
-        regexRequest.initRegexRequest();
     }
 
 }

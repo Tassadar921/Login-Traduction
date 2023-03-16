@@ -6,22 +6,14 @@
 //--------------------------------------------------------------------------------------
 
 export module regexRequest {
-    let urlTokenLength: number;
-    let sessionTokenLength: number;
-
-    export function initRegexRequest(){
-        sessionTokenLength = parseInt(process.env.SESSION_TOKEN_LENGTH!);
-        urlTokenLength = parseInt(process.env.URL_TOKEN_LENGTH!);
-    }
-
     //checks if the sessionToken
-    export function checkRegexSessionToken(sessionToken: string): boolean {
+    export function checkRegexSessionToken(sessionToken: string, sessionTokenLength : number): boolean {
         const regex = new RegExp('^[A-Za-z0-9]{' + sessionTokenLength + '}$');
         return (regex).test(sessionToken);
     }
 
     //checks if the urlToken is valid
-    export function checkRegexUrlToken(urlToken: string): boolean {
+    export function checkRegexUrlToken(urlToken: string, urlTokenLength : number): boolean {
         const regex = new RegExp('/^[A-Za-z0-9]{' + urlTokenLength + '}$/');
 
         return (regex).test(urlToken);

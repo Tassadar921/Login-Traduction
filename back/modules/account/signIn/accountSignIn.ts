@@ -65,11 +65,7 @@ export class AccountSignIn {
 
         //checks if the token is valid for the user
         public async checkSession(username: string, sessionToken: string, res: Response): Promise<void> {
-            if (!regexRequest.checkRegexUsername(username) || !regexRequest.checkRegexSessionToken(sessionToken)) {
-                console.log(regexRequest.checkRegexUsername(username))
-                console.log(regexRequest.checkRegexSessionToken(sessionToken))
-                console.log(username);
-                console.log(sessionToken);
+            if (!regexRequest.checkRegexUsername(username) || !regexRequest.checkRegexSessionToken(sessionToken, this.sessionTokenLength)) {
                 res.json({status: 0});
                 return;
             }
