@@ -72,7 +72,7 @@ module accountRouting {
         });
 
         app.post('/checkSession', async function (req: Request, res: Response) {
-            await accountSignIn.checkSession(req.body.username, req.body.token, res);
+            await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res);
         });
 
         /*----------------------------------------ResetPassword----------------------------------------*/
