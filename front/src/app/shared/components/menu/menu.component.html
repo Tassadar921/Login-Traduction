@@ -2,6 +2,6 @@
                  *ngIf="devicePlatformService.currentPlatform==='small'">
 </app-mobile-menu>
 
-<app-default-menu [menuItems]="menuItems" [signOut]="signOut()"
+<app-default-menu [menuItems]="menuItems" [signOut]="signOut.bind(this)"
                   *ngIf="devicePlatformService.currentPlatform!=='small'">
 </app-default-menu>
