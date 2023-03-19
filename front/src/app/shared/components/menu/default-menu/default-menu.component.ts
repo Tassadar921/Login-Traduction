@@ -11,6 +11,7 @@ import {Router} from "@angular/router";
 export class DefaultMenuComponent implements AfterViewInit {
 
   @Input() menuItems: any[] = [];
+  @Input() public async signOut() {}
 
   constructor(
     public cookieService: CookieService,
@@ -39,8 +40,5 @@ export class DefaultMenuComponent implements AfterViewInit {
   //function that returns a random color
   public randomColor() {
     return '#'+Math.floor(Math.random()*16777215).toString(16);
-  }
-
-  @Input() public async signOut() {
   }
 }

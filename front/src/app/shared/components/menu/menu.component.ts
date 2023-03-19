@@ -26,13 +26,14 @@ export class MenuComponent implements OnInit {
 
   ngOnInit() {}
 
-  public async signOut() {
+  public async signOut(popover: boolean = false) {
     const rtrn = await this.requestService.signOut(
       await this.cookieService.getCookie('username'),
       await this.cookieService.getCookie('sessionToken')
     );
     if (Object(rtrn).status === 1) {
-      await this.cookieService.signOut();
+      console.log(popover);
+      await this.cookieService.signOut(popover);
     }
   }
 }
