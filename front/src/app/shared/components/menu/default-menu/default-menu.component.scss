@@ -1,45 +1,71 @@
+#signOut{
+  background-color: var(--ion-color-danger);
+}
+
 ion-row {
   border-bottom: 1px solid rgba(148, 148, 148, 0.5);
   height: 40px;
+}
 
-  .bold{
-    font-weight: bold;
+ion-popover {
+  ion-icon{
+    color: white;
   }
-
-  nav {
-    text-align: left;
-    margin: 20px auto;
-    transform: translateY(-50%);
-  }
-
-  #indicator {
-    position: absolute;
-    left: 5%;
-    bottom: -1vh;
-    width: 30px;
-    height: 3px;
-    border-radius: 5px;
-    transition: 0.4s ease left;
-  }
-
   ion-item {
-    width: 60px;
-    height: 40px;
-    ion-icon {
-      font-size: 30px;
-      margin-bottom: 10px;
+    color: white;
+    width: 100%;
+    --background: transparent;
+    p, ion-icon{
       -webkit-transition: color .7s ease;
     }
   }
-
-  #connectedIcon{
-    color: green;
-  }
-  #disconnectedIcon{
-    color: red;
-  }
-
-  #connectedIcon:hover, #disconnectedIcon:hover {
-    color: #fff;
+  ion-item:hover{
+    p, ion-icon{
+      color: #a8a5a5;
+    }
   }
 }
+
+.bold {
+  font-weight: bold;
+}
+
+nav {
+  text-align: left;
+  margin: 20px auto;
+  transform: translateY(-50%);
+}
+
+#indicator {
+  position: absolute;
+  left: 5%;
+  bottom: -1vh;
+  width: 30px;
+  height: 3px;
+  border-radius: 5px;
+  transition: 0.4s ease left;
+}
+
+ion-item {
+  width: 60px;
+  height: 40px;
+
+  ion-icon {
+    font-size: 30px;
+    margin-bottom: 10px;
+    -webkit-transition: color .7s ease;
+  }
+}
+
+#connectedIcon {
+  color: green;
+}
+
+#disconnectedIcon {
+  color: red;
+}
+
+#connectedIcon:hover, #disconnectedIcon:hover {
+  color: #fff;
+}
+

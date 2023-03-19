@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Input} from '@angular/core';
 import {CookieService} from "../../../services/cookie.service";
 import {DevicePlatformService} from "../../../services/device-platform.service";
 import {Router} from "@angular/router";
@@ -42,6 +42,5 @@ export class DefaultMenuComponent implements AfterViewInit {
   }
 
   @Input() public async signOut() {
-    console.log('ici')
   }
 }

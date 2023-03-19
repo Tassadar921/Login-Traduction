@@ -13,6 +13,13 @@
 //@import "~@ionic/angular/css/text-transformation.css";
 //@import "~@ionic/angular/css/flex-utils.css";
 
+@media (prefers-color-scheme: light) {
+  ion-grid{
+    background-color: var(--ion-color-dark);
+    color: white;
+  }
+}
+
 *{
   margin: 0;
   padding: 0;
