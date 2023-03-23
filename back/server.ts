@@ -17,7 +17,7 @@ dotenv.config();
 const app = express();
 
 app.use(bodyParser.json());
-app.use(cors({origin: 'http://localhost:8100'}));
+app.use(cors({origin: process.env.URL_FRONT}));
 app.use('/files', express.static('files'));
 
 if (app.get('env') === 'production') {
@@ -27,6 +27,18 @@ if (app.get('env') === 'production') {
 const server = http.createServer(app);
 
 ioServer.init(server)
+
+let runPy = new Promise(function(success) {
+
+    const { spawn } = require('child_process');
+    const py = spawn('python', ['./files/test.py']);
+
+    py.stdout.on('data', function(data: any) {
+        success(data.toString());
+    });
+});
+
+runPy.then(data => console.log(data));
 
 /*-----------------------------------------Boot start Method--------------------------------------------*/
 //boot.start() is a method that is called when the server is booting, 
