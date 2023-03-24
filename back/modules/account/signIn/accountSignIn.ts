@@ -52,14 +52,11 @@ export class AccountSignIn {
         let result: [{ username: string, email: string }] | any;
 
         result = await accountSignInRequest.getUserByTokenAndUsername(username, sessionToken, this.client);
-        console.log(result);
 
         if (!result.length) {
-            console.log('ici')
             res.json({status: 0});
             return;
         } else {
-            console.log('là')
             await accountSignInRequest.updateUserToken(username, 'none', this.client);
             res.json({status: 1});
             return;

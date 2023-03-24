@@ -68,8 +68,6 @@ module accountRouting {
         });
 
         app.post('/signOut', async function (req: Request, res: Response) {
-            console.log(req.body.username);
-            console.log(req.body.sessionToken);
             await accountSignIn.signOut(req.body.username, req.body.sessionToken, res);
         });
 
