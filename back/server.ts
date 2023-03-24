@@ -10,7 +10,6 @@ import boot from './modules/boot/boot';
 import accountRouting from './modules/account/accountRouting';
 import languagesRouting from './modules/languages/languagesRouting';
 import ioServer from './modules/common/socket/socket';
-import { initialize } from 'esbuild';
 
 dotenv.config();
 
@@ -28,17 +27,28 @@ const server = http.createServer(app);
 
 ioServer.init(server)
 
-let runPy = new Promise(function(success) {
 
-    const { spawn } = require('child_process');
-    const py = spawn('python', ['./files/test.py']);
+import {spawn} from "child_process";
 
-    py.stdout.on('data', function(data: any) {
-        success(data.toString());
-    });
+const py = spawn('python', ['files/compliment.py']);
+
+py.stdout.on('data', function(data){
+    console.log('data : ', data.toString());
 });
 
-runPy.then(data => console.log(data));
+py.stdout.on('output', (data) => {
+    console.log('output: ', data);
+});
+
+py.stdout.on('end', function(data: any){
+    console.log('end : ', data);
+});
+
+py.stdin.write('paul');
+py.stdin.end();
+
+
+
 
 /*-----------------------------------------Boot start Method--------------------------------------------*/
 //boot.start() is a method that is called when the server is booting, 
