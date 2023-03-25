@@ -34,6 +34,7 @@ module accountRouting {
         const accountSignUp = new AccountSignUp();
         const encryptRsa = new EncryptRsa();
         const {publicKey, privateKey} = encryptRsa.createPrivateAndPublicKeys();
+        console.log(publicKey);
 
         function decrypt(encryptedText: string) {
             return encryptRsa.decryptStringWithRsaPrivateKey({

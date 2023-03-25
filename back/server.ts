@@ -10,6 +10,7 @@ import boot from './modules/boot/boot';
 import accountRouting from './modules/account/accountRouting';
 import languagesRouting from './modules/languages/languagesRouting';
 import ioServer from './modules/common/socket/socket';
+import rsa from './modules/common/rsa/rsa';
 
 dotenv.config();
 
@@ -25,30 +26,8 @@ if (app.get('env') === 'production') {
 
 const server = http.createServer(app);
 
-ioServer.init(server)
-
-
-import {spawn} from "child_process";
-
-const py = spawn('python', ['files/compliment.py']);
-
-py.stdout.on('data', function(data){
-    console.log('data : ', data.toString());
-});
-
-py.stdout.on('output', (data) => {
-    console.log('output: ', data);
-});
-
-py.stdout.on('end', function(data: any){
-    console.log('end : ', data);
-});
-
-py.stdin.write('paul');
-py.stdin.end();
-
-
-
+ioServer.init(server);
+rsa.init();
 
 /*-----------------------------------------Boot start Method--------------------------------------------*/
 //boot.start() is a method that is called when the server is booting, 
