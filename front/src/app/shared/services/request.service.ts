@@ -92,6 +92,12 @@ export class RequestService {
     ));
   }
 
+  public async test(message: string): Promise<Object> {
+    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/test',
+      {message}
+    ));
+  }
+
   /*
     {status : 0} no such token is allowed to this user
 		{status : 1} everything is fine
