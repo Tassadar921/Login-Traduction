@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
     private requestService: RequestService
   ) {}
 
-  async ngOnInit() {
+  async ngOnInit()  {
     await this.languageService.init();
     await this.cryptoService.setRsaPublicKey();
     if(await this.cookieService.getCookie('sessionToken')) {
@@ -38,5 +38,8 @@ export class AppComponent implements OnInit {
     }else{
       await this.cookieService.signOut();
     }
+    console.log(await this.requestService.test(
+      this.cryptoService.rsaEncryptWithPublicKey('test')
+    ));
   }
 }

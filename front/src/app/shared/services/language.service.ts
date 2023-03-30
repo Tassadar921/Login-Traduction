@@ -21,18 +21,19 @@ export class LanguageService {
       await this.cookieService.setCookie('language', navigator.language.slice(0,2));
     }
     this.languagesList = await this.requestService.getLanguagesList();
-    //checking language exists
-    this.dictionary = await this.requestService.getTranslation(await this.cookieService.getCookie('language'));
+    await this.updateLanguage(await this.cookieService.getCookie('language'));
   }
 
   //updates language from languageID if it exists
   async updateLanguage(languageID: string) {
     for(const language of this.languagesList){
-      if(language.id == languageID){
+      if(language.id === languageID){
         await this.cookieService.setCookie('language', languageID);
         this.dictionary = await this.requestService.getTranslation(await this.cookieService.getCookie('language'));
         return;
       }
     }
+    await this.cookieService.setCookie('language', 'en');
+    this.dictionary = await this.requestService.getTranslation(await this.cookieService.getCookie('language'));
   }
 }

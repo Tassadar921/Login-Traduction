@@ -17,6 +17,7 @@ dotenv.config();
 const app = express();
 
 app.use(bodyParser.json());
+console.log(process.env.URL_FRONT);
 app.use(cors({origin: process.env.URL_FRONT}));
 app.use('/files', express.static('files'));
 
@@ -27,7 +28,6 @@ if (app.get('env') === 'production') {
 const server = http.createServer(app);
 
 ioServer.init(server);
-rsa.init();
 
 /*-----------------------------------------Boot start Method--------------------------------------------*/
 //boot.start() is a method that is called when the server is booting, 
@@ -36,6 +36,7 @@ rsa.init();
 boot.start().then(() => {
     languagesRouting.init(app);
     accountRouting.init(app);
+    rsa.init();
     
     if (server.listen(process.env.PORT || 8080)) {
         console.log('=========== SERVER STARTED FOR HTTP RQ ===========');

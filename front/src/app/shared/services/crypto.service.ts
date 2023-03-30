@@ -20,13 +20,16 @@ export class CryptoService {
 
   //setter of rsa public key from server
   public async setRsaPublicKey():Promise<void>{
-    this.publicKey = Object(await this.requestService.getPublicKey()).publicKey;
+    this.publicKey = Object(await this.requestService.getPublicKey()).publicKey + ')';
   }
 
   //encrypts value with rsa public key
   public rsaEncryptWithPublicKey(valueToEncrypt: string): string {
-    const rsa = forge.pki.publicKeyFromPem(this.publicKey);
-    return window.btoa(rsa.encrypt(valueToEncrypt, 'RSA-OAEP'));
+    console.log(typeof this.publicKey);
+    const publicRSAKey = forge.pki.publicKeyFromPem(
+      forge.util.encodeUtf8(this.publicKey)
+    );
+    return window.btoa(publicRSAKey.encrypt(valueToEncrypt, 'RSA-OAEP'));
   }
 
   //encrypts value with sha256
