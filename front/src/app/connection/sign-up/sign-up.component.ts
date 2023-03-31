@@ -48,15 +48,11 @@ export class SignUpComponent implements OnInit {
     this.mailError = false;
     this.output = '';
     let rtrn;
-    while (!rtrn || Object(rtrn).status === 3) {
-      await this.cryptoService.setRsaPublicKey();
       rtrn = await this.requestService.signUp(
         this.formControl.value.username,
         this.formControl.value.email,
-        this.cryptoService.rsaEncryptWithPublicKey(this.formControl.value.password),
-        this.cryptoService.getPublicKey()
+        this.formControl.value.password,
       );
-    }
     if (Object(rtrn).status === 1) {
       this.output = this.languageService.dictionary.data.components.signUp.checkYourMails;
     } else if (Object(rtrn).status === -1) {
@@ -73,12 +69,13 @@ export class SignUpComponent implements OnInit {
     } else if (Object(rtrn).status === -41) {
       this.output = this.languageService.dictionary.data.components.signUp.emailAlreadyExists;
     }
-    console.log(rtrn);
     this.waiting = false;
   }
 
   public async copyEmail(): Promise<void> {
     this.clipboard.copy(this.supportEmail);
-    await this.toastService.displayToast(this.languageService.dictionary.data.components.signUp.emailCopied, 'top');
+    await this.toastService.displayToast(
+      this.languageService.dictionary.data.components.signUp.emailCopied, 'bottom'
+    );
   }
 }

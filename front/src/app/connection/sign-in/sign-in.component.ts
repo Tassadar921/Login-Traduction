@@ -49,10 +49,9 @@ export class SignInComponent implements OnInit {
     if(Object(rtrn).status === 0){
       this.output = this.languageService.dictionary.data.components.signIn.wrongIdentifierOrPassword;
     }else{
-      console.log(rtrn);
       await this.cookieService.signIn(Object(rtrn).username, Object(rtrn).sessionToken);
       await this.toastService.displayToast(
-        this.languageService.dictionary.data.components.signIn.connected, 'top'
+        this.languageService.dictionary.data.components.signIn.connected, 'bottom'
       );
       await this.router.navigateByUrl('/home');
     }

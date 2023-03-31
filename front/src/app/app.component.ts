@@ -21,7 +21,6 @@ export class AppComponent implements OnInit {
 
   async ngOnInit()  {
     await this.languageService.init();
-    await this.cryptoService.setRsaPublicKey();
     if(await this.cookieService.getCookie('sessionToken')) {
       let rtrn = await this.requestService.checkSession(
         await this.cookieService.getCookie('username'),
@@ -38,8 +37,5 @@ export class AppComponent implements OnInit {
     }else{
       await this.cookieService.signOut();
     }
-    console.log(await this.requestService.test(
-      this.cryptoService.rsaEncryptWithPublicKey('test')
-    ));
   }
 }

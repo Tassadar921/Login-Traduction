@@ -6,7 +6,6 @@
 //--------------------------------------------------------------------------------------
 
 import {Express, Request, Response} from 'express';
-import EncryptRsa from 'encrypt-rsa';
 import * as socketIO from 'socket.io';
 
 import socketOptions from '../common/socket/socketOptions';
@@ -17,7 +16,6 @@ import {AccountNotification} from './notification/accountNotification';
 import {AccountSignIn} from './signIn/accountSignIn';
 import {AccountSignUp} from './signUp/accountSignUp';
 import ioServer from 'modules/common/socket/socket';
-import rsa from 'modules/common/rsa/rsa';
 
 module accountRouting {
     export function init(app: Express): void {
@@ -33,31 +31,11 @@ module accountRouting {
         const accountResetPassword = new AccountResetPassword();
         const accountSignIn = new AccountSignIn();
         const accountSignUp = new AccountSignUp();
-        const encryptRsa = new EncryptRsa();
-        const {publicKey, privateKey} = encryptRsa.createPrivateAndPublicKeys();
-        console.log(publicKey);
-
-        function decrypt(encryptedText: string) {
-            return encryptRsa.decryptStringWithRsaPrivateKey({
-                text: encryptedText,
-                privateKey
-            });
-        }
-
-        /*----------------------------------------Basic----------------------------------------*/
-
-        app.get('/getPublicKey', async function (req: Request, res: Response) {
-            await res.json({publicKey: rsa.getPublicKey()})
-        });
 
         /*----------------------------------------SignUp----------------------------------------*/
 
         app.post('/signUp', async function (req: Request, res: Response) {
-            if (req.body.publicKey !== publicKey) {
-                await res.json({status: -3});
-            } else {
-                await accountSignUp.createUserCreation(req.body.username, decrypt(req.body.password), req.body.email, req.body.language, res);
-            }
+            await accountSignUp.createUserCreation(req.body.username, req.body.password, req.body.email, req.body.language, res);
         });
         app.post('/confirmSignUp', async function (req: Request, res: Response) {
             await accountSignUp.createUser(req.body.urlToken, res);
@@ -83,11 +61,7 @@ module accountRouting {
             await accountResetPassword.mailResetPasswordCreateUrlToken(req.body.email, req.body.language, res);
         });
         app.post('/confirmResetPassword', async function (req: Request, res: Response) {
-            if (req.body.publicKey !== publicKey) {
-                await res.json({status: -1});
-            } else {
-                await accountResetPassword.resetPassword(req.body.urlToken, decrypt(req.body.password), res);
-            }
+            await accountResetPassword.resetPassword(req.body.urlToken, req.body.password, res);
         });
 
         /*----------------------------------------Friends----------------------------------------*/
@@ -100,8 +74,7 @@ module accountRouting {
 
 
         app.post('/test', async function (req: Request, res: Response) {
-
-            console.log(decrypt(req.body.message));
+            //code
             await res.json({status: 1});
         });
 

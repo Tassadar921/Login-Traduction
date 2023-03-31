@@ -54,6 +54,13 @@
         "newPassword": "Nouveau mot de passe",
         "confirmPassword": "Confirmer mot de passe",
         "send": "Envoyer"
+      },
+      "menu": {
+        "home": "Accueil",
+        "messages": "Messages",
+        "friends": "Amis",
+        "settings": "Paramètres",
+        "signOut": "Déconnexion"
       }
     },
     "services": {}

@@ -2,6 +2,7 @@ import {AfterViewInit, Component, Input} from '@angular/core';
 import {CookieService} from "../../../services/cookie.service";
 import {DevicePlatformService} from "../../../services/device-platform.service";
 import {Router} from "@angular/router";
+import {LanguageService} from "../../../services/language.service";
 
 @Component({
   selector: 'app-default-menu',
@@ -16,6 +17,7 @@ export class DefaultMenuComponent implements AfterViewInit {
   constructor(
     public cookieService: CookieService,
     public devicePlatformService: DevicePlatformService,
+    public languageService: LanguageService,
     public router: Router
   ) {}
 

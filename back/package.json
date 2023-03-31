@@ -11,8 +11,7 @@
     "copyFilesFolder:win32": "xcopy /E files build\\files\\",
     "copyFilesFolder:linux": "mkdir ./build/files/ -p && cp -a ./files/. ./build/files/",
     "build": "npm run copyFilesFolder && esbuild server.ts --platform=node --bundle --outdir=build/ --external:/files/*",
-    "start": "npm run build && node build/server.js",
-    "install": "npm i && pip install -r pyRequirements.txt"
+    "start": "npm run build && node build/server.js"
   },
   "author": "",
   "license": "ISC",

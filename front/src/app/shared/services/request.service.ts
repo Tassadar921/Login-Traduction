@@ -48,9 +48,9 @@ export class RequestService {
     {status : 0} wrong identifier or password
 		{status: 1, sessionToken, username, permission} success
 	*/
-  public async signUp(username: string, email: string, password: string, publicKey: string): Promise<Object> {
+  public async signUp(username: string, email: string, password: string): Promise<Object> {
     return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/signUp',
-      {username, password, email, language: await this.cookieService.getCookie('language'), publicKey},
+      {username, password, email, language: await this.cookieService.getCookie('language')},
     ));
   }
 
@@ -80,9 +80,9 @@ export class RequestService {
     {status : 0} no such token in db
 		{status : 1} success
   */
-  public async confirmResetPassword(urlToken: string, password: string, publicKey: string): Promise<Object> {
+  public async confirmResetPassword(urlToken: string, password: string): Promise<Object> {
     return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/confirmResetPassword',
-      {urlToken, password, publicKey}
+      {urlToken, password}
     ));
   }
 

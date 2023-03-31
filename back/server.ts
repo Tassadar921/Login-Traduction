@@ -10,7 +10,6 @@ import boot from './modules/boot/boot';
 import accountRouting from './modules/account/accountRouting';
 import languagesRouting from './modules/languages/languagesRouting';
 import ioServer from './modules/common/socket/socket';
-import rsa from './modules/common/rsa/rsa';
 
 dotenv.config();
 
@@ -36,7 +35,6 @@ ioServer.init(server);
 boot.start().then(() => {
     languagesRouting.init(app);
     accountRouting.init(app);
-    rsa.init();
     
     if (server.listen(process.env.PORT || 8080)) {
         console.log('=========== SERVER STARTED FOR HTTP RQ ===========');
