@@ -31,7 +31,13 @@ export class SignInComponent implements OnInit {
     private router: Router
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    document.addEventListener('keydown', async (event) => {
+      if(event.key === 'Enter' && this.identifier && this.password){
+        await this.signIn();
+      }
+    });
+  }
 
   public async signIn(): Promise<void> {
     // this.waiting = true;
@@ -43,14 +49,17 @@ export class SignInComponent implements OnInit {
     if(Object(rtrn).status === 0){
       this.output = this.languageService.dictionary.data.components.signIn.wrongIdentifierOrPassword;
     }else{
-      console.log(rtrn);
-      await this.cookieService.connect(Object(rtrn).username, Object(rtrn).sessionToken);
+      await this.cookieService.signIn(Object(rtrn).username, Object(rtrn).sessionToken);
       await this.toastService.displayToast(
-        this.languageService.dictionary.data.components.signIn.connected, 'top'
+        this.languageService.dictionary.data.components.signIn.connected, 'bottom'
       );
       await this.router.navigateByUrl('/home');
     }
     this.waiting = false;
     return;
+  }
+
+  public async keyDown(event: KeyboardEvent): Promise<void> {
+
   }
 }

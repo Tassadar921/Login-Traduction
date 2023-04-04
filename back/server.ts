@@ -10,14 +10,14 @@ import boot from './modules/boot/boot';
 import accountRouting from './modules/account/accountRouting';
 import languagesRouting from './modules/languages/languagesRouting';
 import ioServer from './modules/common/socket/socket';
-import { initialize } from 'esbuild';
 
 dotenv.config();
 
 const app = express();
 
 app.use(bodyParser.json());
-app.use(cors({origin: 'http://localhost:8100'}));
+console.log(process.env.URL_FRONT);
+app.use(cors({origin: process.env.URL_FRONT}));
 app.use('/files', express.static('files'));
 
 if (app.get('env') === 'production') {
@@ -26,7 +26,7 @@ if (app.get('env') === 'production') {
 
 const server = http.createServer(app);
 
-ioServer.init(server)
+ioServer.init(server);
 
 /*-----------------------------------------Boot start Method--------------------------------------------*/
 //boot.start() is a method that is called when the server is booting, 

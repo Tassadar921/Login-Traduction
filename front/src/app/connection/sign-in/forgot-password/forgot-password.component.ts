@@ -30,7 +30,13 @@ export class ForgotPasswordComponent implements OnInit {
     this.formControl = this.formValidatorsService.getForgotPasswordValidator();
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    document.addEventListener('keydown', async (event) => {
+      if(event.key === 'Enter' && this.formControl.valid){
+        await this.resetPassword();
+      }
+    });
+  }
 
   public async resetPassword() {
     this.waiting = true;

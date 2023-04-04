@@ -2,9 +2,17 @@ h1.app-name {
   margin-left: 5%;
 }
 
+*{
+  border: transparent;
+}
+
 .sidenav-container {
   flex: 1;
   height:100%;
+  ion-item{
+    --background: transparent;
+    --border: solid 1px transparent;
+  }
 }
 
 mat-sidenav{

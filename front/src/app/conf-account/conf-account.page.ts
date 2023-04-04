@@ -25,7 +25,7 @@ export class ConfAccountPage implements OnInit {
     this.activatedRoute.queryParams.subscribe(async params => {
       const rtrn = await this.requestService.confirmSignUp(Object(params).urlToken);
       if(Object(rtrn).status) {
-        await this.cookieService.connect(Object(rtrn).username, Object(rtrn).token);
+        await this.cookieService.signIn(Object(rtrn).username, Object(rtrn).token);
         await this.toastService.displayToast(
           this.languageService.dictionary.data?.components.confAccount.accountCreated, 'top', 5000
         );

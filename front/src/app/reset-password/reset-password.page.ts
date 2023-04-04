@@ -41,26 +41,29 @@ export class ResetPasswordPage implements OnInit {
     this.activatedRoute.queryParams.subscribe(async params => {
       this.urlToken = Object(params).urlToken;
     });
+    document.addEventListener('keydown', async (event) => {
+      if (event.key === 'Enter' && this.formControl.valid) {
+        await this.confirmResetPassword();
+      }
+    });
   }
 
   public async confirmResetPassword() {
     this.waiting = true;
     this.output = '';
-      let rtrn;
-      while (!rtrn || Object(rtrn).status === -1) {
-        await this.cryptoService.setRsaPublicKey();
-        rtrn = await this.requestService.confirmResetPassword(
-          this.urlToken,
-          this.cryptoService.rsaEncryptWithPublicKey(this.formControl.value.password),
-          this.cryptoService.getPublicKey()
-        );
-      }
-      if (Object(rtrn).status === 1) {
-        await this.toastService.displayToast(this.languageService.dictionary.data?.components.resetPassword.passwordResetSuccess, 'top');
-        await this.router.navigateByUrl('/connection');
-      } else if (Object(rtrn).status === 0) {
-        this.output = this.languageService.dictionary.data?.components.resetPassword.tokenError;
-      }
-      this.waiting = false;
+    let rtrn;
+    rtrn = await this.requestService.confirmResetPassword(
+      this.urlToken,
+      this.formControl.value.password
+    );
+    if (Object(rtrn).status === 1) {
+      await this.toastService.displayToast(
+        this.languageService.dictionary.data?.components.resetPassword.passwordResetSuccess, 'bottom'
+      );
+      await this.router.navigateByUrl('/connection');
+    } else if (Object(rtrn).status === 0) {
+      this.output = this.languageService.dictionary.data?.components.resetPassword.tokenError;
+    }
+    this.waiting = false;
   }
 }

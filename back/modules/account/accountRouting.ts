@@ -5,23 +5,22 @@
 //1.0.0 - 15/03/2023 - Iémélian RAMBEAU - Creation of the first version
 //--------------------------------------------------------------------------------------
 
-import {Express, Request, Response} from "express";
-import EncryptRsa from "encrypt-rsa";
-import * as socketIO from "socket.io";
+import {Express, Request, Response} from 'express';
+import * as socketIO from 'socket.io';
 
-import socketOptions from "../common/socket/socketOptions";
+import socketOptions from '../common/socket/socketOptions';
 
-import { AccountResetPassword } from "./resetPassword/accountResetPassword";
-import { AccountFriends } from "./friends/accountFriends";
-import { AccountNotification } from "./notification/accountNotification";
-import { AccountSignIn } from "./signIn/accountSignIn";
-import { AccountSignUp } from "./signUp/accountSignUp";
-import ioServer from "modules/common/socket/socket";
+import {AccountResetPassword} from './resetPassword/accountResetPassword';
+import {AccountFriends} from './friends/accountFriends';
+import {AccountNotification} from './notification/accountNotification';
+import {AccountSignIn} from './signIn/accountSignIn';
+import {AccountSignUp} from './signUp/accountSignUp';
+import ioServer from 'modules/common/socket/socket';
 
 module accountRouting {
     export function init(app: Express): void {
 
-        
+
         initHttp(app);
         initSocket(ioServer.io);
 
@@ -32,34 +31,15 @@ module accountRouting {
         const accountResetPassword = new AccountResetPassword();
         const accountSignIn = new AccountSignIn();
         const accountSignUp = new AccountSignUp();
-        const encryptRsa = new EncryptRsa();
-        const {publicKey, privateKey} = encryptRsa.createPrivateAndPublicKeys();
-
-        function decrypt(encryptedText: string) {
-            return encryptRsa.decryptStringWithRsaPrivateKey({
-                text: encryptedText,
-                privateKey
-            });
-        }
-
-        /*----------------------------------------Basic----------------------------------------*/
-        
-        app.get('/getPublicKey', async function (req: Request, res: Response) {
-            await res.json({publicKey});
-        });
 
         /*----------------------------------------SignUp----------------------------------------*/
 
         app.post('/signUp', async function (req: Request, res: Response) {
-            if(req.body.publicKey!==publicKey) {
-                await res.json({status: -3});
-            } else {
-                await accountSignUp.createUserCreation(req.body.username, decrypt(req.body.password), req.body.email, req.body.language, res);
-            }
+            await accountSignUp.createUserCreation(req.body.username, req.body.password, req.body.email, req.body.language, res);
         });
         app.post('/confirmSignUp', async function (req: Request, res: Response) {
             await accountSignUp.createUser(req.body.urlToken, res);
-        });        
+        });
 
         /*----------------------------------------Login----------------------------------------*/
 
@@ -68,7 +48,7 @@ module accountRouting {
         });
 
         app.post('/signOut', async function (req: Request, res: Response) {
-            await accountSignIn.signOut(req.body.username, req.body.token, res);
+            await accountSignIn.signOut(req.body.username, req.body.sessionToken, res);
         });
 
         app.post('/checkSession', async function (req: Request, res: Response) {
@@ -81,27 +61,27 @@ module accountRouting {
             await accountResetPassword.mailResetPasswordCreateUrlToken(req.body.email, req.body.language, res);
         });
         app.post('/confirmResetPassword', async function (req: Request, res: Response) {
-            if(req.body.publicKey!==publicKey) {
-                await res.json({status: -1});
-            } else {
-                await accountResetPassword.resetPassword(req.body.urlToken, decrypt(req.body.password), res);
-            }
+            await accountResetPassword.resetPassword(req.body.urlToken, req.body.password, res);
         });
 
         /*----------------------------------------Friends----------------------------------------*/
 
         app.post('/addFriend', async function (req: Request, res: Response) {
-            
+
         });
 
-        /*----------------------------------------Notification----------------------------------------*/
+        /*--------------------------------------Notification-------------------------------------*/
 
 
+        app.post('/test', async function (req: Request, res: Response) {
+            //code
+            await res.json({status: 1});
+        });
 
         return;
     }
 
-    function initSocket(io : socketIO.Server<socketOptions.ClientToServerEvents, socketOptions.ServerToClientEvents, socketOptions.InterServerEvents, socketOptions.SocketData>) : void {
+    function initSocket(io: socketIO.Server<socketOptions.ClientToServerEvents, socketOptions.ServerToClientEvents, socketOptions.InterServerEvents, socketOptions.SocketData>): void {
         const accountNotification = new AccountNotification();
         const accountFriends = new AccountFriends(accountNotification);
 
@@ -109,7 +89,7 @@ module accountRouting {
             console.log('-----new client-----')
             socket.emit('initSocketData');
 
-            socket.on('initSocketData', async (username : string, token : string) => {
+            socket.on('initSocketData', async (username: string, token: string) => {
                 await accountNotification.initSocketData(socket, username, token);
             });
 

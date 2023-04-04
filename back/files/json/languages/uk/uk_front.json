@@ -54,6 +54,13 @@
         "newPassword": "New password",
         "confirmPassword": "Confirm new password",
         "send": "Send"
+      },
+      "menu": {
+        "home": "Home",
+        "messages": "Messages",
+        "friends": "Friends",
+        "settings": "Settings",
+        "signOut": "Sign out"
       }
     }
   },

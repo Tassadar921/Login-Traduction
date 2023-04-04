@@ -1,5 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {DevicePlatformService} from "../../services/device-platform.service";
+import {RequestService} from "../../services/request.service";
+import {CookieService} from '../../services/cookie.service';
+import {LanguageService} from "../../services/language.service";
 
 @Component({
   selector: 'app-menu',
@@ -10,15 +13,31 @@ export class MenuComponent implements OnInit {
 
   //menu items dynamically generated from this array
   //put the name from here : https://ionic.io/ionicons
-  public menuItems = [
-    {name: 'Home', icon: 'home', link: '/home'},
-    {name: 'Messages', icon: 'send', link: '/messages'},
-    {name: 'Friends', icon: 'people', link: '/friends'}
-  ]
+  public menuItems: Array<Object>;
 
   constructor(
-    public devicePlatformService: DevicePlatformService
-  ) {}
+    public devicePlatformService: DevicePlatformService,
+    public requestService: RequestService,
+    private cookieService: CookieService,
+    private languageService: LanguageService
+  ) {
+    this.menuItems = [
+      {name: this.languageService.dictionary.data?.components.menu.home, icon: 'home', link: '/home'},
+      {name: this.languageService.dictionary.data?.components.menu.messages, icon: 'send', link: '/messages'},
+      {name: this.languageService.dictionary.data?.components.menu.friends, icon: 'people', link: '/friends'}
+    ]
+  }
 
   ngOnInit() {}
+
+  public async signOut(popover: boolean = false) {
+    const rtrn = await this.requestService.signOut(
+      await this.cookieService.getCookie('username'),
+      await this.cookieService.getCookie('sessionToken')
+    );
+    if (Object(rtrn).status === 1) {
+      console.log(popover);
+      await this.cookieService.signOut(popover);
+    }
+  }
 }

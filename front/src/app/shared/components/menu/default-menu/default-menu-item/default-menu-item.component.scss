@@ -1,10 +1,15 @@
 ion-button{
-  text-align:center;
-  margin-left: 5vw;
+  //margin-left: 5vw;
   display:inline-block;
   color: #a09797;
-  -webkit-transition: color 1s ease;
-  width:110px;
+  -webkit-transition: color 0.4s ease;
+  flex: auto;
+  padding: 0 50px;
+}
+
+ion-button:hover{
+  color: #fff;
+  cursor: pointer;
 }
 
 p:hover{
