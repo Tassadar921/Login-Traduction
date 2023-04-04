@@ -131,7 +131,7 @@ module accountRouting {
             /*----------------------------------------Chat----------------------------------------*/
 
             socket.on('getChat', async () => {
-                await accountFriends.getMessage(socket);                
+                await accountFriends.getMessage(socket);
             });
             socket.on('sendMessage', async (username, message, date) => {
                 await accountFriends.sendMessage(socket, username, message, date);

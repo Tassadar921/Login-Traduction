@@ -27,13 +27,16 @@ export class AccountFriends{
     public async sendMessage(socket : Socket, username : string, message : string, date : Date) {
         //start by finding the socket if it exists else get undefined (if the user is not connected)
         const socketOfUsername = (await ioServer.io.fetchSockets()).find((socketTmp) => socketTmp.data.username === username);
-        this.accountNotification.addNotifications(username, 'Nouveau message', message);
-        
+
         //convert the date to ISO format
         const dateISO = new Date(date).toISOString()
 
         //add the message to the database
-        accountFriendsRequest.newMessage(socket.data.username, username, message, dateISO, this.client);
+        let dataMessage = await accountFriendsRequest.newMessage(socket.data.username, username, message, dateISO, this.client);
+
+        if(dataMessage.length != undefined) {
+            this.accountNotification.addNotificationsMessage(username, socket.data.username, dataMessage[0].id);
+        }
 
         //if the socket exists send the message to the user
         if(socketOfUsername !== undefined) {

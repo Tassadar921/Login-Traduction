@@ -29,7 +29,7 @@ module socketOptions {
     
     export interface SocketData {
         username: string;
-        token: string;
+        sessionToken: string;
     }    
 }
 

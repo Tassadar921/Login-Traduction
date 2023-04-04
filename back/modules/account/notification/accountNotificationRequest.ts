@@ -13,10 +13,18 @@ module AccountNotificationRequest {
             const result = client.query(`
                 SELECT Notification {
                     id,
-                    date,
                     title,
+                    component,
+                    date,
                     seen,
-                    text,
+                    objectUser : {
+                        id,
+                        username,
+                    },
+                    objectMessage : {
+                        id,
+                        text,
+                    },
                 }
                 FILTER User.token = "${token}"
             `);
@@ -45,20 +53,47 @@ module AccountNotificationRequest {
         });
     }
 
-    export async function addNotifications(username : string, title : string, text : string, date : string, client : Client) {
+    export async function addNotificationsMessage(username : string, component : string, date : string, idMessage : string, client : Client) {
         return new Promise<any[]>((resolve) => {
             const result = client.query(`
                 UPDATE User 
                 filter .username = "${username}"
                 SET {
-                    notifications += (INSERT Notification { 
-                        title := "${title}",
-                        text := "${text}",
+                    notifications += (INSERT Notification {
+                        component := "${component}",
                         date := <datetime>"${date}",
+                        objectMessage := (SELECT Message FILTER .id = <uuid>"${idMessage}"),
                     })
                 }
             `);
 
+            resolve(result);
+        });
+    }
+
+    export async function getIdOfNotificationOrderByDate(username : string, client : Client) {
+        return new Promise<any[]>((resolve) => {
+            const result = client.query(`
+                SELECT User {
+                    notifications: {
+                        id
+                    } ORDER BY .date DESC
+                }
+                FILTER .username = "${username}"
+            `);
+            resolve(result);
+        });
+    }
+
+    export async function addObjectUserToNotification(id : string, usernameSender : string, client : Client) {
+        return new Promise<any[]>((resolve) => {
+            const result = client.query(`
+                UPDATE Notification
+                FILTER .id = <uuid>"${id}"
+                SET {
+                    objectUser := (SELECT User FILTER User.username = "${usernameSender}")
+                }
+            `);
             resolve(result);
         });
     }

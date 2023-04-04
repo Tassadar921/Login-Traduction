@@ -31,10 +31,15 @@ module default {
     }
 
     type Notification {
-        required property title -> str;
-        required property text -> str;
+        required property component -> str;
+        link objectUser -> User {
+            on target delete delete source;
+        };
+        link objectMessage -> Message {
+            on target delete delete source;
+        };
         required property date -> datetime;
-        required property seen -> bool { 
+        required property seen -> bool {
             default := false 
         };
     }

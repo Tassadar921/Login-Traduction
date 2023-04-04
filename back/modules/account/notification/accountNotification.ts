@@ -30,7 +30,7 @@ export class AccountNotification{
 
     public async synchronizeNotificationsWithSocket(socket : Socket) : Promise<void>{
         //get the notifications from the database for the user
-        const dataNotification = await AccountNotificationRequest.getNotifications(socket.data.token, this.client);
+        const dataNotification = await AccountNotificationRequest.getNotifications(socket.data.sessionToken, this.client);
 
         socket.emit('synchronizeNotifications', dataNotification);
         return;
@@ -38,7 +38,7 @@ export class AccountNotification{
 
     private async synchronizeNotificationsWithRemoteSocket(socket : RemoteSocket<socketOptions.ServerToClientEvents, socketOptions.SocketData>) : Promise<void>{
         //get the notifications from the database and send it to a specific user (remoteSocket)
-        const dataNotification = await AccountNotificationRequest.getNotifications(socket.data.token, this.client);
+        const dataNotification = await AccountNotificationRequest.getNotifications(socket.data.sessionToken, this.client);
 
         socket.emit('synchronizeNotifications', dataNotification);
         return;
@@ -79,7 +79,7 @@ export class AccountNotification{
         }
     }
 
-    public async addNotifications(username : string, title : string, text : string) : Promise<void>{
+    public async addNotificationsMessage(username : string, usernameSender : string, idMessage : string) : Promise<void>{
         //start by finding the socket if it exists else get undefined (if the user is not connected)
         const socketOfUsername = (await ioServer.io.fetchSockets()).find((socketTmp ) => socketTmp.data.username === username);
 
@@ -87,7 +87,11 @@ export class AccountNotification{
         const date = new Date().toISOString();
 
         //add the notification to the database
-        await AccountNotificationRequest.addNotifications(username, title, text, date ,this.client);
+        await AccountNotificationRequest.addNotificationsMessage(username, "message", date, idMessage ,this.client);
+
+        let dataNotification = await AccountNotificationRequest.getIdOfNotificationOrderByDate(username, this.client);
+
+        await AccountNotificationRequest.addObjectUserToNotification(dataNotification[0].id, usernameSender, this.client);
 
         //if the user is connected, synchronize the notifications with the socket
         if(socketOfUsername !== undefined) {
