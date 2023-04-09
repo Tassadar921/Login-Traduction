@@ -13,22 +13,23 @@ export class MenuComponent implements OnInit {
 
   //menu items dynamically generated from this array
   //put the name from here : https://ionic.io/ionicons
-  public menuItems: Array<Object>;
+  public menuItems: Array<Object> = [];
 
   constructor(
     public devicePlatformService: DevicePlatformService,
     public requestService: RequestService,
     private cookieService: CookieService,
     private languageService: LanguageService
-  ) {
+  ) {}
+
+  async ngOnInit() {
+    await this.languageService.init();
     this.menuItems = [
       {name: this.languageService.dictionary.data?.components.menu.home, icon: 'home', link: '/home'},
       {name: this.languageService.dictionary.data?.components.menu.messages, icon: 'send', link: '/messages'},
       {name: this.languageService.dictionary.data?.components.menu.friends, icon: 'people', link: '/friends'}
     ]
   }
-
-  ngOnInit() {}
 
   public async signOut(popover: boolean = false) {
     const rtrn = await this.requestService.signOut(

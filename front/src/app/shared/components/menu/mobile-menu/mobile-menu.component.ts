@@ -2,6 +2,7 @@ import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {DevicePlatformService} from '../../../services/device-platform.service';
 import {CookieService} from '../../../services/cookie.service';
 import {MatSidenav} from '@angular/material/sidenav';
+import {LanguageService} from "../../../services/language.service";
 
 @Component({
   selector: 'app-mobile-menu',
@@ -16,7 +17,8 @@ export class MobileMenuComponent implements OnInit {
 
   constructor(
     public devicePlatformService: DevicePlatformService,
-    public cookieService: CookieService
+    public cookieService: CookieService,
+    public languageService: LanguageService,
   ) {}
 
   ngOnInit() {}
@@ -26,7 +28,5 @@ export class MobileMenuComponent implements OnInit {
     await this.sidenav.toggle();
   }
 
-  @Input() public async signOut() {
-    console.log('là')
-  }
+  @Input() public async signOut() {}
 }

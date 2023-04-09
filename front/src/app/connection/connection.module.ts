@@ -14,6 +14,7 @@ import {MoonBackgroundModule} from '../shared/components/moon-background/moon-ba
 import {ForgotPasswordComponent} from './sign-in/forgot-password/forgot-password.component';
 import {NomenclatureModule} from "../shared/components/nomenclature/nomenclature.module";
 import {ModalCloseButtonModule} from '../shared/components/modal-close-button/modal-close-button.module';
+import {IonFabLanguageModule} from "../shared/components/ion-fab-language/ion-fab-language.module";
 
 @NgModule({
   imports: [
@@ -25,7 +26,8 @@ import {ModalCloseButtonModule} from '../shared/components/modal-close-button/mo
     MoonBackgroundModule,
     ReactiveFormsModule,
     ModalCloseButtonModule,
-    NomenclatureModule
+    NomenclatureModule,
+    IonFabLanguageModule
   ],
   declarations: [ConnectionPage, SignInComponent, SignUpComponent, ForgotPasswordComponent]
 })

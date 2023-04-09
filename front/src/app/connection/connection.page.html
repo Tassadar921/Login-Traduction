@@ -2,11 +2,10 @@
 
   <app-moon-background></app-moon-background>
 
-  <ion-fab horizontal="end" [vertical]="devicePlatformService.currentPlatform==='small'?'top':'bottom'">
-    <ion-fab-button color="warning" id="language" size="large">
-      <ion-icon name="language" color="light"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
+<app-ion-fab-language
+  [vertical]="devicePlatformService.currentPlatform==='small'?'top':'bottom'"
+  horizontal="end">
+</app-ion-fab-language>
 
   <ion-item [id]="devicePlatformService.getDeviceSegmentId()"
             [color]="devicePlatformService.getDeviceTheme()==='light'?'dark':'light'">
@@ -31,12 +30,3 @@
   <app-sign-up [class]="devicePlatformService.getDeviceContentClass()" [@signIn]="signUpAnimationState"
                [hidden]="blockDisplaySignUpOnLoading"></app-sign-up>
 </ion-content>
-
-<ion-modal trigger="language">
-  <ng-template>
-    <ion-content [color]="devicePlatformService.getDeviceTheme()==='dark'?'':'dark'">
-      <app-language></app-language>
-    </ion-content>
-    <app-modal-close-button></app-modal-close-button>
-  </ng-template>
-</ion-modal>

@@ -1,6 +1,6 @@
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav #menu>
-    <ion-row style="margin-bottom:20px;">
+    <ion-row style="margin-bottom:20px; margin-top: 10px">
       <ion-col size="1">
         <ion-button fill="clear" (click)="toggleSidenav()">
           <ion-icon name="close" slot="icon-only"></ion-icon>
@@ -10,22 +10,31 @@
         <p id="username">{{cookieService.getUsername()}}</p>
       </ion-col>
       <ion-col size="1">
-        <ion-item button="true" href="/account-settings">
-              <ion-icon name="settings"></ion-icon>
-        </ion-item>
+        <ion-button fill="clear" href="/account-settings">
+          <ion-icon name="settings" slot="icon-only"></ion-icon>
+        </ion-button>
+      </ion-col>
+      <ion-col size="1">
+        <app-ion-fab-language horizontal="end" size="small">
+        </app-ion-fab-language>
       </ion-col>
     </ion-row>
 
     <app-mobile-menu-item *ngFor="let menuItem of menuItems" [menuItem]="menuItem"></app-mobile-menu-item>
 
+    <ion-fab>
+      <ion-button fill="clear" id="language">
+        <ion-icon name="" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-fab>
+
     <ion-item class="menuBlock" id="menuFooter" button="true" color="danger" (click)="signOut()">
       <ion-row>
-        <ion-col size="1"></ion-col>
-        <ion-col>
-          <p>Sign Out</p>
+        <ion-col size="2" push="5">
+          <p>{{languageService.dictionary.data?.components.menu.signOut}}</p>
         </ion-col>
-        <ion-col size="1">
-          <ion-icon name="log-out"></ion-icon>
+        <ion-col size="1" push="5">
+          <ion-icon name="log-out" size="small"></ion-icon>
         </ion-col>
       </ion-row>
     </ion-item>

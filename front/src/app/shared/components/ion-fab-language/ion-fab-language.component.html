@@ -1,0 +1,14 @@
+<ion-fab [horizontal]="horizontal" [vertical]="vertical">
+  <ion-fab-button color="warning" id="language" [size]="size">
+    <ion-icon name="language" color="light"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
+
+<ion-modal trigger="language">
+  <ng-template>
+    <ion-content [color]="devicePlatformService.getDeviceTheme()==='dark'?'':'dark'">
+      <app-language></app-language>
+    </ion-content>
+    <app-modal-close-button></app-modal-close-button>
+  </ng-template>
+</ion-modal>

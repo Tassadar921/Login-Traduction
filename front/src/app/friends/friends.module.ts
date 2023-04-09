@@ -8,6 +8,7 @@ import { FriendsPageRoutingModule } from './friends-routing.module';
 
 import { FriendsPage } from './friends.page';
 import {MenuModule} from '../shared/components/menu/menu.module';
+import {SideBarComponent} from "./side-bar/side-bar.component";
 
 @NgModule({
     imports: [
@@ -17,6 +18,6 @@ import {MenuModule} from '../shared/components/menu/menu.module';
         FriendsPageRoutingModule,
         MenuModule
     ],
-  declarations: [FriendsPage]
+    declarations: [FriendsPage, SideBarComponent]
 })
 export class FriendsPageModule {}
