@@ -11,6 +11,7 @@ export class IonFabLanguageComponent implements OnInit {
   @Input() vertical: string = '';
   @Input() horizontal: string = '';
   @Input() size: string = 'large';
+  @Input() marginBottom: string = '0'
 
   constructor(
     public devicePlatformService: DevicePlatformService,

@@ -14,26 +14,17 @@
           <ion-icon name="settings" slot="icon-only"></ion-icon>
         </ion-button>
       </ion-col>
-      <ion-col size="1">
-        <app-ion-fab-language horizontal="end" size="small">
-        </app-ion-fab-language>
-      </ion-col>
     </ion-row>
 
     <app-mobile-menu-item *ngFor="let menuItem of menuItems" [menuItem]="menuItem"></app-mobile-menu-item>
 
-    <ion-fab>
-      <ion-button fill="clear" id="language">
-        <ion-icon name="" slot="icon-only"></ion-icon>
-      </ion-button>
-    </ion-fab>
+    <app-ion-fab-language horizontal="end" vertical="bottom" size="small" marginBottom="50">
+    </app-ion-fab-language>
 
     <ion-item class="menuBlock" id="menuFooter" button="true" color="danger" (click)="signOut()">
       <ion-row>
-        <ion-col size="2" push="5">
-          <p>{{languageService.dictionary.data?.components.menu.signOut}}</p>
-        </ion-col>
-        <ion-col size="1" push="5">
+        <ion-col>
+          <p id="signOut">{{languageService.dictionary.data?.components.menu.signOut}}</p>
           <ion-icon name="log-out" size="small"></ion-icon>
         </ion-col>
       </ion-row>
