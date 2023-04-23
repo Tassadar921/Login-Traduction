@@ -20,15 +20,28 @@ export class MenuComponent implements OnInit {
     public requestService: RequestService,
     private cookieService: CookieService,
     private languageService: LanguageService
-  ) {}
+  ) {
+  }
 
   async ngOnInit() {
+    this.languageService.dictionaryChanged.subscribe(() => {
+      this.menuItems = [
+        {
+          name: this.languageService.dictionary.data?.components.menu.home,
+          icon: 'home',
+          link: '/home'
+        }, {
+          name: this.languageService.dictionary.data?.components.menu.messages,
+          icon: 'send',
+          link: '/messages'
+        }, {
+          name: this.languageService.dictionary.data?.components.menu.friends,
+          icon: 'people',
+          link: '/friends'
+        }
+      ]
+    });
     await this.languageService.init();
-    this.menuItems = [
-      {name: this.languageService.dictionary.data?.components.menu.home, icon: 'home', link: '/home'},
-      {name: this.languageService.dictionary.data?.components.menu.messages, icon: 'send', link: '/messages'},
-      {name: this.languageService.dictionary.data?.components.menu.friends, icon: 'people', link: '/friends'}
-    ]
   }
 
   public async signOut(popover: boolean = false) {

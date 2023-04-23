@@ -12,7 +12,7 @@ import {LanguageService} from "../../../services/language.service";
 export class DefaultMenuComponent implements AfterViewInit {
 
   @Input() menuItems: any[] = [];
-  @Input() public async signOut() {}
+  @Input() public async signOut() {};
 
   constructor(
     public cookieService: CookieService,
@@ -27,7 +27,7 @@ export class DefaultMenuComponent implements AfterViewInit {
       menuItemElement!.addEventListener('pointerenter', () => {
         let left = 0;
         for(let i = 0; i<this.menuItems.indexOf(menuItem); i++) {
-            left+=document.getElementById('menuItem'+i)!.offsetWidth;
+          left+=document.getElementById('menuItem'+i)!.offsetWidth;
         }
         left+= menuItemElement!.offsetWidth/2
           - document.getElementById('indicator')!.offsetWidth/2;
@@ -35,7 +35,7 @@ export class DefaultMenuComponent implements AfterViewInit {
           left+'px';
         document.getElementById('indicator')!.style.background =
           'linear-gradient(130deg, '+this.randomColor()+', '+this.randomColor()+')';
-        });
+      });
     }
   }
 
