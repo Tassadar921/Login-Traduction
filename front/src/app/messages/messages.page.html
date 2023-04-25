@@ -1,1 +1,35 @@
 <app-menu></app-menu>
+
+<ion-grid>
+  <ion-row style="height:100%;">
+    <ion-col size="3" id="sideBar">
+      <app-side-bar></app-side-bar>
+    </ion-col>
+    <ion-col>
+      <ion-button size="large" shape="round" color="success" id="add">
+        {{languageService.dictionary.data?.components.friends.add}}
+      </ion-button>
+      <ion-button size="large" shape="round" color="danger" id="blocked">
+        {{languageService.dictionary.data?.components.friends.blocked}}
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+
+<ion-modal trigger="blocked">
+  <ng-template>
+    <ion-content [color]="devicePlatformService.getDeviceTheme()==='dark'?'':'dark'">
+      <app-blocked></app-blocked>
+    </ion-content>
+    <app-modal-close-button></app-modal-close-button>
+  </ng-template>
+</ion-modal>
+
+<ion-modal trigger="add">
+  <ng-template>
+    <ion-content [color]="devicePlatformService.getDeviceTheme()==='dark'?'':'dark'">
+      <app-add></app-add>
+    </ion-content>
+    <app-modal-close-button></app-modal-close-button>
+  </ng-template>
+</ion-modal>

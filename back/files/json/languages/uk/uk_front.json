@@ -63,7 +63,9 @@
         "signOut": "Sign out"
       },
       "friends": {
-        "friends": "Friends"
+        "friends": "Friends",
+        "add": "Add",
+        "blocked": "Blocked"
       }
     },
     "services": {}

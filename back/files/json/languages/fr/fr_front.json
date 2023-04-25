@@ -63,7 +63,9 @@
         "signOut": "Déconnexion"
       },
       "friends": {
-        "friends": "Amis"
+        "friends": "Amis",
+        "add": "Ajouter",
+        "blocked": "Bloqués"
       }
     },
     "services": {}

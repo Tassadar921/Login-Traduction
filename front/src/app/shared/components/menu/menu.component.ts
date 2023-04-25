@@ -23,8 +23,8 @@ export class MenuComponent implements OnInit {
   ) {
   }
 
-  async ngOnInit() {
-    this.languageService.dictionaryChanged.subscribe(() => {
+  async ngOnInit(): Promise<void> {
+    this.languageService.dictionaryChanged.subscribe((): void => {
       this.menuItems = [
         {
           name: this.languageService.dictionary.data?.components.menu.home,
@@ -34,18 +34,14 @@ export class MenuComponent implements OnInit {
           name: this.languageService.dictionary.data?.components.menu.messages,
           icon: 'send',
           link: '/messages'
-        }, {
-          name: this.languageService.dictionary.data?.components.menu.friends,
-          icon: 'people',
-          link: '/friends'
         }
       ]
     });
     await this.languageService.init();
   }
 
-  public async signOut(popover: boolean = false) {
-    const rtrn = await this.requestService.signOut(
+  public async signOut(popover: boolean = false): Promise<void> {
+    const rtrn: Object = await this.requestService.signOut(
       await this.cookieService.getCookie('username'),
       await this.cookieService.getCookie('sessionToken')
     );

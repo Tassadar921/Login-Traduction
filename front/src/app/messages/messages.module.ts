@@ -8,6 +8,10 @@ import { MessagesPageRoutingModule } from './messages-routing.module';
 
 import { MessagesPage } from './messages.page';
 import {MenuModule} from '../shared/components/menu/menu.module';
+import {ModalCloseButtonModule} from '../shared/components/modal-close-button/modal-close-button.module';
+import {SideBarComponent} from './side-bar/side-bar.component';
+import {BlockedComponent} from './blocked/blocked.component';
+import {AddComponent} from './add/add.component';
 
 @NgModule({
     imports: [
@@ -15,8 +19,9 @@ import {MenuModule} from '../shared/components/menu/menu.module';
         FormsModule,
         IonicModule,
         MessagesPageRoutingModule,
-        MenuModule
+        MenuModule,
+        ModalCloseButtonModule
     ],
-  declarations: [MessagesPage]
+  declarations: [MessagesPage, SideBarComponent, BlockedComponent, AddComponent]
 })
 export class MessagesPageModule {}

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {DevicePlatformService} from '../shared/services/device-platform.service';
+import {LanguageService} from '../shared/services/language.service';
 
 @Component({
   selector: 'app-messages',
@@ -7,9 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MessagesPage implements OnInit {
 
-  constructor() { }
+  constructor(
+    public devicePlatformService: DevicePlatformService,
+    public languageService: LanguageService,
+  ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
 }

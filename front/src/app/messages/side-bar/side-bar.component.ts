@@ -10,8 +10,8 @@ export class SideBarComponent implements OnInit {
 
   constructor(
     public languageService: LanguageService,
-  ) { }
+  ) {}
 
-  ngOnInit() {}
+  ngOnInit(): void {}
 
 }
