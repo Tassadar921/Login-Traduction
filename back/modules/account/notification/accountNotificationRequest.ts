@@ -3,6 +3,7 @@
 //This module manage the request to the database for accountNotification.ts
 //Version log :
 //1.0.0 - 15/03/2023 - Iémélian RAMBEAU - Creation of the first version
+//1.1.0 - 25/04/2023 - Iémélian RAMBEAU - New version of the notification type in the database, the request are now adapted to the new database
 //--------------------------------------------------------------------------------------------
 
 import { Client } from "edgedb";
@@ -17,13 +18,13 @@ module AccountNotificationRequest {
                     component,
                     date,
                     seen,
-                    objectMessage := Notification.object[is Message]{
-                    id,
-                    sender : {username}
-                    },
-                    objectUser := Notification.object[is User]{
-                    username,
-                    }
+                    object := Notification.object[is Message]{
+                            id,
+                            sender : {username}
+                        } 
+                        union Notification.object[is User]{
+                            username,
+                        }
                 }
                 FILTER User.token = "${token}"
             `);

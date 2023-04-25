@@ -22,7 +22,6 @@ export class ResetTables {
     }
 
     public async startReset(): Promise<void> {
-
         console.log('\n=========== RESETING ALL TABLES ===========\n');
 
         const tableResetPassword = await resetTablesRequest.getUrlTokenFromResetPassword(this.client);
@@ -32,6 +31,7 @@ export class ResetTables {
             });
             console.log(tableResetPassword.length + ' urlToken(s) reseted from the mailResetPasswordQueue')
         }
+
         console.log('----------- Reset of Reset_Password table done -----------')
 
         const tableUserCreation = await resetTablesRequest.getUrlTokenFromUserCreation(this.client);
