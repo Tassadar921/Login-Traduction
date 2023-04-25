@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {CookieService} from "../shared/services/cookie.service";
 import {Socket} from "ngx-socket-io";
 
 @Component({
@@ -12,9 +13,9 @@ export class SocketPage implements OnInit {
   lastMessage : [{sender : {username : string}, seen : boolean, date : Date, text : string}] | undefined;
   messageSuccess : boolean = false;
 
-  constructor(private socket: Socket) {
-    this.socket.on("initSocketData", () => {
-      this.socket.emit('initSocketData',"oui" ,"oui");
+  constructor(private socket: Socket, private cookieService: CookieService) {
+    this.socket.on("initSocketData", async () => {
+      this.socket.emit('initSocketData',await cookieService.getCookie('username'),await cookieService.getCookie('sessionToken'));
       this.socket.emit('synchronizeNotifications');
     });
     this.socket.on('synchronizeNotifications', (data : any) => {
@@ -52,11 +53,11 @@ export class SocketPage implements OnInit {
   public emit3() {
     this.socket.emit('deleteNotification', this.id);
   }
-  public emit4() {
-    this.socket.emit('addNotifications', "oui", "titre", "texte");
+  public async emit4() {
+    this.socket.emit('addNotifications', await this.cookieService.getCookie('username'), "titre", "texte");
   }
-  public emit5() {
-    this.socket.emit('sendMessage', "oui", "texte", Date.now());
+  public async emit5() {
+    this.socket.emit('sendMessage', await this.cookieService.getCookie('username'), "texte", Date.now());
     this.messageSuccess = false;
   }
   public emit6() {

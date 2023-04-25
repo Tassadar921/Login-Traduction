@@ -10,6 +10,7 @@ import { Client } from "edgedb";
 module AccountNotificationRequest {
     export async function getNotifications(token : string, client : Client) {
         return new Promise<any[]>((resolve) => {
+            //for every new type in subject, add a new corresponding object in the query
             const result = client.query(`
             SELECT Notification {
                     id,
@@ -29,6 +30,7 @@ module AccountNotificationRequest {
             resolve(result);
         });
     }
+    
 
     export async function notificationIsSeen(id : string, client : Client) {
         return new Promise<any[]>((resolve) => {
