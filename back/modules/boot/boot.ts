@@ -6,7 +6,6 @@
 //--------------------------------------------------------------------------------------
 
 import { ResetTables } from "./resetTables/resetTables";
-import {regexRequest} from "../common/regex/regexRequest";
 
 module boot {
     export async function start() {

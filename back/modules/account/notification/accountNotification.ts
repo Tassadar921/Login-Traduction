@@ -3,6 +3,7 @@
 //This class is used to manage the notifications of the user
 //Version log :
 //1.0.0 - 15/03/2023 - Iémélian RAMBEAU - Creation of the first version
+//1.1.0 - 25/04/2023 - Iémélian RAMBEAU - New version of the notification type in the database, the functions are now adapted to the new database
 //--------------------------------------------------------------------------------------------
 
 import createClient, {Client} from 'edgedb';
