@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {DevicePlatformService} from "../shared/services/device-platform.service";
 
 @Component({
   selector: 'app-friends',
@@ -7,7 +8,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FriendsPage implements OnInit {
 
-  constructor() { }
+  constructor(
+    public devicePlatformService: DevicePlatformService
+  ) { }
 
   ngOnInit() {
   }

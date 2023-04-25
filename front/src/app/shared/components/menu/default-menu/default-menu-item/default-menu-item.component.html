@@ -1,4 +1,4 @@
 <ion-button fill="clear" [href]="menuItem?.link"
-[class]="router.url.includes(menuItem?.name?.toLowerCase())?'bold':''">
+[id]="router.url.includes(menuItem?.link?.toLowerCase())?'bold':''">
   {{menuItem?.name}}
 </ion-button>

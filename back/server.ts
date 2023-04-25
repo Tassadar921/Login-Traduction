@@ -16,7 +16,6 @@ dotenv.config();
 const app = express();
 
 app.use(bodyParser.json());
-console.log(process.env.URL_FRONT);
 app.use(cors({origin: process.env.URL_FRONT}));
 app.use('/files', express.static('files'));
 
@@ -37,7 +36,7 @@ boot.start().then(() => {
     accountRouting.init(app);
     
     if (server.listen(process.env.PORT || 8080)) {
-        console.log('=========== SERVER STARTED FOR HTTP RQ ===========');
+        console.log('\n=========== SERVER STARTED FOR HTTP RQ ===========');
         console.log('    =============   PORT: 8080   =============');
     }
 });

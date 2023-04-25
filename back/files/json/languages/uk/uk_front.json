@@ -61,8 +61,11 @@
         "friends": "Friends",
         "settings": "Settings",
         "signOut": "Sign out"
+      },
+      "friends": {
+        "friends": "Friends"
       }
-    }
-  },
-  "services": {}
+    },
+    "services": {}
+  }
 }

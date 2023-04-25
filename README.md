@@ -29,8 +29,7 @@ In order to launch it, run those commands in a terminal
 It'll install Angular and Ionic on your computer.
 
 Make sure you have EdgeDB installed on your computer 
-(https://edgedb.com/download) and python 
-(https://www.python.org/downloads/).
+(https://edgedb.com/download).
 - In the /database folder :
 
 ```
@@ -41,7 +40,7 @@ edgedb project init <EDGEDB_INSTANCE>
 - Now go in the /back folder:
 
 ```
-npm run install && npm run start
+npm i && npm run start
 ```
 
 - In another terminal, go in the /front folder:
