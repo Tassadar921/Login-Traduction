@@ -90,3 +90,8 @@ app-nomenclature{
   }
   color: var(--ion-color-primary);
 }
+
+#forgotPasswordCard{
+  border-radius: 0;
+  height: calc(100vh - 50px);
+}
