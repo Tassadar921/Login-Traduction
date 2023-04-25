@@ -14,7 +14,10 @@ export module regexRequest {
 
     //checks if the urlToken is valid
     export function checkRegexUrlToken(urlToken: string, urlTokenLength : number): boolean {
-        const regex = new RegExp('/^[A-Za-z0-9]{' + urlTokenLength + '}$/');
+        const regex = new RegExp('^[A-Za-z0-9]{' + urlTokenLength + '}$');
+
+        console.log(regex);
+        console.log(urlToken);
 
         return (regex).test(urlToken);
     }

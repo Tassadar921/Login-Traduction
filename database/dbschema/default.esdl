@@ -3,7 +3,10 @@ module default {
         required property name -> str;
     }
 
-    type User {
+    abstract type Subject {
+    }
+
+    type User extending Subject {
         required property username -> str;
         required property password -> str;
         required property email -> str;
@@ -32,11 +35,8 @@ module default {
 
     type Notification {
         required property component -> str;
-        link objectUser -> User {
-            on target delete delete source;
-        };
-        link objectMessage -> Message {
-            on target delete delete source;
+        multi link object -> Subject {
+            on target delete allow;
         };
         required property date -> datetime;
         required property seen -> bool {
@@ -44,7 +44,7 @@ module default {
         };
     }
 
-    type Message {
+    type Message extending Subject {
         required property text -> str;
         required property date -> datetime;
         required property seen -> bool { 

@@ -11,20 +11,14 @@ module AccountNotificationRequest {
     export async function getNotifications(token : string, client : Client) {
         return new Promise<any[]>((resolve) => {
             const result = client.query(`
-                SELECT Notification {
+            SELECT Notification {
                     id,
-                    title,
                     component,
                     date,
                     seen,
-                    objectUser : {
+                    object : {
                         id,
-                        username,
-                    },
-                    objectMessage : {
-                        id,
-                        text,
-                    },
+                    }
                 }
                 FILTER User.token = "${token}"
             `);
@@ -62,7 +56,7 @@ module AccountNotificationRequest {
                     notifications += (INSERT Notification {
                         component := "${component}",
                         date := <datetime>"${date}",
-                        objectMessage := (SELECT Message FILTER .id = <uuid>"${idMessage}"),
+                        object := (SELECT Message FILTER .id = <uuid>"${idMessage}"),
                     })
                 }
             `);
@@ -80,19 +74,6 @@ module AccountNotificationRequest {
                     } ORDER BY .date DESC
                 }
                 FILTER .username = "${username}"
-            `);
-            resolve(result);
-        });
-    }
-
-    export async function addObjectUserToNotification(id : string, usernameSender : string, client : Client) {
-        return new Promise<any[]>((resolve) => {
-            const result = client.query(`
-                UPDATE Notification
-                FILTER .id = <uuid>"${id}"
-                SET {
-                    objectUser := (SELECT User FILTER User.username = "${usernameSender}")
-                }
             `);
             resolve(result);
         });

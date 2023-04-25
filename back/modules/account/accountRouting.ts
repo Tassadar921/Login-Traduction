@@ -104,9 +104,6 @@ module accountRouting {
             socket.on('deleteNotification', async (id) => {
                 await accountNotification.deleteNotification(socket, id);
             });
-            socket.on('addNotifications', async (username, title, text) => {
-                await accountNotification.addNotifications(username, title, text);
-            });
 
             /*----------------------------------------Chat----------------------------------------*/
 
