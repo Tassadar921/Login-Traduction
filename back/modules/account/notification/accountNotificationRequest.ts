@@ -16,8 +16,12 @@ module AccountNotificationRequest {
                     component,
                     date,
                     seen,
-                    object : {
-                        id,
+                    objectMessage := Notification.object[is Message]{
+                    id,
+                    sender : {username}
+                    },
+                    objectUser := Notification.object[is User]{
+                    username,
                     }
                 }
                 FILTER User.token = "${token}"
