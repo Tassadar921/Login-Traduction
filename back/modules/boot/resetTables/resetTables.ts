@@ -24,23 +24,24 @@ export class ResetTables {
     public async startReset(): Promise<void> {
         console.log('\n=========== RESETING ALL TABLES ===========\n');
 
-        const tableResetPassword = await resetTablesRequest.getUrlTokenFromResetPassword(this.client);
-        if(tableResetPassword !== undefined) {
-            tableResetPassword.forEach(element => {
+        const tableUserCreation = await resetTablesRequest.getUrlTokenFromUserCreation(this.client);
+
+        if(tableUserCreation !== undefined) {
+            tableUserCreation.forEach(element => {
                 this.accountSignUp.deleteUserCreation(element.urlToken);
             });
-            console.log(tableResetPassword.length + ' urlToken(s) reseted from the mailResetPasswordQueue')
+            console.log(tableUserCreation.length + ' urlToken(s) reseted from the mailUserCreationQueue')
         }
 
         console.log('----------- Reset of Reset_Password table done -----------')
 
-        const tableUserCreation = await resetTablesRequest.getUrlTokenFromUserCreation(this.client);
-        if(tableUserCreation !== undefined) {
-            tableUserCreation.forEach(element => {
+        const tableResetPassword = await resetTablesRequest.getUrlTokenFromResetPassword(this.client);
+        if(tableResetPassword !== undefined) {
+            tableResetPassword.forEach(element => {
                 this.accountResetPassword.deleteResetPassword(element.urlToken);
             });
             console.log('');
-            console.log(tableUserCreation.length + ' urlToken(s) reseted from the mailUserCreationQueue')
+            console.log(tableResetPassword.length + ' urlToken(s) reseted from the mailResetPasswordQueue')
         }
         console.log('----------- Reset of User_Creation table done -----------')
         console.log('\n=========== RESETING ALL TABLES DONE ===========\n')
