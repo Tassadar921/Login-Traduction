@@ -177,6 +177,7 @@ export class AccountSignUp {
         const client = this.commonAccount.client;
 
         setTimeout(async () => {
+            console.log("deleteUserCreation---------------------------------");
             await accountSignInRequest.deleteUserCreationByUrlToken(urlToken, client);
         }, this.commonAccount.urlTokenExpiration);
         return;

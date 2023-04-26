@@ -144,6 +144,7 @@ export class AccountResetPassword {
     public deleteResetPassword(urlToken: string): void {
         const client = this.commonAccount.client;
         setTimeout(async () => {
+                console.log('deleteResetPassword setTimeout');
                 await accountResetPasswordRequest.deleteResetPasswordByUrlToken(
                     urlToken,
                     client
