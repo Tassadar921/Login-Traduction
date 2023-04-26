@@ -82,25 +82,25 @@ module accountRouting {
 
         app.post('/getFriends', async function (req: Request, res: Response): Promise<void> {
             if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res)){
-
+                await accountFriends.getFriends(req.body.username, req.body.itemsPerPage,  req.body.page, res);
             }
             else{
                 await res.json({status: 0});
             }
         });
 
-        app.post('/checkSession', async function (req: Request, res: Response): Promise<void> {
+        app.post('/getEnteringPendingFriendsRequests', async function (req: Request, res: Response): Promise<void> {
             if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res)){
-
+                await accountFriends.getEnteringPendingFriendsRequests(req.body.username, req.body.itemsPerPage,  req.body.page, res);
             }
             else{
                 await res.json({status: 0});
             }
         });
 
-        app.post('/checkSession', async function (req: Request, res: Response): Promise<void> {
+        app.post('/getExitingPendingFriendsRequests', async function (req: Request, res: Response): Promise<void> {
             if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res)){
-                
+                await accountFriends.getExitingPendingFriendsRequests(req.body.username, req.body.itemsPerPage,  req.body.page, res);
             }
             else{
                 await res.json({status: 0});
