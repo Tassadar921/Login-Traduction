@@ -151,10 +151,34 @@ module accountFriendsRequest {
     export async function getOtherUsers(username : string, page : number, itemsPerPage : number, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve) => {
             resolve(client.query(`
-                Select User {
-                    id,
-                    username
-                } Filter .username != "${username}"
+                Select (with x :=   (Select User {
+                            id,
+                            username
+                        } Filter .username != "${username}"),
+                        y := ((Select User {
+                        friends : {
+                            id,
+                            username
+                        }} Filter .username = "${username}").friends),
+                        zexit := (Select User {
+                                        id,
+                                        username
+                                } Filter User.pendingFriendsRequests.username = "${username}"),
+                        zenter := (Select User {
+                                        pendingFriendsRequests : {
+                                            id,
+                                            username
+                                        }
+                                    } Filter .username = "${username}").pendingFriendsRequests
+                    Select {
+                        x {
+                        username,
+                        id,
+                        boolAmi := (Select y filter y.username = x.username) = x,
+                        boolEnter := (Select zenter filter zenter.username = x.username) = x,
+                        boolExit := (Select zexit filter zexit.username = x.username) = x,
+                        },
+                    })
                 order by .username
                 offset ${itemsPerPage}*(${page}-1)
                 limit ${itemsPerPage}
