@@ -63,16 +63,19 @@ export class AccountSignIn {
     }
 
     //checks if the token is valid for the user
-    public async checkSession(username: string, sessionToken: string, res: Response): Promise<number> {
+    public async checkSession(username: string, sessionToken: string, res: Response): Promise<void> {
         if (!regexRequest.checkRegexUsername(username) || !regexRequest.checkRegexSessionToken(sessionToken, this.sessionTokenLength)) {
-            return 0;
+            res.json({status: 0});
+            return;
         }
 
         const result: any = await accountSignInRequest.getUserByTokenAndUsername(username, sessionToken, this.client);
         if (result.length && sessionToken !== 'none') {
-            return 1;
+            res.json({status: 1});
+            return;
         } else {
-            return 0;
+            res.json({status: 0});
+            return;
         }
     }
 
