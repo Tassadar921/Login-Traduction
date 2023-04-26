@@ -8,7 +8,7 @@
 import { Client } from "edgedb";
 
 module accountResetPasswordRequest {
-    export async function getUsernameByEmail(email : string, client : Client) {
+    export async function getUsernameByEmail(email : string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve) => {
             resolve(client.query(`
                 SELECT User {
@@ -19,7 +19,7 @@ module accountResetPasswordRequest {
         });
     }
 
-    export async function getUrlTokenByEmail(email : string, client : Client) {
+    export async function getUrlTokenByEmail(email : string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve) => {
             resolve(client.query(`
                 SELECT Reset_Password {
@@ -30,7 +30,7 @@ module accountResetPasswordRequest {
         });
     }
 
-    export async function getEmailByUrlToken(urlToken : string, client : Client) {
+    export async function getEmailByUrlToken(urlToken : string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve) => {
             resolve(client.query(`
                 SELECT Reset_Password {
@@ -41,7 +41,7 @@ module accountResetPasswordRequest {
         });
     }
 
-    export async function deleteResetPasswordByUrlToken(urlToken : string, client : Client) {
+    export async function deleteResetPasswordByUrlToken(urlToken : string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve) => {
             resolve(client.query(`
                 delete Reset_Password
@@ -50,7 +50,7 @@ module accountResetPasswordRequest {
         });
     }
 
-    export async function createResetPassword(urlToken : string, email : string, client : Client) {
+    export async function createResetPassword(urlToken : string, email : string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve) => {
             resolve(client.query(`
                 insert Reset_Password {
@@ -61,7 +61,7 @@ module accountResetPasswordRequest {
         });
     }
 
-    export async function resetPassword(email : string, password : string, client : Client) {
+    export async function resetPassword(email : string, password : string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve) => {
             resolve(client.query(`
                 UPDATE User

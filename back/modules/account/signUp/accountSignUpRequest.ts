@@ -8,7 +8,7 @@
 import { Client } from "edgedb";
 
 module accountBasicRequest {
-    export async function getUsernameAndEmailByUsernameAndEmail(username : string, email : string, client : Client) {
+    export async function getUsernameAndEmailByUsernameAndEmail(username : string, email : string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve) => {
             resolve(client.query(`
                 SELECT User {
@@ -20,7 +20,7 @@ module accountBasicRequest {
         });
     }
 
-    export async function getUsernameBySessionToken(token : string, client : Client) {
+    export async function getUsernameBySessionToken(token : string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve) => {
             resolve(client.query(`
                 SELECT User {
@@ -31,7 +31,7 @@ module accountBasicRequest {
         });
     }
 
-    export async function createUser(username : string, email : string, password : string, token : string, client : Client) {
+    export async function createUser(username : string, email : string, password : string, token : string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve) => {
             resolve(client.query(`
                 insert User {
@@ -44,7 +44,7 @@ module accountBasicRequest {
         });
     }
 
-    export async function getUsernameAndEmailAndPasswordByUrlToken(urlToken : string, client : Client) {
+    export async function getUsernameAndEmailAndPasswordByUrlToken(urlToken : string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve) => {
             resolve(client.query(`
                 SELECT User_Creation {
@@ -57,7 +57,7 @@ module accountBasicRequest {
         });
     }
 
-    export async function getUrlTokenByEmail(email : string, client : Client) {
+    export async function getUrlTokenByEmail(email : string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve) => {
             resolve(client.query(`
                 SELECT User_Creation {
@@ -68,7 +68,7 @@ module accountBasicRequest {
         });
     }
 
-    export async function createUserCreation(urlToken : string, username : string, email : string, password : string, client : Client) {
+    export async function createUserCreation(urlToken : string, username : string, email : string, password : string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve) => {
             resolve(client.query(`
                 insert User_Creation {
@@ -81,7 +81,7 @@ module accountBasicRequest {
         });
     }
 
-    export async function deleteUserCreationByUrlToken(urlToken : string, client : Client) {
+    export async function deleteUserCreationByUrlToken(urlToken : string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve) => {
             resolve(client.query(`
                 delete User_Creation

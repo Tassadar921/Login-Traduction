@@ -9,54 +9,51 @@
 import { Client } from "edgedb";
 
 module AccountNotificationRequest {
-    export async function getNotifications(token : string, client : Client) {
+    export async function getNotifications(token : string, client : Client) : Promise<any[]> {
         return new Promise<any[]>((resolve) => {
             //for every new type in subject, add a new corresponding object in the query
-            const result = client.query(`
-            SELECT Notification {
-                    id,
-                    component,
-                    date,
-                    seen,
-                    object := Notification.object[is Message]{
-                            id,
-                            sender : {username}
-                        } 
-                        union Notification.object[is User]{
-                            username,
-                        }
-                }
-                FILTER User.token = "${token}"
-            `);
-            resolve(result);
+            resolve(client.query(`
+                SELECT Notification {
+                        id,
+                        component,
+                        date,
+                        seen,
+                        object := Notification.object[is Message]{
+                                id,
+                                sender : {username}
+                            } 
+                            union Notification.object[is User]{
+                                username,
+                            }
+                    }
+                    FILTER User.token = "${token}"
+            `));
         });
     }
     
 
-    export async function notificationIsSeen(id : string, client : Client) {
+    export async function notificationIsSeen(id : string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve) => {
-            const result = client.query(`
+            resolve(client.query(`
                 UPDATE Notification
                 FILTER .id = <uuid>"${id}"
                 set { seen := true };
-            `);
-            resolve(result);
+            `));
         });
     }
 
-    export async function deleteNotification(id : string, client : Client) {
+    export async function deleteNotification(id : string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve) => {
-            const result = client.query(`
+            resolve(client.query(`
                 DELETE Notification 
                 FILTER .id = <uuid>"${id}";
-            `);
-            resolve(result);
+            `));
         });
     }
 
-    export async function addNotificationsMessage(username : string, component : string, date : string, idMessage : string, client : Client) {
+    export async function addNotificationsMessage(username : string, component : string, date : string, idMessage : string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve) => {
-            const result = client.query(`
+            resolve(client.query(`
                 UPDATE User 
                 filter .username = "${username}"
                 SET {
@@ -66,23 +63,20 @@ module AccountNotificationRequest {
                         object := (SELECT Message FILTER .id = <uuid>"${idMessage}"),
                     })
                 }
-            `);
-
-            resolve(result);
+            `));
         });
     }
 
-    export async function getIdOfNotificationOrderByDate(username : string, client : Client) {
+    export async function getIdOfNotificationOrderByDate(username : string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve) => {
-            const result = client.query(`
+            resolve(client.query(`
                 SELECT User {
                     notifications: {
                         id
                     } ORDER BY .date DESC
                 }
                 FILTER .username = "${username}"
-            `);
-            resolve(result);
+            `));
         });
     }
 }

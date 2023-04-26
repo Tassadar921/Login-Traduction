@@ -8,7 +8,7 @@
 import { Client } from "edgedb";
 
 module accountLoginRequest {
-    export async function getUsernameByPasswordAndIdentifier(identifier : string, password : string, client : Client) {
+    export async function getUsernameByPasswordAndIdentifier(identifier : string, password : string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve) => {
             resolve(client.query(`
                 SELECT User {
@@ -19,7 +19,7 @@ module accountLoginRequest {
         });
     }
 
-    export async function getUserByTokenAndUsername(username : string, token : string, client : Client) {
+    export async function getUserByTokenAndUsername(username : string, token : string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve) => {
             resolve(client.query(`
                 SELECT User
@@ -28,7 +28,7 @@ module accountLoginRequest {
         });
     }
 
-    export async function getUsernameBySessionToken(token : string, client : Client) {
+    export async function getUsernameBySessionToken(token : string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve) => {
             resolve(client.query(`
                 SELECT User {
@@ -39,7 +39,7 @@ module accountLoginRequest {
         });
     }
 
-    export async function getPermissionByUsername(username : string, client : Client) {
+    export async function getPermissionByUsername(username : string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve) => {
             resolve(client.query(`
                 SELECT Permission {
@@ -50,7 +50,7 @@ module accountLoginRequest {
         });
     }
 
-    export async function updateUserToken(username : string, token : string, client : Client) {
+    export async function updateUserToken(username : string, token : string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve) => {
             resolve(client.query(`
                 UPDATE User
