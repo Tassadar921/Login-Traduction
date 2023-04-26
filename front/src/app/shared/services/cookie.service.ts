@@ -9,7 +9,7 @@ import {PopoverController} from '@ionic/angular';
 export class CookieService {
 
   //for html dynamic display
-  private username = '';
+  private username: string = '';
 
   constructor(
     private router: Router,
@@ -17,13 +17,13 @@ export class CookieService {
   ){}
 
   //returns cookie data from cookie key
-  getCookie = async (key: string) => Object(await Preferences.get({key})).value;
+  getCookie = async (key: string): Promise<any> => Object(await Preferences.get({key})).value;
 
   //sets cookie from key and value, erasing previous cookie if exists
-  setCookie = async (key: string, value: any) => await Preferences.set({key, value});
+  setCookie = async (key: string, value: any): Promise<void> => await Preferences.set({key, value});
 
   //connects user by setting cookies session token and username
-  public async signIn(username: string, sessionToken: string) {
+  public async signIn(username: string, sessionToken: string): Promise<void> {
     await this.setCookie('username', username);
     await this.setCookie('sessionToken', sessionToken);
     this.username = username;

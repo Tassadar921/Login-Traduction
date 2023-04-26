@@ -1,4 +1,4 @@
-import express from 'express';
+import express, {Express} from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import * as dotenv from 'dotenv';
@@ -13,7 +13,7 @@ import ioServer from './modules/common/socket/socket';
 
 dotenv.config();
 
-const app = express();
+const app: Express = express();
 
 app.use(bodyParser.json());
 app.use(cors({origin: process.env.URL_FRONT}));
@@ -23,7 +23,7 @@ if (app.get('env') === 'production') {
     app.set('trust proxy', 1);
 }
 
-const server = http.createServer(app);
+const server: http.Server<any> = http.createServer(app);
 
 ioServer.init(server);
 
@@ -31,7 +31,7 @@ ioServer.init(server);
 //boot.start() is a method that is called when the server is booting, 
 //it is used for the website to function properly even after a rash restart
 
-boot.start().then(() => {
+boot.start().then((): void => {
     languagesRouting.init(app);
     accountRouting.init(app);
     
