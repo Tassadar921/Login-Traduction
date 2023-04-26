@@ -22,7 +22,16 @@ export class AccountFriends{
         this.accountNotification = accountNotification;
     }
 
-    public async askFriend(username: string, res: Response): Promise<void>{
+    public async askFriend(usernameSender: string, usernameReceiver: string, res: Response): Promise<void>{
+        if(usernameSender = usernameReceiver) {
+            res.json({status: -1});
+            return;
+        }
+        if(await accountFriendsRequest.getFriendByBothUsernames(usernameSender, usernameReceiver, this.client)) {
+            res.json({status: 0});
+            return;
+        }
+
         await res.json({status: 1});
     }
 

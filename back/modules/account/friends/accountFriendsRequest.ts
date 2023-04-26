@@ -79,6 +79,29 @@ module accountFriendsRequest {
             `));
         });
     }
+
+    export async function addPendingFriendsRequests(usernameReceiver : string, usernameSender : string, client : Client) : Promise<unknown[]> {
+        return new Promise<any[]>((resolve) => {
+            resolve(client.query(`
+                Update User 
+                Filter .username = "${usernameReceiver}"
+                Set {
+                pendingFriendsRequests += (Select User Filter .username = "${usernameSender}"),
+                }
+            `));
+        });
+    }
+
+    export async function getFriendByBothUsernames(usernameReceiver : string, usernameSender : string, client : Client) : Promise<unknown[]> {
+        return new Promise<any[]>((resolve) => {
+            resolve(client.query(`
+                Select User {
+
+                }
+                Filter .friends.username = "${usernameSender}" AND .username = "${usernameReceiver}"
+            `));
+        });
+    }
 }
 
 export default accountFriendsRequest;
