@@ -57,7 +57,8 @@ module accountFriendsRequest {
             resolve(client.query(`
                 Select (Select User {
                     pendingFriendsRequests : {
-                    username
+                        id,
+                        username
                     }
                 } Filter .username = "${username}").pendingFriendsRequests
                 order by .username
@@ -71,6 +72,7 @@ module accountFriendsRequest {
         return new Promise<any[]>((resolve) => {
             resolve(client.query(`
                 Select User {
+                    id,
                     username
                 } Filter User.pendingFriendsRequests.username = "${username}"
                 order by .username
@@ -137,7 +139,28 @@ module accountFriendsRequest {
         });
     }
 
+    export async function getUserByUsername(username : string, client : Client) : Promise<unknown[]> {
+        return new Promise<any[]>((resolve) => {
+            resolve(client.query(`
+                Select User {
+                } Filter .username = "${username}"
+            `));
+        });
+    }
 
+    export async function getOtherUsers(username : string, page : number, itemsPerPage : number, client : Client) : Promise<unknown[]> {
+        return new Promise<any[]>((resolve) => {
+            resolve(client.query(`
+                Select User {
+                    id,
+                    username
+                } Filter .username != "${username}"
+                order by .username
+                offset ${itemsPerPage}*(${page}-1)
+                limit ${itemsPerPage}
+            `));
+        });
+    }
 }
 
 export default accountFriendsRequest;

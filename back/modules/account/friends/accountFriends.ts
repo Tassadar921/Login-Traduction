@@ -26,6 +26,9 @@ export class AccountFriends{
         if (usernameSender === usernameReceiver) {
             res.json({status: -1});
             return;
+        } else if (await accountFriendsRequest.getUserByUsername(usernameReceiver, this.client) === undefined) {
+            res.json({status: -2});
+            return;
         } else if (await accountFriendsRequest.getFriendByBothUsernames(usernameSender, usernameReceiver, this.client)) {
             res.json({status: 0});
             return;
@@ -57,6 +60,12 @@ export class AccountFriends{
     public async getExitingPendingFriendsRequests(username: string, itemsPerPage: number, page: number, res: Response): Promise<void>{
         const pendingFriendsRequests: any[] = await accountFriendsRequest.getExitingPendingFriendsRequests(username, itemsPerPage, page, this.client);
         res.json(pendingFriendsRequests);
+        return;
+    }
+
+    public async getOtherUsers(username: string, itemsPerPage: number, page: number, res: Response): Promise<void>{
+        const otherUsers: any[] = await accountFriendsRequest.getOtherUsers(username, itemsPerPage, page, this.client);
+        res.json(otherUsers);
         return;
     }
 
