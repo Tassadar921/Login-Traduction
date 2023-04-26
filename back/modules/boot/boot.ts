@@ -9,7 +9,7 @@ import { ResetTables } from "./resetTables/resetTables";
 
 module boot {
     export async function start() {
-        const resetTables = new ResetTables();
+        const resetTables : ResetTables = new ResetTables();
 
         await resetTables.startReset();
     }

@@ -8,17 +8,13 @@
 export module regexRequest {
     //checks if the sessionToken
     export function checkRegexSessionToken(sessionToken: string, sessionTokenLength : number): boolean {
-        const regex = new RegExp('^[A-Za-z0-9]{' + sessionTokenLength + '}$');
+        const regex : RegExp = new RegExp('^[A-Za-z0-9]{' + sessionTokenLength + '}$');
         return (regex).test(sessionToken);
     }
 
     //checks if the urlToken format is valid
     export function checkRegexUrlToken(urlToken: string, urlTokenLength : number): boolean {
-        const regex = new RegExp('^[A-Za-z0-9]{' + urlTokenLength + '}$');
-
-        console.log(regex);
-        console.log(urlToken);
-
+        const regex : RegExp = new RegExp('^[A-Za-z0-9]{' + urlTokenLength + '}$');
         return (regex).test(urlToken);
     }
 

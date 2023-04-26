@@ -32,7 +32,7 @@ export class AccountNotification {
 
     public async synchronizeNotificationsWithSocket(socket: Socket): Promise<void> {
         //get the notifications from the database for the user
-        const dataNotification = await AccountNotificationRequest.getNotifications(socket.data.sessionToken, this.client);
+        const dataNotification : any[] = await AccountNotificationRequest.getNotifications(socket.data.sessionToken, this.client);
 
         socket.emit('synchronizeNotifications', dataNotification);
         return;
@@ -40,7 +40,7 @@ export class AccountNotification {
 
     private async synchronizeNotificationsWithRemoteSocket(socket: RemoteSocket<socketOptions.ServerToClientEvents, socketOptions.SocketData>): Promise<void> {
         //get the notifications from the database and send it to a specific user (remoteSocket)
-        const dataNotification = await AccountNotificationRequest.getNotifications(socket.data.sessionToken, this.client);
+        const dataNotification : any[] = await AccountNotificationRequest.getNotifications(socket.data.sessionToken, this.client);
 
         socket.emit('synchronizeNotifications', dataNotification);
         return;
@@ -72,14 +72,14 @@ export class AccountNotification {
 
     public async addNotificationsMessage(username: string, usernameSender: string, idMessage: string): Promise<void> {
         //start by finding the socket if it exists else get undefined (if the user is not connected)
-        const socketOfUsername: RemoteSocket<DefaultEventsMap, any> | undefined =
+        const socketOfUsername : RemoteSocket<DefaultEventsMap, any> | undefined =
             (await ioServer.io.fetchSockets()).find(
                 (socketTmp: RemoteSocket<DefaultEventsMap, any>): boolean =>
                     socketTmp.data.username === username
             );
 
         //convert the date to ISO format
-        const date: string = new Date().toISOString();
+        const date : string = new Date().toISOString();
 
         //add the notification to the database
         await AccountNotificationRequest.addNotificationsMessage(username, 'message', date, idMessage, this.client);

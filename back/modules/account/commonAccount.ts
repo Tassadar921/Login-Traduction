@@ -40,7 +40,7 @@ export class CommonAccount {
     //hash a string with sha256
     public async hashSha256(data: string): Promise<string> {
         return new Promise((resolve, reject) => {
-            const hash = crypto.createHash('sha256');
+            const hash : crypto.Hash = crypto.createHash('sha256');
             hash.write(data);
             hash.on('readable', () => {
                 const data = hash.read();
@@ -58,8 +58,8 @@ export class CommonAccount {
     // generates token by stringing a random number of characters from a dictionary
     public generateToken(length: number): string {
         //edit the token allowed characters
-        let alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'.split('');
-        let token: string = '';
+        let alphabet : string[] = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'.split('');
+        let token : string = '';
         for (let i = 0; i < length; i++) {
             let j = Math.floor(Math.random() * (alphabet.length - 1));
             token += alphabet[j];

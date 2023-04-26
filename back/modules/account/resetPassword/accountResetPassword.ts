@@ -7,10 +7,9 @@
 
 import {Response} from 'express';
 import accountResetPasswordRequest from './accountResetPasswordRequest';
-// @ts-ignore
-import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import regexRequest from 'modules/common/regex/regexRequest';
 import {CommonAccount} from "../commonAccount";
+import { Client } from "edgedb";
 
 export class AccountResetPassword {
     private commonAccount = new CommonAccount();
@@ -19,28 +18,26 @@ export class AccountResetPassword {
 
     //sends an email containing a unique token to reset the password, effective for 10 minutes
     //temporary linking the token and email in the resetPassword queue
-    public async mailResetPasswordCreateUrlToken(
-        email: string,
-        language: string,
-        res: Response
-    ): Promise<void> {
+    public async mailResetPasswordCreateUrlToken(email: string, language: string, res: Response): Promise<void> {
         if (!regexRequest.checkRegexEmail(email)) {
             res.json({status: -2});
             return;
         }
 
         let result: any[] = await accountResetPasswordRequest.getUsernameByEmail(
-            email, this.commonAccount.client
+            email, 
+            this.commonAccount.client
         );
 
         if (!result.length) {
             res.json({status: 0});
             return;
         } else {
-            let username = result[0].username;
+            let username : string = result[0].username;
 
             result = await accountResetPasswordRequest.getUrlTokenByEmail(
-                email, this.commonAccount.client
+                email, 
+                this.commonAccount.client
             );
 
             if (result.length) {
@@ -50,7 +47,7 @@ export class AccountResetPassword {
                 );
             }
 
-            let urlToken = this.commonAccount.generateToken(
+            let urlToken : string = this.commonAccount.generateToken(
                 this.commonAccount.urlTokenLength
             );
             result = await accountResetPasswordRequest.getEmailByUrlToken(
@@ -75,10 +72,9 @@ export class AccountResetPassword {
 
             this.deleteResetPassword(urlToken);
 
-            // @ts-ignore
             const languageFile = await import('./files/json/languages/'
             + language + '/' + language + '_back.json',
-                {assert: {type: 'json'}})
+                {assert: {type: 'json'}});
 
             this.commonAccount.mailOptions.to = email;
             this.commonAccount.mailOptions.subject =
@@ -109,12 +105,8 @@ export class AccountResetPassword {
     }
 
     //resets the password of the account linked to the email, himself linked to the token
-    public async resetPassword(
-        urlToken: string,
-        password: string,
-        res: Response
-    ): Promise<void> {
-        const result: [{ email: string, password: string }] | any =
+    public async resetPassword(urlToken: string, password: string, res: Response): Promise<void> {
+        const result : any[] =
             await accountResetPasswordRequest.getEmailByUrlToken(
                 urlToken,
                 this.commonAccount.client
@@ -142,7 +134,7 @@ export class AccountResetPassword {
 
     //sends an email containing a unique token to reset the password, effective for 10 minutes
     public deleteResetPassword(urlToken: string): void {
-        const client = this.commonAccount.client;
+        const client : Client = this.commonAccount.client;
         setTimeout(async () => {
                 console.log('deleteResetPassword setTimeout');
                 await accountResetPasswordRequest.deleteResetPasswordByUrlToken(

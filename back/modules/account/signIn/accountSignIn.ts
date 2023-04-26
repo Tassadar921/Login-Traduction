@@ -30,16 +30,16 @@ export class AccountSignIn {
             res.json({status: 0});
             return;
         } else {
-            let username = result[0].username;
+            let username : string = result[0].username;
             let sessionToken: string = this.generateToken(this.sessionTokenLength);
-            let result1: any[] = await accountSignInRequest.getUsernameBySessionToken(sessionToken, this.client);
+            let result1 : any[] = await accountSignInRequest.getUsernameBySessionToken(sessionToken, this.client);
 
             while (result1.length > 0) {
                 sessionToken = this.generateToken(this.sessionTokenLength);
                 result1 = await accountSignInRequest.getUsernameBySessionToken(sessionToken, this.client);
             }
             await accountSignInRequest.updateUserToken(username, sessionToken, this.client);
-            const result2: any[] = await accountSignInRequest.getPermissionByUsername(username, this.client);
+            const result2 : any[] = await accountSignInRequest.getPermissionByUsername(username, this.client);
 
             res.json({status: 1, sessionToken, username, permission: result2[0]?.permission});
             return;
@@ -48,7 +48,7 @@ export class AccountSignIn {
 
     //delete the token of the user
     public async signOut(username: string, sessionToken: string, res: Response): Promise<void> {
-        let result: [{ username: string, email: string }] | any;
+        let result : any[];
 
         result = await accountSignInRequest.getUserByTokenAndUsername(username, sessionToken, this.client);
 
@@ -62,24 +62,24 @@ export class AccountSignIn {
         }
     }
 
-        //checks if the token is valid for the user
-        public async checkSession(username: string, sessionToken: string, res: Response): Promise<number> {
-            if (!regexRequest.checkRegexUsername(username) || !regexRequest.checkRegexSessionToken(sessionToken, this.sessionTokenLength)) {
-                return 0;
-            }
-    
-            const result: any = await accountSignInRequest.getUserByTokenAndUsername(username, sessionToken, this.client);
-            if (result.length && sessionToken !== 'none') {
-                return 1;
-            } else {
-                return 0;
-            }
+    //checks if the token is valid for the user
+    public async checkSession(username: string, sessionToken: string, res: Response): Promise<number> {
+        if (!regexRequest.checkRegexUsername(username) || !regexRequest.checkRegexSessionToken(sessionToken, this.sessionTokenLength)) {
+            return 0;
         }
+
+        const result: any = await accountSignInRequest.getUserByTokenAndUsername(username, sessionToken, this.client);
+        if (result.length && sessionToken !== 'none') {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 
     //hash a string with sha256
     private async hashSha256(data: string): Promise<string> {
         return new Promise((resolve, reject): void => {
-            const hash: crypto.Hash = crypto.createHash('sha256');
+            const hash : crypto.Hash = crypto.createHash('sha256');
             hash.write(data);
             hash.on('readable', (): void => {
                 const data = hash.read();

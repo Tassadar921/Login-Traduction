@@ -5,15 +5,15 @@
 //1.0.0 - 15/03/2023 - Iémélian RAMBEAU - Creation of the first version
 //--------------------------------------------------------------------------------------
 
-import createClient from "edgedb";
+import createClient, { Client } from "edgedb";
 import { AccountSignUp } from "modules/account/signUp/accountSignUp";
 import { AccountResetPassword } from "modules/account/resetPassword/accountResetPassword";
 import resetTablesRequest from "./resetTablesRequest";
 
 export class ResetTables {
-    private client;
-    private accountSignUp;
-    accountResetPassword: AccountResetPassword;
+    private client : Client;
+    private accountSignUp : AccountSignUp;
+    private accountResetPassword: AccountResetPassword;
 
     constructor() {
         this.client = createClient({});
