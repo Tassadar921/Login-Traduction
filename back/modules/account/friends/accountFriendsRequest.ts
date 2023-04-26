@@ -112,6 +112,32 @@ module accountFriendsRequest {
             `));
         });
     }
+
+    export async function removePendingFriendsRequests(usernameReceiver : string, usernameSender : string, client : Client) : Promise<unknown[]> {
+        return new Promise<any[]>((resolve) => {
+            resolve(client.query(`
+                Update User 
+                Filter .username = "${usernameReceiver}"
+                Set {
+                pendingFriendsRequests -= (Select User Filter .username = "${usernameSender}"),
+                }
+            `));
+        });
+    }
+
+    export async function addFriend(username1 : string, username2 : string, client : Client) : Promise<unknown[]> {
+        return new Promise<any[]>((resolve) => {
+            resolve(client.query(`
+                Update User 
+                Filter .username = "${username1}"
+                Set {
+                friends += (Select User Filter .username = "${username2}"),
+                }
+            `));
+        });
+    }
+
+
 }
 
 export default accountFriendsRequest;

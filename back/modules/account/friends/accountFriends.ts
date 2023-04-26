@@ -31,6 +31,17 @@ export class AccountFriends{
             res.json({status: 0});
             return;
         }
+        if(await accountFriendsRequest.getPendingFriendsRequestByBothUsernames(usernameSender, usernameReceiver, this.client)){
+            accountFriendsRequest.removePendingFriendsRequests(usernameSender, usernameReceiver, this.client);
+            accountFriendsRequest.addFriend(usernameSender, usernameReceiver, this.client);
+            accountFriendsRequest.addFriend(usernameReceiver, usernameSender, this.client);
+            res.json({status: 10});
+            return;
+        } else {
+            accountFriendsRequest.addPendingFriendsRequests(usernameSender, usernameReceiver, this.client);
+            res.json({status: 11});
+            return;
+        }
     }
 
     public async getFriends(username: string, itemsPerPage: number, page: number, res: Response): Promise<void>{
