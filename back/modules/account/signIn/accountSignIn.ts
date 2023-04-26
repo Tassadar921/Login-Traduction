@@ -18,29 +18,28 @@ export class AccountSignIn {
 
     constructor() {
         this.client = createClient({});
-
         this.sessionTokenLength = parseInt(process.env.SESSION_TOKEN_LENGTH!);
     }
 
     //signIn, identifier can be either username or email
     public async signIn(identifier: string, password: string, res: Response): Promise<void> {
 
-        const result = await accountSignInRequest.getUsernameByPasswordAndIdentifier(identifier, await this.hashSha256(password), this.client);
+        const result: any[] = await accountSignInRequest.getUsernameByPasswordAndIdentifier(identifier, await this.hashSha256(password), this.client);
 
         if (!result.length) {
             res.json({status: 0});
             return;
         } else {
             let username = result[0].username;
-            let sessionToken = this.generateToken(this.sessionTokenLength);
-            let result1 = await accountSignInRequest.getUsernameBySessionToken(sessionToken, this.client);
+            let sessionToken: string = this.generateToken(this.sessionTokenLength);
+            let result1: any[] = await accountSignInRequest.getUsernameBySessionToken(sessionToken, this.client);
 
             while (result1.length > 0) {
                 sessionToken = this.generateToken(this.sessionTokenLength);
                 result1 = await accountSignInRequest.getUsernameBySessionToken(sessionToken, this.client);
             }
             await accountSignInRequest.updateUserToken(username, sessionToken, this.client);
-            const result2 = await accountSignInRequest.getPermissionByUsername(username, this.client);
+            const result2: any[] = await accountSignInRequest.getPermissionByUsername(username, this.client);
 
             res.json({status: 1, sessionToken, username, permission: result2[0]?.permission});
             return;
@@ -64,28 +63,25 @@ export class AccountSignIn {
     }
 
         //checks if the token is valid for the user
-        public async checkSession(username: string, sessionToken: string, res: Response): Promise<void> {
+        public async checkSession(username: string, sessionToken: string, res: Response): Promise<number> {
             if (!regexRequest.checkRegexUsername(username) || !regexRequest.checkRegexSessionToken(sessionToken, this.sessionTokenLength)) {
-                res.json({status: 0});
-                return;
+                return 0;
             }
     
             const result: any = await accountSignInRequest.getUserByTokenAndUsername(username, sessionToken, this.client);
             if (result.length && sessionToken !== 'none') {
-                res.json({status: 1});
-                return;
+                return 1;
             } else {
-                res.json({status: 0});
-                return;
+                return 0;
             }
         }
 
     //hash a string with sha256
     private async hashSha256(data: string): Promise<string> {
-        return new Promise((resolve, reject) => {
-            const hash = crypto.createHash('sha256');
+        return new Promise((resolve, reject): void => {
+            const hash: crypto.Hash = crypto.createHash('sha256');
             hash.write(data);
-            hash.on('readable', () => {
+            hash.on('readable', (): void => {
                 const data = hash.read();
                 if (data) {
                     const final = data.toString('hex');
@@ -101,10 +97,10 @@ export class AccountSignIn {
     // generates token by stringing a random number of characters from a dictionary
     private generateToken(length: number): string {
         //edit the token allowed characters
-        let alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'.split('');
+        let alphabet: string[] = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'.split('');
         let token: string = '';
-        for (let i = 0; i < length; i++) {
-            let j = Math.floor(Math.random() * (alphabet.length - 1));
+        for (let i: number = 0; i < length; i++) {
+            let j: number = Math.floor(Math.random() * (alphabet.length - 1));
             token += alphabet[j];
         }
         return token;

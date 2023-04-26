@@ -11,6 +11,7 @@ import ioServer from '../../common/socket/socket';
 import accountFriendsRequest from './accountFriendsRequest';
 import createClient, { Client } from 'edgedb';
 import {DefaultEventsMap} from 'socket.io/dist/typed-events';
+import {Response} from 'express';
 
 export class AccountFriends{
     private accountNotification: AccountNotification;
@@ -21,11 +22,11 @@ export class AccountFriends{
         this.accountNotification = accountNotification;
     }
 
-    public async addFriend(socket : Socket, username : string): Promise<void> {
-        
+    public async askFriend(username: string, res: Response): Promise<void>{
+        await res.json({status: 1});
     }
 
-    public async sendMessage(socket : Socket, username : string, message : string, date : Date): Promise<void> {
+    public async sendMessage(username : string, message : string, date : Date, socket : Socket): Promise<void> {
         //start by finding the socket if it exists else get undefined (if the user is not connected)
         const socketOfUsername: RemoteSocket<DefaultEventsMap, any> | undefined  =
             (await ioServer.io.fetchSockets()).find(
@@ -33,7 +34,7 @@ export class AccountFriends{
             );
 
         //convert the date to ISO format
-        const dateISO = new Date(date).toISOString()
+        const dateISO: string = new Date(date).toISOString()
 
         //add the message to the database
         let dataMessage: any[] = await accountFriendsRequest.newMessage(socket.data.username, username, message, dateISO, this.client);

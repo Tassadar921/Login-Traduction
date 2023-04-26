@@ -28,52 +28,53 @@ module accountRouting {
     }
 
     function initHttp(app: Express): void {
-        const accountResetPassword = new AccountResetPassword();
-        const accountSignIn = new AccountSignIn();
-        const accountSignUp = new AccountSignUp();
+        const accountResetPassword: AccountResetPassword = new AccountResetPassword();
+        const accountSignIn: AccountSignIn = new AccountSignIn();
+        const accountSignUp: AccountSignUp = new AccountSignUp();
+        const accountFriends: AccountFriends = new AccountFriends(new AccountNotification());
 
         /*----------------------------------------SignUp----------------------------------------*/
 
-        app.post('/signUp', async function (req: Request, res: Response) {
+        app.post('/signUp', async function (req: Request, res: Response): Promise<void> {
             await accountSignUp.createUserCreation(req.body.username, req.body.password, req.body.email, req.body.language, res);
         });
-        app.post('/confirmSignUp', async function (req: Request, res: Response) {
+        app.post('/confirmSignUp', async function (req: Request, res: Response): Promise<void> {
             await accountSignUp.createUser(req.body.urlToken, res);
         });
 
         /*----------------------------------------Login----------------------------------------*/
 
-        app.post('/signIn', async function (req: Request, res: Response) {
+        app.post('/signIn', async function (req: Request, res: Response): Promise<void> {
             await accountSignIn.signIn(req.body.identifier, req.body.password, res);
         });
 
-        app.post('/signOut', async function (req: Request, res: Response) {
+        app.post('/signOut', async function (req: Request, res: Response): Promise<void> {
             await accountSignIn.signOut(req.body.username, req.body.sessionToken, res);
-        });
-
-        app.post('/checkSession', async function (req: Request, res: Response) {
-            await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res);
         });
 
         /*----------------------------------------ResetPassword----------------------------------------*/
 
-        app.post('/resetPassword', async function (req: Request, res: Response) {
+        app.post('/resetPassword', async function (req: Request, res: Response): Promise<void> {
             await accountResetPassword.mailResetPasswordCreateUrlToken(req.body.email, req.body.language, res);
         });
-        app.post('/confirmResetPassword', async function (req: Request, res: Response) {
+        app.post('/confirmResetPassword', async function (req: Request, res: Response): Promise<void> {
             await accountResetPassword.resetPassword(req.body.urlToken, req.body.password, res);
         });
 
         /*----------------------------------------Friends----------------------------------------*/
 
-        app.post('/addFriend', async function (req: Request, res: Response) {
-
+        app.post('/askFriend', async function (req: Request, res: Response): Promise<void> {
+            if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res)){
+                await accountFriends.askFriend(req.body.username, res);
+            }else{
+                await res.json({status: 0});
+            }
         });
 
         /*--------------------------------------Notification-------------------------------------*/
 
 
-        app.post('/test', async function (req: Request, res: Response) {
+        app.post('/test', async function (req: Request, res: Response): Promise<void> {
             //code
             await res.json({status: 1});
         });
@@ -81,40 +82,43 @@ module accountRouting {
         return;
     }
 
-    function initSocket(io: socketIO.Server<socketOptions.ClientToServerEvents, socketOptions.ServerToClientEvents, socketOptions.InterServerEvents, socketOptions.SocketData>): void {
-        const accountNotification = new AccountNotification();
-        const accountFriends = new AccountFriends(accountNotification);
+    function initSocket(io: socketIO.Server<socketOptions.ClientToServerEvents,
+        socketOptions.ServerToClientEvents,
+        socketOptions.InterServerEvents,
+        socketOptions.SocketData>): void {
+        const accountNotification: AccountNotification = new AccountNotification();
+        const accountFriends: AccountFriends = new AccountFriends(accountNotification);
 
-        io.on('connection', (socket) => {
-            console.log('-----new client-----')
+        io.on('connection', (socket: socketIO.Socket<any>): void => {
+            console.log('-----  New client connected    -----')
             socket.emit('initSocketData');
 
-            socket.on('initSocketData', async (username: string, token: string) => {
+            socket.on('initSocketData', async (username: string, token: string): Promise<void> => {
                 await accountNotification.initSocketData(socket, username, token);
             });
 
             /*------------------------------------Notification------------------------------------*/
 
-            socket.on('synchronizeNotifications', async () => {
+            socket.on('synchronizeNotifications', async (): Promise<void> => {
                 await accountNotification.synchronizeNotificationsWithSocket(socket);
             });
-            socket.on('notificationIsSeen', async (id) => {
+            socket.on('notificationIsSeen', async (id: string): Promise<void> => {
                 await accountNotification.notificationIsSeen(socket, id);
             });
-            socket.on('deleteNotification', async (id) => {
+            socket.on('deleteNotification', async (id: string): Promise<void> => {
                 await accountNotification.deleteNotification(socket, id);
             });
 
             /*----------------------------------------Chat----------------------------------------*/
 
-            socket.on('getChat', async () => {
+            socket.on('getChat', async (): Promise<void> => {
                 await accountFriends.getMessage(socket);
             });
-            socket.on('sendMessage', async (username, message, date) => {
-                await accountFriends.sendMessage(socket, username, message, date);
+            socket.on('sendMessage', async (username: string, message: string, date: Date): Promise<void> => {
+                await accountFriends.sendMessage(username, message, date, socket);
             });
 
-            socket.on('disconnect', async () => {
+            socket.on('disconnect', async (): Promise<void> => {
                 console.log('client déconnecté')
             });
         });

@@ -1,9 +1,9 @@
 //----------------------------------------Notification----------------------------------------
 //Version 1.0.0 
-//This module manage the request to the database for accountNotification.ts
+//This module manages the requests to the database for accountNotification.ts
 //Version log :
 //1.0.0 - 15/03/2023 - Iémélian RAMBEAU - Creation of the first version
-//1.1.0 - 25/04/2023 - Iémélian RAMBEAU - New version of the notification type in the database, the request are now adapted to the new database
+//1.1.0 - 25/04/2023 - Iémélian RAMBEAU - New version of the notification type in the database, the requests are now adapted to the new database
 //--------------------------------------------------------------------------------------------
 
 import { Client } from "edgedb";
