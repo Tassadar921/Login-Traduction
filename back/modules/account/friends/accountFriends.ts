@@ -27,15 +27,18 @@ export class AccountFriends{
     }
 
     public async getFriends(username: string, itemsPerPage: number, page: number, res: Response): Promise<void>{
-
+        const friends: any[] = await accountFriendsRequest.getFriends(username, itemsPerPage, page, this.client);
+        res.json(friends);
     }
 
     public async getEnteringPendingFriendsRequests(username: string, itemsPerPage: number, page: number, res: Response): Promise<void>{
-
+        const pendingFriendsRequests: any[] = await accountFriendsRequest.getEnteringPendingFriendsRequests(username, itemsPerPage, page, this.client);
+        res.json(pendingFriendsRequests);
     }
 
     public async getExitingPendingFriendsRequests(username: string, itemsPerPage: number, page: number, res: Response): Promise<void>{
-
+        const pendingFriendsRequests: any[] = await accountFriendsRequest.getExitingPendingFriendsRequests(username, itemsPerPage, page, this.client);
+        res.json(pendingFriendsRequests);
     }
 
     public async sendMessage(username : string, message : string, date : Date, socket : Socket): Promise<void> {

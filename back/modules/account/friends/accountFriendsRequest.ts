@@ -35,6 +35,50 @@ module accountFriendsRequest {
             `));
         });
     }
+
+    export async function getFriends(username : string, page : number, itemsPerPage : number, client : Client) : Promise<unknown[]> {
+        return new Promise<any[]>((resolve) => {
+            resolve(client.query(`
+                Select (Select User {
+                    friends : {
+                    id,
+                    username    
+                    }
+                } filter .username = "${username}").friends
+                order by .username
+                offset ${itemsPerPage}*(${page}-1)
+                limit ${itemsPerPage}
+            `));
+        });
+    }
+
+    export async function getEnteringPendingFriendsRequests(username : string, page : number, itemsPerPage : number, client : Client) : Promise<unknown[]> {
+        return new Promise<any[]>((resolve) => {
+            resolve(client.query(`
+                Select (Select User {
+                    pendingFriendsRequests : {
+                    username
+                    }
+                } Filter .username = "${username}").pendingFriendsRequests
+                order by .username
+                offset ${itemsPerPage}*(${page}-1)
+                limit ${itemsPerPage}
+            `));
+        });
+    }
+
+    export async function getExitingPendingFriendsRequests(username : string, page : number, itemsPerPage : number, client : Client) : Promise<unknown[]> {
+        return new Promise<any[]>((resolve) => {
+            resolve(client.query(`
+                Select User {
+                    username
+                } Filter User.pendingFriendsRequests.username = "${username}"
+                order by .username
+                offset ${itemsPerPage}*(${page}-1)
+                limit ${itemsPerPage}
+            `));
+        });
+    }
 }
 
 export default accountFriendsRequest;
