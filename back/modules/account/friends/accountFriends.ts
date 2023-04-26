@@ -26,6 +26,18 @@ export class AccountFriends{
         await res.json({status: 1});
     }
 
+    public async getFriends(username: string, itemsPerPage: number, page: number, res: Response): Promise<void>{
+
+    }
+
+    public async getEnteringPendingFriendsRequests(username: string, itemsPerPage: number, page: number, res: Response): Promise<void>{
+
+    }
+
+    public async getExitingPendingFriendsRequests(username: string, itemsPerPage: number, page: number, res: Response): Promise<void>{
+
+    }
+
     public async sendMessage(username : string, message : string, date : Date, socket : Socket): Promise<void> {
         //start by finding the socket if it exists else get undefined (if the user is not connected)
         const socketOfUsername: RemoteSocket<DefaultEventsMap, any> | undefined  =
