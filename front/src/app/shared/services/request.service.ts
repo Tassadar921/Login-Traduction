@@ -126,4 +126,10 @@ export class RequestService {
       {username, sessionToken, itemsPerPage, page}
     ));
   }
+
+  public async askFriend(senderUsername: string, sessionToken: string, receiverUsername: string): Promise<Object> {
+    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/askFriend',
+      {senderUsername, sessionToken, receiverUsername}
+    ));
+  }
 }

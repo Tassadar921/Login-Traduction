@@ -22,34 +22,33 @@ export class AccountFriends{
         this.accountNotification = accountNotification;
     }
 
-    public async askFriend(usernameSender: string, usernameReceiver: string, res: Response): Promise<void>{
-        if(usernameSender == usernameReceiver) {
+    public async askFriend(usernameSender: string, usernameReceiver: string, res: Response): Promise<void> {
+        if (usernameSender === usernameReceiver) {
             res.json({status: -1});
             return;
         }
-        if(await accountFriendsRequest.getFriendByBothUsernames(usernameSender, usernameReceiver, this.client)) {
+        if (await accountFriendsRequest.getFriendByBothUsernames(usernameSender, usernameReceiver, this.client)) {
             res.json({status: 0});
             return;
         }
-        
-
-
-        await res.json({status: 1});
     }
 
     public async getFriends(username: string, itemsPerPage: number, page: number, res: Response): Promise<void>{
         const friends: any[] = await accountFriendsRequest.getFriends(username, itemsPerPage, page, this.client);
         res.json(friends);
+        return;
     }
 
     public async getEnteringPendingFriendsRequests(username: string, itemsPerPage: number, page: number, res: Response): Promise<void>{
         const pendingFriendsRequests: any[] = await accountFriendsRequest.getEnteringPendingFriendsRequests(username, itemsPerPage, page, this.client);
         res.json(pendingFriendsRequests);
+        return;
     }
 
     public async getExitingPendingFriendsRequests(username: string, itemsPerPage: number, page: number, res: Response): Promise<void>{
         const pendingFriendsRequests: any[] = await accountFriendsRequest.getExitingPendingFriendsRequests(username, itemsPerPage, page, this.client);
         res.json(pendingFriendsRequests);
+        return;
     }
 
     public async sendMessage(username : string, message : string, date : Date, socket : Socket): Promise<void> {

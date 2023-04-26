@@ -15,12 +15,12 @@ import {FormValidatorsService} from '../../shared/services/form-validators.servi
   styleUrls: ['../connection.page.scss'],
 })
 export class SignUpComponent implements OnInit {
-  public showPassword = false;
-  public showConfirmPassword = false;
-  public output = '';
-  public waiting = false;
-  public supportEmail = environment.supportEmail;
-  public mailError = false;
+  public showPassword: boolean = false;
+  public showConfirmPassword: boolean = false;
+  public output: string = '';
+  public waiting: boolean = false;
+  public supportEmail: string = environment.supportEmail;
+  public mailError: boolean = false;
   public formControl: FormGroup;
 
   constructor(
@@ -35,8 +35,8 @@ export class SignUpComponent implements OnInit {
     this.formControl = this.formValidatorsService.getSignUpValidator();
   }
 
-  ngOnInit() {
-    document.addEventListener('keydown', async (event) => {
+  ngOnInit(): void {
+    document.addEventListener('keydown', async (event: KeyboardEvent): Promise<void> => {
       if(event.key === 'Enter' && this.formControl.valid){
         await this.signUp();
       }
