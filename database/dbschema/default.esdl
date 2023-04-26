@@ -3,8 +3,7 @@ module default {
         required property name -> str;
     }
 
-    abstract type Subject {
-    }
+    abstract type Subject {}
 
     type User extending Subject {
         required property username -> str;
@@ -16,6 +15,10 @@ module default {
             on target delete allow;
         };
         multi link notifications -> Notification {
+            on target delete allow;
+            on source delete delete target;
+        };
+        multi link pendingRequests -> PendingRequest {
             on target delete allow;
             on source delete delete target;
         };
@@ -40,7 +43,7 @@ module default {
         };
         required property date -> datetime;
         required property seen -> bool {
-            default := false 
+            default := false;
         };
     }
 
@@ -48,13 +51,23 @@ module default {
         required property text -> str;
         required property date -> datetime;
         required property seen -> bool { 
-            default := false 
+            default := false;
         };
         link sender -> User {
             on target delete delete source;
         };
         multi link receiver -> User {
             on target delete allow;
+        };
+    }
+
+    type PendingRequest {
+        required property date -> datetime;
+        link sender -> User {
+            on target delete delete source;
+        };
+        link receiver -> User {
+            on target delete delete source;
         };
     }
 }

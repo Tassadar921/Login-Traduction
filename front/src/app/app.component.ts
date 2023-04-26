@@ -19,10 +19,10 @@ export class AppComponent implements OnInit {
     private requestService: RequestService
   ) {}
 
-  async ngOnInit()  {
+  async ngOnInit(): Promise<void>  {
     await this.languageService.init();
     if(await this.cookieService.getCookie('sessionToken')) {
-      let rtrn = await this.requestService.checkSession(
+      let rtrn: Object = await this.requestService.checkSession(
         await this.cookieService.getCookie('username'),
         await this.cookieService.getCookie('sessionToken')
       );
