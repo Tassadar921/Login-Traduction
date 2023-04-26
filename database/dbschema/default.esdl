@@ -66,8 +66,5 @@ module default {
         link sender -> User {
             on target delete delete source;
         };
-        link receiver -> User {
-            on target delete delete source;
-        };
     }
 }
