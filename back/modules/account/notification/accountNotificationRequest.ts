@@ -66,19 +66,6 @@ module AccountNotificationRequest {
             `));
         });
     }
-
-    export async function getIdOfNotificationOrderByDate(username : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve) => {
-            resolve(client.query(`
-                SELECT User {
-                    notifications: {
-                        id
-                    } ORDER BY .date DESC
-                }
-                FILTER .username = "${username}"
-            `));
-        });
-    }
 }
 
 export default AccountNotificationRequest;

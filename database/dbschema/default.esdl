@@ -14,11 +14,10 @@ module default {
         multi link friends -> User{
             on target delete allow;
         };
-        multi link notifications -> Notification {
+        multi link pendingFriendsRequests -> User {
             on target delete allow;
-            on source delete delete target;
         };
-        multi link pendingRequests -> PendingRequest {
+        multi link notifications -> Notification {
             on target delete allow;
             on source delete delete target;
         };
@@ -58,13 +57,6 @@ module default {
         };
         multi link receiver -> User {
             on target delete allow;
-        };
-    }
-
-    type PendingRequest {
-        required property date -> datetime;
-        link sender -> User {
-            on target delete delete source;
         };
     }
 }
