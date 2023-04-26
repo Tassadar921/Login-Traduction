@@ -26,19 +26,17 @@ export class AccountFriends{
         if (usernameSender === usernameReceiver) {
             res.json({status: -1});
             return;
-        }
-        if (await accountFriendsRequest.getFriendByBothUsernames(usernameSender, usernameReceiver, this.client)) {
+        } else if (await accountFriendsRequest.getFriendByBothUsernames(usernameSender, usernameReceiver, this.client)) {
             res.json({status: 0});
             return;
-        }
-        if(await accountFriendsRequest.getPendingFriendsRequestByBothUsernames(usernameSender, usernameReceiver, this.client)){
-            accountFriendsRequest.removePendingFriendsRequests(usernameSender, usernameReceiver, this.client);
-            accountFriendsRequest.addFriend(usernameSender, usernameReceiver, this.client);
-            accountFriendsRequest.addFriend(usernameReceiver, usernameSender, this.client);
+        } else if(await accountFriendsRequest.getPendingFriendsRequestByBothUsernames(usernameSender, usernameReceiver, this.client)){
+            await accountFriendsRequest.removePendingFriendsRequests(usernameSender, usernameReceiver, this.client);
+            await accountFriendsRequest.addFriend(usernameSender, usernameReceiver, this.client);
+            await accountFriendsRequest.addFriend(usernameReceiver, usernameSender, this.client);
             res.json({status: 10});
             return;
         } else {
-            accountFriendsRequest.addPendingFriendsRequests(usernameSender, usernameReceiver, this.client);
+            await accountFriendsRequest.addPendingFriendsRequests(usernameSender, usernameReceiver, this.client);
             res.json({status: 11});
             return;
         }
