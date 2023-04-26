@@ -45,7 +45,13 @@ module accountRouting {
         /*----------------------------------------Login----------------------------------------*/
 
         app.post('/checkSession', async function (req: Request, res: Response): Promise<void> {
-            await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res);
+            if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res)){
+                res.json({status: 1});
+            }
+            else{
+                res.json({status: 0});
+            }
+
         });
 
         app.post('/signIn', async function (req: Request, res: Response): Promise<void> {
