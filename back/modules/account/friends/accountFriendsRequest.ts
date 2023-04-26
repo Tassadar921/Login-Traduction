@@ -96,9 +96,19 @@ module accountFriendsRequest {
         return new Promise<any[]>((resolve) => {
             resolve(client.query(`
                 Select User {
-
                 }
                 Filter .friends.username = "${usernameSender}" AND .username = "${usernameReceiver}"
+            `));
+        });
+    }
+
+    export async function getPendingFriendsRequestByBothUsernames(usernameReceiver : string, usernameSender : string, client : Client) : Promise<unknown[]> {
+        return new Promise<any[]>((resolve) => {
+            resolve(client.query(`
+                Select User {
+                    pendingFriendsRequests : {}
+                }
+                Filter .username = "${usernameSender}" and .pendingFriendsRequests.username = "${usernameReceiver}"
             `));
         });
     }

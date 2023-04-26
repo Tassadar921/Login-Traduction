@@ -23,7 +23,7 @@ export class AccountFriends{
     }
 
     public async askFriend(usernameSender: string, usernameReceiver: string, res: Response): Promise<void>{
-        if(usernameSender = usernameReceiver) {
+        if(usernameSender == usernameReceiver) {
             res.json({status: -1});
             return;
         }
@@ -31,6 +31,8 @@ export class AccountFriends{
             res.json({status: 0});
             return;
         }
+        
+
 
         await res.json({status: 1});
     }
