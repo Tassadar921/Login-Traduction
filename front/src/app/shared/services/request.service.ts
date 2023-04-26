@@ -108,4 +108,22 @@ export class RequestService {
       {username, sessionToken}
     ));
   }
+
+  public async getFriends(username: string, sessionToken: string, itemsPerPage: number, page: number): Promise<Object> {
+    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/getFriends',
+      {username, sessionToken, itemsPerPage, page}
+    ));
+  }
+
+  public async getEnteringPendingFriendsRequests(username: string, sessionToken: string, itemsPerPage: number, page: number): Promise<Object> {
+    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/getEnteringPendingFriendsRequests',
+      {username, sessionToken, itemsPerPage, page}
+    ));
+  }
+
+  public async getExitingPendingFriendsRequests(username: string, sessionToken: string, itemsPerPage: number, page: number): Promise<Object> {
+    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/getExitingPendingFriendsRequests',
+      {username, sessionToken, itemsPerPage, page}
+    ));
+  }
 }

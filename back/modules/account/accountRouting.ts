@@ -46,12 +46,11 @@ module accountRouting {
 
         app.post('/checkSession', async function (req: Request, res: Response): Promise<void> {
             if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res)){
-                res.json({status: 1});
+                await res.json({status: 1});
             }
             else{
-                res.json({status: 0});
+                await res.json({status: 0});
             }
-
         });
 
         app.post('/signIn', async function (req: Request, res: Response): Promise<void> {
@@ -77,6 +76,33 @@ module accountRouting {
             if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res)){
                 await accountFriends.askFriend(req.body.username, res);
             }else{
+                await res.json({status: 0});
+            }
+        });
+
+        app.post('/getFriends', async function (req: Request, res: Response): Promise<void> {
+            if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res)){
+
+            }
+            else{
+                await res.json({status: 0});
+            }
+        });
+
+        app.post('/checkSession', async function (req: Request, res: Response): Promise<void> {
+            if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res)){
+
+            }
+            else{
+                await res.json({status: 0});
+            }
+        });
+
+        app.post('/checkSession', async function (req: Request, res: Response): Promise<void> {
+            if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res)){
+                
+            }
+            else{
                 await res.json({status: 0});
             }
         });
