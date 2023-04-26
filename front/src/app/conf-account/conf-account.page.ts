@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 import {RequestService} from '../shared/services/request.service';
 import {ToastService} from '../shared/services/toast.service';
 import {LanguageService} from '../shared/services/language.service';
@@ -21,11 +21,11 @@ export class ConfAccountPage implements OnInit {
     private cookieService: CookieService
   ) {}
 
-  ngOnInit() {
-    this.activatedRoute.queryParams.subscribe(async params => {
-      const rtrn = await this.requestService.confirmSignUp(Object(params).urlToken);
+  ngOnInit(): void {
+    this.activatedRoute.queryParams.subscribe(async (params: Params): Promise<void> => {
+      const rtrn: Object = await this.requestService.confirmSignUp(Object(params).urlToken);
       if(Object(rtrn).status) {
-        await this.cookieService.signIn(Object(rtrn).username, Object(rtrn).token);
+        await this.cookieService.signIn(Object(rtrn).username, Object(rtrn).sessionToken);
         await this.toastService.displayToast(
           this.languageService.dictionary.data?.components.confAccount.accountCreated, 'top', 5000
         );
