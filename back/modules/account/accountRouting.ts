@@ -108,6 +108,26 @@ module accountRouting {
             }
         });
 
+        app.post('/blockUser', async function (req: Request, res: Response): Promise<void> {
+            if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res)){
+                await accountFriends.blockUser(req.body.username, req.body.blockedUsername, res);
+            }
+            else{
+                await res.json({status: 0});
+            }
+        });
+
+        app.post('/unblockUser', async function (req: Request, res: Response): Promise<void> {
+            if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res)){
+                await accountFriends.unblockUser(req.body.username, req.body.blockedUsername, res);
+            }
+            else{
+                await res.json({status: 0});
+            }
+        });
+
+        
+
         /*--------------------------------------Notification-------------------------------------*/
 
 

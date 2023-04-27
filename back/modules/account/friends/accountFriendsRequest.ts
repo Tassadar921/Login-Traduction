@@ -139,6 +139,18 @@ module accountFriendsRequest {
         });
     }
 
+    export async function removeFriend(username1 : string, username2 : string, client : Client) : Promise<unknown[]> {
+        return new Promise<any[]>((resolve) => {
+            resolve(client.query(`
+                Update User 
+                Filter .username = "${username1}"
+                Set {
+                friends -= (Select User Filter .username = "${username2}"),
+                }
+            `));
+        });
+    }
+
     export async function getUserByUsername(username : string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve) => {
             resolve(client.query(`
@@ -182,6 +194,92 @@ module accountFriendsRequest {
                 order by .username
                 offset ${itemsPerPage}*(${page}-1)
                 limit ${itemsPerPage}
+            `));
+        });
+    }
+
+    export async function addBlockedUser(username1 : string, username2 : string, client : Client) : Promise<unknown[]> {
+        return new Promise<any[]>((resolve) => {
+            resolve(client.query(`
+                Update User 
+                Filter .username = "${username1}"
+                Set {
+                blockedUsers += (Select User Filter .username = "${username2}"),
+                }
+            `));
+        });
+    }
+
+    export async function addBlockedBy(username1 : string, username2 : string, client : Client) : Promise<unknown[]> {
+        return new Promise<any[]>((resolve) => {
+            resolve(client.query(`
+                Update User 
+                Filter .username = "${username1}"
+                Set {
+                blockedBy += (Select User Filter .username = "${username2}"),
+                }
+            `));
+        });
+    }
+
+    export async function removeBlockedUser(username1 : string, username2 : string, client : Client) : Promise<unknown[]> {
+        return new Promise<any[]>((resolve) => {
+            resolve(client.query(`
+                Update User 
+                Filter .username = "${username1}"
+                Set {
+                blockedUsers -= (Select User Filter .username = "${username2}"),
+                }
+            `));
+        });
+    }
+
+    export async function removeBlockedBy(username1 : string, username2 : string, client : Client) : Promise<unknown[]> {
+        return new Promise<any[]>((resolve) => {
+            resolve(client.query(`
+                Update User 
+                Filter .username = "${username1}"
+                Set {
+                blockedBy -= (Select User Filter .username = "${username2}"),
+                }
+            `));
+        });
+    }
+
+    export async function getBlockedUsers(username : string, itemsPerPage : number, page : number, client : Client) : Promise<unknown[]> {
+        return new Promise<any[]>((resolve) => {
+            resolve(client.query(`
+                Select (Select User {
+                    blockedUsers : {
+                        id,
+                        username
+                    }
+                } Filter .username = "${username}").blockedUsers
+                order by .username
+                offset ${itemsPerPage}*(${page}-1)
+                limit ${itemsPerPage}
+            `));
+        });
+    }
+
+    export async function getBlockedUserByBothUsernames(username1 : string, username2 : string, client : Client) : Promise<unknown[]> {
+        return new Promise<any[]>((resolve) => {
+            resolve(client.query(`
+                Select User {
+                    blockedUsers : {}
+                }
+                Filter .username = "${username1}" and .blockedUsers.username = "${username2}"
+            `));
+        });
+    }
+
+    export async function getBlockedByByBothUsernames(username1 : string, username2 : string, client : Client) : Promise<unknown[]> {
+        return new Promise<any[]>((resolve) => {
+            resolve(client.query(`
+                Select User {
+                    blockedBy : {}
+                }
+                Filter .username = "${username1}" and .blockedBy.username = "${username2}"
             `));
         });
     }
