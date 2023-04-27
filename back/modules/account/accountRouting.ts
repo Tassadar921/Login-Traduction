@@ -73,9 +73,9 @@ module accountRouting {
 
         /*----------------------------------------Friends----------------------------------------*/
 
-        app.post('/askFriend', async function (req: Request, res: Response): Promise<void> {
+        app.post('/askIfNotAddFriend', async function (req: Request, res: Response): Promise<void> {
             if(await accountSignIn.checkSession(req.body.senderUsername, req.body.sessionToken, res)){
-                await accountFriends.askFriend(req.body.senderUsername, req.body.receiverUsername, res);
+                await accountFriends.askIfNotAddFriend(req.body.senderUsername, req.body.receiverUsername, res);
             }else{
                 await res.json({status: 0});
             }
