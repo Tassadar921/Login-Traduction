@@ -148,7 +148,7 @@ module accountFriendsRequest {
         });
     }
 
-    export async function getOtherUsers(username : string, page : number, itemsPerPage : number, client : Client) : Promise<unknown[]> {
+    export async function getOtherUsers(username : string, itemsPerPage : number, page : number, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve) => {
             resolve(client.query(`
                 Select (with x :=   (Select User {
