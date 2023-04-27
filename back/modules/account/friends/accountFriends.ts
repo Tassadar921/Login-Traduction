@@ -83,7 +83,7 @@ export class AccountFriends{
         let dataMessage: any[] = await accountFriendsRequest.newMessage(socket.data.username, username, message, dateISO, this.client);
 
         if(dataMessage.length != undefined) {
-            await this.accountNotification.addNotificationsMessage(username, socket.data.username, dataMessage[0].id);
+            await this.accountNotification.addNotificationsMessage(username, dataMessage[0].id);
         }
 
         //if the socket exists send the message to the user

@@ -12,6 +12,7 @@ import SMTPTransport from 'nodemailer/lib/smtp-transport';
 import regexRequest from 'modules/common/regex/regexRequest';
 import {CommonAccount} from "../commonAccount";
 import { Client } from 'edgedb';
+import logger from 'modules/common/logger/logger';
 
 export class AccountSignUp {
     private commonAccount = new CommonAccount();
@@ -35,7 +36,7 @@ export class AccountSignUp {
             return;
         }
 
-        let result = await accountSignInRequest.getUsernameAndEmailByUsernameAndEmail(
+        let result : any[] = await accountSignInRequest.getUsernameAndEmailByUsernameAndEmail(
             username,
             email,
             this.commonAccount.client
@@ -113,7 +114,7 @@ export class AccountSignUp {
             this.commonAccount.mailOptions,
             async function (error) {
             if (error) {
-                console.log(error);
+                logger.logger.error(error);
                 res.json({status: -1});
                 return;
             } else {
@@ -177,7 +178,6 @@ export class AccountSignUp {
         const client : Client = this.commonAccount.client;
 
         setTimeout(async () => {
-            console.log("deleteUserCreation---------------------------------");
             await accountSignInRequest.deleteUserCreationByUrlToken(urlToken, client);
         }, this.commonAccount.urlTokenExpiration);
         return;

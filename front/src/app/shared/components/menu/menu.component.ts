@@ -46,7 +46,7 @@ export class MenuComponent implements OnInit {
       await this.cookieService.getCookie('sessionToken')
     );
     if (Object(rtrn).status === 1) {
-      console.log(popover);
+      logger.logger.info(popover);
       await this.cookieService.signOut(popover);
     }
   }

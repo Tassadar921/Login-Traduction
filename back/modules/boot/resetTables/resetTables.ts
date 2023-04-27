@@ -9,6 +9,7 @@ import createClient, { Client } from "edgedb";
 import { AccountSignUp } from "modules/account/signUp/accountSignUp";
 import { AccountResetPassword } from "modules/account/resetPassword/accountResetPassword";
 import resetTablesRequest from "./resetTablesRequest";
+import logger from "modules/common/logger/logger";
 
 export class ResetTables {
     private client : Client;
@@ -22,29 +23,29 @@ export class ResetTables {
     }
 
     public async startReset(): Promise<void> {
-        console.log('\n=========== RESETING ALL TABLES ===========\n');
+        logger.logger.info('=========== RESETING ALL TABLES ===========');
 
-        const tableUserCreation = await resetTablesRequest.getUrlTokenFromUserCreation(this.client);
+        const tableUserCreation : any[] = await resetTablesRequest.getUrlTokenFromUserCreation(this.client);
 
         if(tableUserCreation !== undefined) {
             tableUserCreation.forEach(element => {
                 this.accountSignUp.deleteUserCreation(element.urlToken);
             });
-            console.log(tableUserCreation.length + ' urlToken(s) reseted from the mailUserCreationQueue')
+            logger.logger.info(tableUserCreation.length + ' urlToken(s) reseted from the mailUserCreationQueue')
         }
 
-        console.log('----------- Reset of Reset_Password table done -----------')
+        logger.logger.info('----------- Reset of Reset_Password table done -----------')
 
-        const tableResetPassword = await resetTablesRequest.getUrlTokenFromResetPassword(this.client);
+        const tableResetPassword : any[] = await resetTablesRequest.getUrlTokenFromResetPassword(this.client);
         if(tableResetPassword !== undefined) {
             tableResetPassword.forEach(element => {
                 this.accountResetPassword.deleteResetPassword(element.urlToken);
             });
-            console.log('');
-            console.log(tableResetPassword.length + ' urlToken(s) reseted from the mailResetPasswordQueue')
+            logger.logger.info('');
+            logger.logger.info(tableResetPassword.length + ' urlToken(s) reseted from the mailResetPasswordQueue')
         }
-        console.log('----------- Reset of User_Creation table done -----------')
-        console.log('\n=========== RESETING ALL TABLES DONE ===========\n')
+        logger.logger.info('----------- Reset of User_Creation table done -----------')
+        logger.logger.info('=========== RESETING ALL TABLES DONE ===========')
         return;
     }
 }

@@ -16,6 +16,7 @@ import {AccountNotification} from './notification/accountNotification';
 import {AccountSignIn} from './signIn/accountSignIn';
 import {AccountSignUp} from './signUp/accountSignUp';
 import ioServer from 'modules/common/socket/socket';
+import logger from 'modules/common/logger/logger';
 
 module accountRouting {
     export function init(app: Express): void {
@@ -24,7 +25,7 @@ module accountRouting {
         initHttp(app);
         initSocket(ioServer.io);
 
-        console.log('accountRouting initialized');
+        logger.logger.info('accountRouting initialized');
     }
 
     function initHttp(app: Express): void {
@@ -126,7 +127,7 @@ module accountRouting {
         const accountFriends: AccountFriends = new AccountFriends(accountNotification);
 
         io.on('connection', (socket: socketIO.Socket<any>): void => {
-            console.log('-----  New client connected    -----')
+            logger.logger.info('-----  New client connected    -----')
             socket.emit('initSocketData');
 
             socket.on('initSocketData', async (username: string, token: string): Promise<void> => {
@@ -155,7 +156,7 @@ module accountRouting {
             });
 
             socket.on('disconnect', async (): Promise<void> => {
-                console.log('client déconnecté')
+                logger.logger.info('client déconnecté')
             });
         });
 

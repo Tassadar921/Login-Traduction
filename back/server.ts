@@ -10,6 +10,7 @@ import boot from './modules/boot/boot';
 import accountRouting from './modules/account/accountRouting';
 import languagesRouting from './modules/languages/languagesRouting';
 import ioServer from './modules/common/socket/socket';
+import logger from './modules/common/logger/logger';
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ if (app.get('env') === 'production') {
 const server: http.Server<any> = http.createServer(app);
 
 ioServer.init(server);
+logger.init();
 
 /*-----------------------------------------Boot start Method--------------------------------------------*/
 //boot.start() is a method that is called when the server is booting, 
@@ -36,7 +38,7 @@ boot.start().then((): void => {
     accountRouting.init(app);
     
     if (server.listen(process.env.PORT || 8080)) {
-        console.log('\n=========== SERVER STARTED FOR HTTP RQ ===========');
-        console.log('    =============   PORT: 8080   =============');
+        logger.logger.info('=========== SERVER STARTED FOR HTTP RQ ===========');
+        logger.logger.info('    =============   PORT: 8080   =============');
     }
 });

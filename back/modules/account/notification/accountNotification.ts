@@ -14,6 +14,7 @@ import socketOptions from 'modules/common/socket/socketOptions';
 import ioServer from '../../common/socket/socket';
 import regexRequest from 'modules/common/regex/regexRequest';
 import {DefaultEventsMap} from 'socket.io/dist/typed-events';
+import logger from 'modules/common/logger/logger';
 
 export class AccountNotification {
     private readonly client: Client;
@@ -26,7 +27,7 @@ export class AccountNotification {
         //initialise the socket data after the connection
         socket.data.sessionToken = token;
         socket.data.username = username;
-        console.log(socket.data.username, 'is connected and his token is :', socket.data.sessionToken);
+        logger.logger.info(socket.data.username, 'is connected and his token is :', socket.data.sessionToken);
         return;
     }
 
@@ -70,7 +71,7 @@ export class AccountNotification {
         }
     }
 
-    public async addNotificationsMessage(username: string, usernameSender: string, idMessage: string): Promise<void> {
+    public async addNotificationsMessage(username: string, idMessage: string): Promise<void> {
         //start by finding the socket if it exists else get undefined (if the user is not connected)
         const socketOfUsername : RemoteSocket<DefaultEventsMap, any> | undefined =
             (await ioServer.io.fetchSockets()).find(
@@ -90,7 +91,7 @@ export class AccountNotification {
             await this.synchronizeNotificationsWithRemoteSocket(socketOfUsername);
         }else{
             //offline notification
-            console.log('the user', username, 'is not connected');
+            logger.logger.info('the user', username, 'is not connected');
         }
         return;
     }

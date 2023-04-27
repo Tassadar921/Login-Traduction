@@ -7,6 +7,7 @@
 
 import { Request, Response } from "express";
 import { Languages } from "./languages";
+import logger from "modules/common/logger/logger";
 
 module languagesRouting {
     export function init(app : any): void {
@@ -19,7 +20,7 @@ module languagesRouting {
             await languages.getDictionary(req.params.language, res);
         });
 
-        console.log('Languages routing initialized');
+        logger.logger.info('Languages routing initialized');
         return;
     }
 }

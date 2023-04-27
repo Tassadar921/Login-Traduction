@@ -10,6 +10,7 @@ import accountResetPasswordRequest from './accountResetPasswordRequest';
 import regexRequest from 'modules/common/regex/regexRequest';
 import {CommonAccount} from "../commonAccount";
 import { Client } from "edgedb";
+import logger from 'modules/common/logger/logger';
 
 export class AccountResetPassword {
     private commonAccount = new CommonAccount();
@@ -94,6 +95,7 @@ export class AccountResetPassword {
                 this.commonAccount.mailOptions,
                 async function (error) {
                 if (error) {
+                    logger.logger.error(error);
                     res.json({status: -1});
                     return;
                 } else {
@@ -136,7 +138,6 @@ export class AccountResetPassword {
     public deleteResetPassword(urlToken: string): void {
         const client : Client = this.commonAccount.client;
         setTimeout(async () => {
-                console.log('deleteResetPassword setTimeout');
                 await accountResetPasswordRequest.deleteResetPasswordByUrlToken(
                     urlToken,
                     client
