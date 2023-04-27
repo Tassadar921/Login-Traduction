@@ -163,34 +163,46 @@ module accountFriendsRequest {
     export async function getOtherUsers(username : string, itemsPerPage : number, page : number, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve) => {
             resolve(client.query(`
-                Select (with x :=   (Select User {
-                            id,
-                            username
-                        } Filter .username != "${username}"),
-                        y := ((Select User {
-                        friends : {
-                            id,
-                            username
-                        }} Filter .username = "${username}").friends),
-                        zexit := (Select User {
+            Select (with x :=   (Select User {
+                        id,
+                        username
+                    } Filter .username != "${username}"),
+                    y := ((Select User {
+                    friends : {
+                        id,
+                        username
+                    }} Filter .username = "${username}").friends),
+                    zexit := (Select User {
+                                    id,
+                                    username
+                            } Filter User.pendingFriendsRequests.username = "${username}"),
+                    zenter := (Select User {
+                                    pendingFriendsRequests : {
                                         id,
                                         username
-                                } Filter User.pendingFriendsRequests.username = "${username}"),
-                        zenter := (Select User {
-                                        pendingFriendsRequests : {
-                                            id,
-                                            username
-                                        }
-                                    } Filter .username = "${username}").pendingFriendsRequests
-                    Select {
-                        x {
-                        username,
-                        id,
-                        boolAmi := (Select y filter y.username = x.username) = x,
-                        boolEnter := (Select zenter filter zenter.username = x.username) = x,
-                        boolExit := (Select zexit filter zexit.username = x.username) = x,
-                        },
-                    })
+                                    }
+                                } Filter .username = "${username}").pendingFriendsRequests,
+                    w1 := (Select User {
+                                    blockedUsers : {
+                                        id,
+                                        username
+                                    }
+                                } Filter .username = "${username}").blockedUsers,
+                    w2 := (Select User {
+                                    blockedBy : {
+                                        id,
+                                        username
+                                    }
+                                } Filter .username = "${username}").blockedBy,
+                Select {
+                    x {
+                    username,
+                    id,
+                    boolFriend := (Select y filter y.username = x.username) = x,
+                    boolEnteringFriendRequest := (Select zenter filter zenter.username = x.username) = x,
+                    boolExitingFriendRequest := (Select zexit filter zexit.username = x.username) = x,
+                    },
+                } if x != w1 and x != w2 else <User>{})
                 order by .username
                 offset ${itemsPerPage}*(${page}-1)
                 limit ${itemsPerPage}
