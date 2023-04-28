@@ -11,6 +11,7 @@ import accountRouting from './modules/account/accountRouting';
 import languagesRouting from './modules/languages/languagesRouting';
 import ioServer from './modules/common/socket/socket';
 import logger from './modules/common/logger/logger';
+import errorHandler from './modules/common/errorHandler/errorHandler';
 
 dotenv.config();
 
@@ -23,6 +24,8 @@ app.use('/files', express.static('files'));
 if (app.get('env') === 'production') {
     app.set('trust proxy', 1);
 }
+
+app.use(errorHandler.logErrorMiddleware);
 
 const server: http.Server<any> = http.createServer(app);
 
