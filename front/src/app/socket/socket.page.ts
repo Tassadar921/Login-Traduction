@@ -19,7 +19,7 @@ export class SocketPage implements OnInit {
       this.socket.emit('synchronizeNotifications');
     });
     this.socket.on('synchronizeNotifications', (data : any) => {
-      logger.logger.info(data);
+      console.log(data);
       if(data.length > 0) {
 
         this.notification = data.map((notification : any) => {notification.date = new Date(notification.date); return notification;});

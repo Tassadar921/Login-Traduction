@@ -5,7 +5,7 @@
 //1.0.0 - 15/03/2023 - Iémélian RAMBEAU - Creation of the first version
 //--------------------------------------------------------------------------------------
 
-import {Express, Request, Response} from 'express';
+import {Express, NextFunction, Request, Response} from 'express';
 import * as socketIO from 'socket.io';
 
 import socketOptions from '../common/socket/socketOptions';
@@ -36,93 +36,147 @@ module accountRouting {
 
         /*----------------------------------------SignUp----------------------------------------*/
 
-        app.post('/signUp', async function (req: Request, res: Response): Promise<void> {
-            await accountSignUp.createUserCreation(req.body.username, req.body.password, req.body.email, req.body.language, res);
+        app.post('/signUp', async function (req: Request, res: Response, next : NextFunction): Promise<void> {
+            try {
+                await accountSignUp.createUserCreation(req.body.username, req.body.password, req.body.email, req.body.language, res);
+            } catch (error) {
+                next(error);
+            }
         });
-        app.post('/confirmSignUp', async function (req: Request, res: Response): Promise<void> {
-            await accountSignUp.createUser(req.body.urlToken, res);
+
+        app.post('/confirmSignUp', async function (req: Request, res: Response, next : NextFunction): Promise<void> {
+            try {
+                await accountSignUp.createUser(req.body.urlToken, res);
+            } catch (error) {
+                next(error);
+            }
         });
 
         /*----------------------------------------Login----------------------------------------*/
 
-        app.post('/checkSession', async function (req: Request, res: Response): Promise<void> {
-            if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res)){
-                await res.json({status: 1});
-            }
-            else{
-                await res.json({status: 0});
+        app.post('/checkSession', async function (req: Request, res: Response, next : NextFunction): Promise<void> {
+            try {
+                if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res)){
+                    await res.json({status: 1});
+                }
+                else{
+                    await res.json({status: 0});
+                }
+            } catch (error) {
+                next(error);
             }
         });
 
-        app.post('/signIn', async function (req: Request, res: Response): Promise<void> {
-            await accountSignIn.signIn(req.body.identifier, req.body.password, res);
+        app.post('/signIn', async function (req: Request, res: Response, next : NextFunction): Promise<void> {
+            try {
+                await accountSignIn.signIn(req.body.identifier, req.body.password, res);
+            } catch (error) {
+                next(error);
+            }
         });
 
-        app.post('/signOut', async function (req: Request, res: Response): Promise<void> {
-            await accountSignIn.signOut(req.body.username, req.body.sessionToken, res);
+        
+        app.post('/signOut', async function (req: Request, res: Response, next : NextFunction): Promise<void> {
+            try {
+                await accountSignIn.signOut(req.body.username, req.body.sessionToken, res);
+            } catch (error) {
+                next(error);
+            }
         });
 
         /*----------------------------------------ResetPassword----------------------------------------*/
 
-        app.post('/resetPassword', async function (req: Request, res: Response): Promise<void> {
-            await accountResetPassword.mailResetPasswordCreateUrlToken(req.body.email, req.body.language, res);
+        app.post('/resetPassword', async function (req: Request, res: Response, next : NextFunction): Promise<void> {
+            try {
+                await accountResetPassword.mailResetPasswordCreateUrlToken(req.body.email, req.body.language, res);
+            } catch (error) {
+                next(error);
+            }
         });
-        app.post('/confirmResetPassword', async function (req: Request, res: Response): Promise<void> {
-            await accountResetPassword.resetPassword(req.body.urlToken, req.body.password, res);
+        app.post('/confirmResetPassword', async function (req: Request, res: Response, next : NextFunction): Promise<void> {
+            try {
+                await accountResetPassword.resetPassword(req.body.urlToken, req.body.password, res);
+            } catch (error) {
+                next(error);
+            }
         });
 
         /*----------------------------------------Friends----------------------------------------*/
 
-        app.post('/askIfNotAddFriend', async function (req: Request, res: Response): Promise<void> {
-            if(await accountSignIn.checkSession(req.body.senderUsername, req.body.sessionToken, res)){
-                await accountFriends.askIfNotAddFriend(req.body.senderUsername, req.body.receiverUsername, res);
-            }else{
-                await res.json({status: 0});
+        app.post('/askIfNotAddFriend', async function (req: Request, res: Response, next : NextFunction): Promise<void> {
+            try {
+                if(await accountSignIn.checkSession(req.body.senderUsername, req.body.sessionToken, res)){
+                    await accountFriends.askIfNotAddFriend(req.body.senderUsername, req.body.receiverUsername, res);
+                }else{
+                    await res.json({status: 0});
+                }
+            } catch (error) {
+                next(error);
             }
         });
 
-        app.post('/getFriends', async function (req: Request, res: Response): Promise<void> {
-            if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res)){
-                await accountFriends.getFriends(req.body.username, req.body.itemsPerPage,  req.body.page, res);
-            }
-            else{
-                await res.json({status: 0});
-            }
-        });
-
-        app.post('/getEnteringPendingFriendsRequests', async function (req: Request, res: Response): Promise<void> {
-            if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res)){
-                await accountFriends.getEnteringPendingFriendsRequests(req.body.username, req.body.itemsPerPage,  req.body.page, res);
-            }
-            else{
-                await res.json({status: 0});
+        app.post('/getFriends', async function (req: Request, res: Response, next : NextFunction): Promise<void> {
+            try {
+                if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res)){
+                    await accountFriends.getFriends(req.body.username, req.body.itemsPerPage,  req.body.page, res);
+                }
+                else{
+                    await res.json({status: 0});
+                }
+            } catch (error) {
+                next(error);
             }
         });
 
-        app.post('/getExitingPendingFriendsRequests', async function (req: Request, res: Response): Promise<void> {
-            if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res)){
-                await accountFriends.getExitingPendingFriendsRequests(req.body.username, req.body.itemsPerPage,  req.body.page, res);
-            }
-            else{
-                await res.json({status: 0});
-            }
-        });
-
-        app.post('/blockUser', async function (req: Request, res: Response): Promise<void> {
-            if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res)){
-                await accountFriends.blockUser(req.body.username, req.body.blockedUsername, res);
-            }
-            else{
-                await res.json({status: 0});
+        app.post('/getEnteringPendingFriendsRequests', async function (req: Request, res: Response, next : NextFunction): Promise<void> {
+            try {
+                if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res)){
+                    await accountFriends.getEnteringPendingFriendsRequests(req.body.username, req.body.itemsPerPage,  req.body.page, res);
+                }
+                else{
+                    await res.json({status: 0});
+                }
+            } catch (error) {
+                next(error);
             }
         });
 
-        app.post('/unblockUser', async function (req: Request, res: Response): Promise<void> {
-            if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res)){
-                await accountFriends.unblockUser(req.body.username, req.body.blockedUsername, res);
+        app.post('/getExitingPendingFriendsRequests', async function (req: Request, res: Response, next : NextFunction): Promise<void> {
+            try {
+                if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res)){
+                    await accountFriends.getExitingPendingFriendsRequests(req.body.username, req.body.itemsPerPage,  req.body.page, res);
+                }
+                else{
+                    await res.json({status: 0});
+                }
+            } catch (error) {
+                next(error);
             }
-            else{
-                await res.json({status: 0});
+        });
+
+        app.post('/blockUser', async function (req: Request, res: Response, next : NextFunction): Promise<void> {
+            try {
+                if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res)){
+                    await accountFriends.blockUser(req.body.username, req.body.blockedUsername, res);
+                }
+                else{
+                    await res.json({status: 0});
+                }
+            } catch (error) {
+                next(error);
+            }
+        });
+
+        app.post('/unblockUser', async function (req: Request, res: Response, next : NextFunction): Promise<void> {
+            try {
+                if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res)){
+                    await accountFriends.unblockUser(req.body.username, req.body.blockedUsername, res);
+                }
+                else{
+                    await res.json({status: 0});
+                }
+            } catch (error) {
+                next(error);
             }
         });
 
@@ -131,9 +185,13 @@ module accountRouting {
         /*--------------------------------------Notification-------------------------------------*/
 
 
-        app.post('/test', async function (req: Request, res: Response): Promise<void> {
-            //code
-            await res.json({status: 1});
+        app.post('/test', async function (req: Request, res: Response, next : NextFunction): Promise<void> {
+            try {
+                //code
+                await res.json({status: 1});
+            } catch (error) {
+                next(error);
+            }
         });
 
         return;

@@ -93,7 +93,7 @@ export class RequestService {
   }
 
   public async test(message: string): Promise<Object> {
-    logger.logger.info(message);
+    console.log(message);
     return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/test',
       {message}
     ));
