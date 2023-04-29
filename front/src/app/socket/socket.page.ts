@@ -8,18 +8,18 @@ import {Socket} from "ngx-socket-io";
   styleUrls: ['./socket.page.scss'],
 })
 export class SocketPage implements OnInit {
-  private id = "";
+  private id: string = "";
   notification : [{id : string, title : string, text : string, date : Date, seen : boolean}] | undefined;
   lastMessage : [{sender : {username : string}, seen : boolean, date : Date, text : string}] | undefined;
   messageSuccess : boolean = false;
 
   constructor(private socket: Socket, private cookieService: CookieService) {
-    this.socket.on("initSocketData", async () => {
+    this.socket.on("initSocketData", async (): Promise<void> => {
       this.socket.emit('initSocketData',await cookieService.getCookie('username'),await cookieService.getCookie('sessionToken'));
       this.socket.emit('synchronizeNotifications');
     });
     this.socket.on('synchronizeNotifications', (data : any) => {
-      logger.logger.info(data);
+      console.log(data);
       if(data.length > 0) {
 
         this.notification = data.map((notification : any) => {notification.date = new Date(notification.date); return notification;});

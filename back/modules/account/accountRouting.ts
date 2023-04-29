@@ -108,6 +108,15 @@ module accountRouting {
             }
         });
 
+        app.post('/getOtherUsers', async function (req: Request, res: Response): Promise<void> {
+            if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res)){
+                await accountFriends.getOtherUsers(req.body.username, req.body.itemsPerPage,  req.body.page, res);
+            }
+            else{
+                await res.json({status: 0});
+            }
+        });
+
         /*--------------------------------------Notification-------------------------------------*/
 
 

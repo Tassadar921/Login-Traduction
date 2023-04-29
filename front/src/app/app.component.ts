@@ -33,24 +33,6 @@ export class AppComponent implements OnInit {
           await this.cookieService.getCookie('username'),
           await this.cookieService.getCookie('sessionToken')
         );
-        logger.logger.info(await this.requestService.getFriends(
-          await this.cookieService.getCookie('username'),
-          await this.cookieService.getCookie('sessionToken'),
-          10,
-          1
-        ));
-        logger.logger.info(await this.requestService.getEnteringPendingFriendsRequests(
-          await this.cookieService.getCookie('username'),
-          await this.cookieService.getCookie('sessionToken'),
-          10,
-          1
-        ));
-        logger.logger.info(await this.requestService.getExitingPendingFriendsRequests(
-          await this.cookieService.getCookie('username'),
-          await this.cookieService.getCookie('sessionToken'),
-          10,
-          1
-        ));
       }
     }else{
       await this.cookieService.signOut();
