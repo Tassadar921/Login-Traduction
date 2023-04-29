@@ -166,7 +166,6 @@ module accountRouting {
             }
         });
 
-<<<<<<< HEAD
         app.post('/getOtherUsers', async function (req: Request, res: Response): Promise<void> {
             if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res)){
                 await accountFriends.getOtherUsers(req.body.username, req.body.itemsPerPage,  req.body.page, res);
@@ -175,8 +174,6 @@ module accountRouting {
                 await res.json({status: 0});
             }
         });
-
-=======
         app.post('/blockUser', async function (req: Request, res: Response, next : NextFunction): Promise<void> {
             try {
                 logger.logger.info(`blockUser, ${req.body.username}, ${req.body.blockedUsername}`);
@@ -204,10 +201,7 @@ module accountRouting {
                 next(error);
             }
         });
-
-
-
->>>>>>> 9e3cf8bfdd772075feea722f13ed8ae8b1e4a33e
+        
         /*--------------------------------------Notification-------------------------------------*/
 
 
