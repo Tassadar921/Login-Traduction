@@ -204,7 +204,14 @@ module accountFriendsRequest {
                     c1 := ((Select w1 filter w1.username = x.username) = x),
                     c2 := (Select w2 filter w2.username = x.username) = x,
                     })
-                    })
+                }) 
+                {
+                    username,
+                    id,
+                    boolFriend,
+                    boolEnteringFriendRequest,
+                    boolExitingFriendRequest,
+                }
                 filter exists .c1 != true and exists .c2 != true
                 order by .username
                 offset ${itemsPerPage}*(${page}-1)
