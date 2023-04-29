@@ -24,20 +24,24 @@ export class MenuComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
+    this.menuItems = this.setMenuItems();
     this.languageService.dictionaryChanged.subscribe((): void => {
-      this.menuItems = [
-        {
-          name: this.languageService.dictionary.data?.components.menu.home,
-          icon: 'home',
-          link: '/home'
-        }, {
-          name: this.languageService.dictionary.data?.components.menu.messages,
-          icon: 'send',
-          link: '/messages'
-        }
-      ]
+      this.menuItems = this.setMenuItems();
     });
-    await this.languageService.init();
+  }
+
+  private setMenuItems(): Array<Object> {
+    return [
+      {
+        name: this.languageService.dictionary.data?.components.menu.home,
+        icon: 'home',
+        link: '/home'
+      }, {
+        name: this.languageService.dictionary.data?.components.menu.messages,
+        icon: 'send',
+        link: '/messages'
+      }
+    ]
   }
 
   public async signOut(popover: boolean = false): Promise<void> {
