@@ -1,4 +1,4 @@
-import express, {Express} from 'express';
+import express, {Express, Request, Response, NextFunction} from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import * as dotenv from 'dotenv';
@@ -11,6 +11,7 @@ import accountRouting from './modules/account/accountRouting';
 import languagesRouting from './modules/languages/languagesRouting';
 import ioServer from './modules/common/socket/socket';
 import logger from './modules/common/logger/logger';
+import errorHandler from './modules/common/errorHandler/errorHandler';
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ if (app.get('env') === 'production') {
     app.set('trust proxy', 1);
 }
 
+
 const server: http.Server<any> = http.createServer(app);
 
 ioServer.init(server);
@@ -36,7 +38,11 @@ logger.init();
 boot.start().then((): void => {
     languagesRouting.init(app);
     accountRouting.init(app);
-    
+
+    app.use((err: Error,req: Request,res: Response,next: NextFunction) => {
+        errorHandler.logErrorMiddleware(err, req, res, next);
+    });
+
     if (server.listen(process.env.PORT || 8080)) {
         logger.logger.info('=========== SERVER STARTED FOR HTTP RQ ===========');
         logger.logger.info('    =============   PORT: 8080   =============');

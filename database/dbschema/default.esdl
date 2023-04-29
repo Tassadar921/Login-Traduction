@@ -14,7 +14,10 @@ module default {
         multi link friends -> User{
             on target delete allow;
         };
-        multi link blocked -> User{
+        multi link blockedUsers -> User{
+            on target delete allow;
+        };
+        multi link blockedBy -> User{
             on target delete allow;
         };
         multi link pendingFriendsRequests -> User {

@@ -14,9 +14,11 @@ module languagesRouting {
         const languages = new Languages();
         
         app.get('/languages/list', async function(req : Request, res : Response) {
+            logger.logger.info('languages/list');
             await languages.getLanguagesList(res);
         });
         app.get('/languages/:language', async function(req : Request, res : Response) {
+            logger.logger.info(`languages/${req.params.language}`);
             await languages.getDictionary(req.params.language, res);
         });
 

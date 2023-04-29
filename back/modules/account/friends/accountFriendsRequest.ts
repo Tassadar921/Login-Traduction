@@ -139,6 +139,18 @@ module accountFriendsRequest {
         });
     }
 
+    export async function removeFriend(username1 : string, username2 : string, client : Client) : Promise<unknown[]> {
+        return new Promise<any[]>((resolve) => {
+            resolve(client.query(`
+                Update User 
+                Filter .username = "${username1}"
+                Set {
+                friends -= (Select User Filter .username = "${username2}"),
+                }
+            `));
+        });
+    }
+
     export async function getUserByUsername(username : string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve) => {
             resolve(client.query(`
@@ -151,37 +163,135 @@ module accountFriendsRequest {
     export async function getOtherUsers(username : string, itemsPerPage : number, page : number, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve) => {
             resolve(client.query(`
-                Select (with x :=   (Select User {
-                            id,
-                            username
-                        } Filter .username != "${username}"),
-                        y := ((Select User {
-                        friends : {
-                            id,
-                            username
-                        }} Filter .username = "${username}").friends),
-                        zexit := (Select User {
+            Select (with x :=   (Select User {
+                        id,
+                        username
+                    } Filter .username != "${username}"),
+                    y := ((Select User {
+                    friends : {
+                        id,
+                        username
+                    }} Filter .username = "${username}").friends),
+                    zexit := (Select User {
+                                    id,
+                                    username
+                            } Filter User.pendingFriendsRequests.username = "${username}"),
+                    zenter := (Select User {
+                                    pendingFriendsRequests : {
                                         id,
                                         username
-                                } Filter User.pendingFriendsRequests.username = "${username}"),
-                        zenter := (Select User {
-                                        pendingFriendsRequests : {
-                                            id,
-                                            username
-                                        }
-                                    } Filter .username = "${username}").pendingFriendsRequests
-                    Select {
-                        x {
-                        username,
-                        id,
-                        boolAmi := (Select y filter y.username = x.username) = x,
-                        boolEnter := (Select zenter filter zenter.username = x.username) = x,
-                        boolExit := (Select zexit filter zexit.username = x.username) = x,
-                        },
-                    })
+                                    }
+                                } Filter .username = "${username}").pendingFriendsRequests,
+                    w1 := (Select User {
+                                    blockedUsers : {
+                                        id,
+                                        username
+                                    }
+                                } Filter .username = "${username}").blockedUsers,
+                    w2 := (Select User {
+                                    blockedBy : {
+                                        id,
+                                        username
+                                    }
+                                } Filter .username = "${username}").blockedBy,
+                Select {
+                    x {
+                    username,
+                    id,
+                    boolFriend := (Select y filter y.username = x.username) = x,
+                    boolEnteringFriendRequest := (Select zenter filter zenter.username = x.username) = x,
+                    boolExitingFriendRequest := (Select zexit filter zexit.username = x.username) = x,
+                    },
+                } if x != w1 and x != w2 else <User>{})
                 order by .username
                 offset ${itemsPerPage}*(${page}-1)
                 limit ${itemsPerPage}
+            `));
+        });
+    }
+
+    export async function addBlockedUser(username1 : string, username2 : string, client : Client) : Promise<unknown[]> {
+        return new Promise<any[]>((resolve) => {
+            resolve(client.query(`
+                Update User 
+                Filter .username = "${username1}"
+                Set {
+                blockedUsers += (Select User Filter .username = "${username2}"),
+                }
+            `));
+        });
+    }
+
+    export async function addBlockedBy(username1 : string, username2 : string, client : Client) : Promise<unknown[]> {
+        return new Promise<any[]>((resolve) => {
+            resolve(client.query(`
+                Update User 
+                Filter .username = "${username1}"
+                Set {
+                blockedBy += (Select User Filter .username = "${username2}"),
+                }
+            `));
+        });
+    }
+
+    export async function removeBlockedUser(username1 : string, username2 : string, client : Client) : Promise<unknown[]> {
+        return new Promise<any[]>((resolve) => {
+            resolve(client.query(`
+                Update User 
+                Filter .username = "${username1}"
+                Set {
+                blockedUsers -= (Select User Filter .username = "${username2}"),
+                }
+            `));
+        });
+    }
+
+    export async function removeBlockedBy(username1 : string, username2 : string, client : Client) : Promise<unknown[]> {
+        return new Promise<any[]>((resolve) => {
+            resolve(client.query(`
+                Update User 
+                Filter .username = "${username1}"
+                Set {
+                blockedBy -= (Select User Filter .username = "${username2}"),
+                }
+            `));
+        });
+    }
+
+    export async function getBlockedUsers(username : string, itemsPerPage : number, page : number, client : Client) : Promise<unknown[]> {
+        return new Promise<any[]>((resolve) => {
+            resolve(client.query(`
+                Select (Select User {
+                    blockedUsers : {
+                        id,
+                        username
+                    }
+                } Filter .username = "${username}").blockedUsers
+                order by .username
+                offset ${itemsPerPage}*(${page}-1)
+                limit ${itemsPerPage}
+            `));
+        });
+    }
+
+    export async function getBlockedUserByBothUsernames(username1 : string, username2 : string, client : Client) : Promise<unknown[]> {
+        return new Promise<any[]>((resolve) => {
+            resolve(client.query(`
+                Select User {
+                    blockedUsers : {}
+                }
+                Filter .username = "${username1}" and .blockedUsers.username = "${username2}"
+            `));
+        });
+    }
+
+    export async function getBlockedByByBothUsernames(username1 : string, username2 : string, client : Client) : Promise<unknown[]> {
+        return new Promise<any[]>((resolve) => {
+            resolve(client.query(`
+                Select User {
+                    blockedBy : {}
+                }
+                Filter .username = "${username1}" and .blockedBy.username = "${username2}"
             `));
         });
     }
