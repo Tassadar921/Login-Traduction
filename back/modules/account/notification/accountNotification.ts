@@ -34,7 +34,7 @@ export class AccountNotification {
     public async synchronizeNotificationsWithSocket(socket: Socket): Promise<void> {
         //get the notifications from the database for the user
         const dataNotification : any[] = await AccountNotificationRequest.getNotifications(socket.data.sessionToken, this.client);
-
+        
         socket.emit('synchronizeNotifications', dataNotification);
         return;
     }

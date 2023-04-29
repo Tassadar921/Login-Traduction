@@ -53,7 +53,7 @@ module accountLoginRequest {
     export async function updateUserToken(username : string, token : string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve) => {
             resolve(client.query(`
-                UPDATE Userq
+                UPDATE User
                 FILTER .username = "${username}"
                 SET {
                     token := "${token}",
