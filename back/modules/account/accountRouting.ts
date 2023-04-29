@@ -166,12 +166,17 @@ module accountRouting {
             }
         });
 
-        app.post('/getOtherUsers', async function (req: Request, res: Response): Promise<void> {
-            if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res)){
-                await accountFriends.getOtherUsers(req.body.username, req.body.itemsPerPage,  req.body.page, res);
-            }
-            else{
-                await res.json({status: 0});
+        app.post('/getOtherUsers', async function (req: Request, res: Response, next : NextFunction): Promise<void> {
+            try {
+                logger.logger.info(`getOtherUsers, { username : ${req.body.username}, itemsPerPage : ${req.body.itemsPerPage}, page : ${req.body.page}}`);
+                if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res)){
+                    await accountFriends.getOtherUsers(req.body.username, req.body.itemsPerPage,  req.body.page, res);
+                }
+                else{
+                    await res.json({status: 0});
+                }
+            } catch (error) {
+                next(error);
             }
         });
         app.post('/blockUser', async function (req: Request, res: Response, next : NextFunction): Promise<void> {

@@ -195,14 +195,17 @@ module accountFriendsRequest {
                                     }
                                 } Filter .username = "${username}").blockedBy,
                 Select {
-                    x {
+                    (x {
                     username,
                     id,
                     boolFriend := (Select y filter y.username = x.username) = x,
                     boolEnteringFriendRequest := (Select zenter filter zenter.username = x.username) = x,
                     boolExitingFriendRequest := (Select zexit filter zexit.username = x.username) = x,
-                    },
-                } if x != w1 and x != w2 else <User>{})
+                    c1 := ((Select w1 filter w1.username = x.username) = x),
+                    c2 := (Select w2 filter w2.username = x.username) = x,
+                    })
+                    })
+                filter exists .c1 != true and exists .c2 != true
                 order by .username
                 offset ${itemsPerPage}*(${page}-1)
                 limit ${itemsPerPage}
