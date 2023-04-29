@@ -13,7 +13,7 @@ module errorHandler {
     }
 
     function returnError (err : Error, req : Request, res : Response, next : NextFunction) : void {
-        res.json({status: -2, message: "Something went wrong"});
+        res.json({status: 500, message: "Something went wrong"});
     }
 }
 
