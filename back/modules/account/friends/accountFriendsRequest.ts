@@ -208,9 +208,9 @@ module accountFriendsRequest {
                 {
                     username,
                     id,
-                    boolFriend,
-                    boolEnteringFriendRequest,
-                    boolExitingFriendRequest,
+                    boolFriend := exists .boolFriend,
+                    boolEnteringFriendRequest := exists .boolEnteringFriendRequest,
+                    boolExitingFriendRequest := exists .boolExitingFriendRequest,
                 }
                 filter exists .c1 != true and exists .c2 != true
                 order by .username
