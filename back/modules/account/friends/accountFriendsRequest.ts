@@ -244,25 +244,25 @@ module accountFriendsRequest {
         });
     }
 
-    export async function removeBlockedUser(username1 : string, username2 : string, client : Client) : Promise<unknown[]> {
+    export async function removeBlockedUser(usernameSender : string, usernameReceiver : string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 Update User 
-                Filter .username = "${username1}"
+                Filter .username = "${usernameSender}"
                 Set {
-                blockedUsers -= (Select detached User Filter .username = "${username2}"),
+                blockedUsers -= (Select detached User Filter .username = "${usernameReceiver}"),
                 }
             `));
         });
     }
 
-    export async function removeBlockedBy(username1 : string, username2 : string, client : Client) : Promise<unknown[]> {
+    export async function removeBlockedBy(usernameSender : string, usernameReceiver : string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 Update User 
-                Filter .username = "${username1}"
+                Filter .username = "${usernameSender}"
                 Set {
-                blockedBy -= (Select detached User Filter .username = "${username2}"),
+                blockedBy -= (Select detached User Filter .username = "${usernameReceiver}"),
                 }
             `));
         });

@@ -22,6 +22,30 @@ export class AccountFriends{
         this.accountNotification = accountNotification;
     }
 
+    public async cancelFriendRequest(username: string, usernameReceiver: string, res: Response): Promise<void> {
+        if (username === usernameReceiver) {
+            res.json({status: -1});
+            return;
+        } else if (await accountFriendsRequest.getUserByUsername(usernameReceiver, this.client) === undefined) {
+            res.json({status: -2});
+            return;
+        } else {
+            await accountFriendsRequest.removePendingFriendsRequests(username, usernameReceiver, this.client);
+        }
+    }
+
+    public async refuseFriendRequest(username: string, usernameSender: string, res: Response): Promise<void> {
+        if (usernameSender === username) {
+            res.json({status: -1});
+            return;
+        } else if (await accountFriendsRequest.getUserByUsername(usernameSender, this.client) === undefined) {
+            res.json({status: -2});
+            return;
+        } else {
+            await accountFriendsRequest.removePendingFriendsRequests(usernameSender, username, this.client);
+        }
+    }
+
     public async blockUser(usernameSender: string, usernameReceiver: string, res: Response): Promise<void> {
         if (usernameSender === usernameReceiver) {
             res.json({status: -1});
@@ -151,7 +175,7 @@ export class AccountFriends{
                 ioServer.io.to(socketOfUsername.id).emit('message');
             }
 
-            return   
+            return
         }
     }
 
