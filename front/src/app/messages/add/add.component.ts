@@ -46,6 +46,33 @@ export class AddComponent implements OnInit {
       username
     );
     this.waiting = false;
+    if(Object(rtrn).status){
+      await this.setUsers(this.currentPage);
+    }
+  }
+
+  public async refuseFriendRequest(senderUsername: string): Promise<void> {
+    this.waiting = true;
+    const rtrn: Object = await this.requestService.refuseFriendRequest(
+      await this.cookieService.getCookie('username'),
+      await this.cookieService.getCookie('sessionToken'),
+      senderUsername
+    );
+    this.waiting = false;
+    console.log(rtrn);
+    if(Object(rtrn).status){
+      await this.setUsers(this.currentPage);
+    }
+  }
+
+  public async cancelFriendRequest(receiverUsername: string): Promise<void> {
+    this.waiting = true;
+    const rtrn: Object = await this.requestService.cancelFriendRequest(
+      await this.cookieService.getCookie('username'),
+      await this.cookieService.getCookie('sessionToken'),
+      receiverUsername
+    );
+    this.waiting = false;
     console.log(rtrn);
     if(Object(rtrn).status){
       await this.setUsers(this.currentPage);

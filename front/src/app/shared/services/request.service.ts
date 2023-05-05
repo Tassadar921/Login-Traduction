@@ -13,11 +13,6 @@ export class RequestService {
     private cookieService: CookieService,
   ) {}
 
-  //returns the public key of the server
-  public async getPublicKey (): Promise<Object> {
-    return await lastValueFrom(this.http.get<Object>(environment.apiUrl + '/getPublicKey'));
-  }
-
   //returns array containing all available languages, with their full name and id
   public async getLanguagesList (): Promise<Array<Object>> {
     return await lastValueFrom(this.http.get<Array<Object>>(environment.apiUrl + '/languages/list'));
@@ -40,7 +35,7 @@ export class RequestService {
 	*/
   public async signIn(identifier: string, password: string): Promise<Object> {
     return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/signIn',
-      {identifier, password}
+      { identifier, password }
     ));
   }
 
@@ -50,7 +45,7 @@ export class RequestService {
 	*/
   public async signUp(username: string, email: string, password: string): Promise<Object> {
     return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/signUp',
-      {username, password, email, language: await this.cookieService.getCookie('language')},
+      { username, password, email, language: await this.cookieService.getCookie('language') },
     ));
   }
 
@@ -60,7 +55,7 @@ export class RequestService {
   */
   public async confirmSignUp(urlToken: string): Promise<Object> {
     return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/confirmSignUp',
-      {urlToken}
+      { urlToken }
     ));
   }
 
@@ -72,7 +67,7 @@ export class RequestService {
   */
   public async resetPassword(email: string): Promise<Object> {
     return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/resetPassword',
-      {email, language: await this.cookieService.getCookie('language')}
+      { email, language: await this.cookieService.getCookie('language') }
     ));
   }
 
@@ -82,19 +77,19 @@ export class RequestService {
   */
   public async confirmResetPassword(urlToken: string, password: string): Promise<Object> {
     return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/confirmResetPassword',
-      {urlToken, password}
+      { urlToken, password }
     ));
   }
 
   public async signOut(username: string, sessionToken: string): Promise<Object> {
     return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/signOut',
-      {username, sessionToken}
+      { username, sessionToken }
     ));
   }
 
   public async test(message: string): Promise<Object> {
     return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/test',
-      {message}
+      { message }
     ));
   }
 
@@ -104,37 +99,49 @@ export class RequestService {
   */
   public async checkSession(username: string, sessionToken: string): Promise<Object> {
     return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/checkSession',
-      {username, sessionToken}
+      { username, sessionToken }
     ));
   }
 
   public async getFriends(username: string, sessionToken: string, itemsPerPage: number, page: number): Promise<Object> {
     return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/getFriends',
-      {username, sessionToken, itemsPerPage, page}
+      { username, sessionToken, itemsPerPage, page }
     ));
   }
 
   public async getEnteringPendingFriendsRequests(username: string, sessionToken: string, itemsPerPage: number, page: number): Promise<Object> {
     return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/getEnteringPendingFriendsRequests',
-      {username, sessionToken, itemsPerPage, page}
+      { username, sessionToken, itemsPerPage, page }
     ));
   }
 
   public async getExitingPendingFriendsRequests(username: string, sessionToken: string, itemsPerPage: number, page: number): Promise<Object> {
     return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/getExitingPendingFriendsRequests',
-      {username, sessionToken, itemsPerPage, page}
+      { username, sessionToken, itemsPerPage, page }
     ));
   }
 
   public async getOtherUsers(username: string, sessionToken: string, itemsPerPage: number, page: number): Promise<Object> {
     return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/getOtherUsers',
-      {username, sessionToken, itemsPerPage, page}
+      { username, sessionToken, itemsPerPage, page }
     ));
   }
 
   public async askIfNotAddFriend(senderUsername: string, sessionToken: string, receiverUsername: string): Promise<Object> {
     return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/askIfNotAddFriend',
-      {senderUsername, sessionToken, receiverUsername}
+      { senderUsername, sessionToken, receiverUsername }
+    ));
+  }
+
+  public async refuseFriendRequest(username: string, sessionToken: string, senderUsername: string): Promise<Object> {
+    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/refuseFriendRequest ',
+      { username, sessionToken, senderUsername }
+    ));
+  }
+
+  public async cancelFriendRequest(username: string, sessionToken: string, receiverUsername: string): Promise<Object> {
+    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/cancelFriendRequest ',
+      {username, sessionToken, receiverUsername}
     ));
   }
 }

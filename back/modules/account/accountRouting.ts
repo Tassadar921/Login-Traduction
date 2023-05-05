@@ -207,7 +207,7 @@ module accountRouting {
             }
         });
 
-        app.post('refuseFriendRequest', async function (req: Request, res: Response, next : NextFunction): Promise<void> {
+        app.post('/refuseFriendRequest', async function (req: Request, res: Response, next : NextFunction): Promise<void> {
             try {
                 logger.logger.info(`refuseFriendRequest, { username : ${req.body.username}, senderUsername : ${req.body.senderUsername}}`);
                 if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res)){
@@ -221,11 +221,25 @@ module accountRouting {
             }
         });
 
-        app.post('cancelFriendRequest', async function (req: Request, res: Response, next : NextFunction): Promise<void> {
+        app.post('/cancelFriendRequest', async function (req: Request, res: Response, next : NextFunction): Promise<void> {
             try {
                 logger.logger.info(`cancelFriendRequest, { username : ${req.body.username}, receiverUsername : ${req.body.receiverUsername}}`);
                 if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res)){
                     await accountFriends.cancelFriendRequest(req.body.username, req.body.receiverUsername, res);
+                }
+                else{
+                    await res.json({status: 0});
+                }
+            } catch (error) {
+                next(error);
+            }
+        });
+
+        app.post('/removeFriend', async function (req: Request, res: Response, next : NextFunction): Promise<void> {
+            try {
+                logger.logger.info(`cancelFriendRequest, { username : ${req.body.username}, receiverUsername : ${req.body.receiverUsername}}`);
+                if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res)){
+                    await accountFriends.removeFriend(req.body.username, req.body.receiverUsername, res);
                 }
                 else{
                     await res.json({status: 0});

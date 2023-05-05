@@ -78,6 +78,24 @@ export class AccountFriends{
         }
     }
 
+    public async removeFriend(usernameSender: string, usernameReceiver: string, res: Response): Promise<void> {
+        if (usernameSender === usernameReceiver) {
+            res.json({status: -1});
+            return;
+        } else if (await accountFriendsRequest.getUserByUsername(usernameReceiver, this.client) === undefined) {
+            res.json({status: -2});
+            return;
+        } else if ((await accountFriendsRequest.getFriendByBothUsernames(usernameSender, usernameReceiver, this.client)).length) {
+            await accountFriendsRequest.removeFriend(usernameSender, usernameReceiver, this.client);
+            await accountFriendsRequest.removeFriend(usernameReceiver, usernameSender, this.client);
+            res.json({status: 1});
+            return;
+        } else {
+            res.json({status: 0});
+            return;
+        }
+    }
+
     public async unblockUser(usernameSender: string, usernameReceiver: string, res: Response): Promise<void> {
         if (usernameSender === usernameReceiver) {
             res.json({status: -1});

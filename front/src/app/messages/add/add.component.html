@@ -15,17 +15,17 @@
 
   <div *ngIf="user.boolExitingFriendRequest[0]">
     <p>Request sent</p>
-    <ion-button fill="clear">
+    <ion-button fill="clear" (click)="cancelFriendRequest(user.username)">
       <ion-icon name="close" slot="icon-only" color="danger"></ion-icon>
     </ion-button>
   </div>
 
   <div *ngIf="user.boolEnteringFriendRequest[0]">
     <p>Answer request</p>
-    <ion-button fill="clear">
+    <ion-button fill="clear" (click)="addFriend(user.username)">
       <ion-icon name="checkmark" slot="icon-only" color="success"></ion-icon>
     </ion-button>
-    <ion-button fill="clear">
+    <ion-button fill="clear" (click)="refuseFriendRequest(user.username)">
       <ion-icon name="close" slot="icon-only" color="danger"></ion-icon>
     </ion-button>
   </div>
