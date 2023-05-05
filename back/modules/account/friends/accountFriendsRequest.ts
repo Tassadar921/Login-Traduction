@@ -88,7 +88,7 @@ module accountFriendsRequest {
                 Update User 
                 Filter .username = "${usernameReceiver}"
                 Set {
-                pendingFriendsRequests += (Select User Filter .username = "${usernameSender}"),
+                    pendingFriendsRequests += (Select detached User Filter .username = "${usernameSender}"),
                 }
             `));
         });
@@ -121,7 +121,7 @@ module accountFriendsRequest {
                 Update User 
                 Filter .username = "${usernameReceiver}"
                 Set {
-                pendingFriendsRequests -= (Select User Filter .username = "${usernameSender}"),
+                pendingFriendsRequests -= (Select detached User Filter .username = "${usernameSender}"),
                 }
             `));
         });
@@ -133,7 +133,7 @@ module accountFriendsRequest {
                 Update User 
                 Filter .username = "${username1}"
                 Set {
-                friends += (Select User Filter .username = "${username2}"),
+                friends += (Select detached User Filter .username = "${username2}"),
                 }
             `));
         });
@@ -145,7 +145,7 @@ module accountFriendsRequest {
                 Update User 
                 Filter .username = "${username1}"
                 Set {
-                friends -= (Select User Filter .username = "${username2}"),
+                friends -= (Select detached User Filter .username = "${username2}"),
                 }
             `));
         });
