@@ -82,7 +82,7 @@ module accountFriendsRequest {
         });
     }
 
-    export async function addPendingFriendsRequests(usernameReceiver : string, usernameSender : string, client : Client) : Promise<unknown[]> {
+    export async function addPendingFriendsRequests(usernameSender : string, usernameReceiver : string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 Update User 
@@ -94,7 +94,7 @@ module accountFriendsRequest {
         });
     }
 
-    export async function getFriendByBothUsernames(usernameReceiver : string, usernameSender : string, client : Client) : Promise<unknown[]> {
+    export async function getFriendByBothUsernames(usernameSender : string, usernameReceiver : string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 Select User {
@@ -104,7 +104,7 @@ module accountFriendsRequest {
         });
     }
 
-    export async function getPendingFriendsRequestByBothUsernames(usernameReceiver : string, usernameSender : string, client : Client) : Promise<unknown[]> {
+    export async function getPendingFriendsRequestByBothUsernames(usernameSender : string, usernameReceiver : string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 Select User {
@@ -115,7 +115,7 @@ module accountFriendsRequest {
         });
     }
 
-    export async function removePendingFriendsRequests(usernameReceiver : string, usernameSender : string, client : Client) : Promise<unknown[]> {
+    export async function removePendingFriendsRequests(usernameSender : string, usernameReceiver : string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 Update User 
@@ -220,25 +220,25 @@ module accountFriendsRequest {
         });
     }
 
-    export async function addBlockedUser(username1 : string, username2 : string, client : Client) : Promise<unknown[]> {
+    export async function addBlockedUser(usernameSender : string, usernameReceiver : string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 Update User 
-                Filter .username = "${username1}"
+                Filter .username = "${usernameSender}"
                 Set {
-                blockedUsers += (Select User Filter .username = "${username2}"),
+                blockedUsers += (Select detached User Filter .username = "${usernameReceiver}"),
                 }
             `));
         });
     }
 
-    export async function addBlockedBy(username1 : string, username2 : string, client : Client) : Promise<unknown[]> {
+    export async function addBlockedBy(usernameSender : string, usernameReceiver : string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
-                Update User 
-                Filter .username = "${username1}"
+                Update User
+                Filter .username = "${usernameReceiver}"
                 Set {
-                blockedBy += (Select User Filter .username = "${username2}"),
+                blockedBy += (Select detached User Filter .username = "${usernameSender}"),
                 }
             `));
         });
@@ -250,7 +250,7 @@ module accountFriendsRequest {
                 Update User 
                 Filter .username = "${username1}"
                 Set {
-                blockedUsers -= (Select User Filter .username = "${username2}"),
+                blockedUsers -= (Select detached User Filter .username = "${username2}"),
                 }
             `));
         });
@@ -262,7 +262,7 @@ module accountFriendsRequest {
                 Update User 
                 Filter .username = "${username1}"
                 Set {
-                blockedBy -= (Select User Filter .username = "${username2}"),
+                blockedBy -= (Select detached User Filter .username = "${username2}"),
                 }
             `));
         });
