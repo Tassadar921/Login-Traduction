@@ -1,3 +1,32 @@
-<p>
-  add works!
-</p>
+<div *ngFor="let user of users" class="user">
+  <p>{{user.username}}</p>
+  <ion-button fill="clear" *ngIf="!user.boolFriend[0]
+      && !user.boolExitingFriendRequest[0]
+      && !user.boolEnteringFriendRequest[0]"
+      (click)="addFriend(user.username)">
+    <ion-icon name="person-add" slot="icon-only" color="success"></ion-icon>
+  </ion-button>
+
+  <div *ngIf="user.boolFriend[0]">
+    <ion-button fill="clear">
+      <ion-icon name="person-remove" slot="icon-only" color="danger"></ion-icon>
+    </ion-button>
+  </div>
+
+  <div *ngIf="user.boolExitingFriendRequest[0]">
+    <p>Request sent</p>
+    <ion-button fill="clear">
+      <ion-icon name="close" slot="icon-only" color="danger"></ion-icon>
+    </ion-button>
+  </div>
+
+  <div *ngIf="user.boolEnteringFriendRequest[0]">
+    <p>Answer request</p>
+    <ion-button fill="clear">
+      <ion-icon name="checkmark" slot="icon-only" color="success"></ion-icon>
+    </ion-button>
+    <ion-button fill="clear">
+      <ion-icon name="close" slot="icon-only" color="danger"></ion-icon>
+    </ion-button>
+  </div>
+</div>

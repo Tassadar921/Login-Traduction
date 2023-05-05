@@ -79,17 +79,16 @@ export class AccountFriends{
         } else if (await accountFriendsRequest.getUserByUsername(usernameReceiver, this.client) === undefined) {
             res.json({status: -2});
             return;
-
-        } else if (await accountFriendsRequest.getBlockedUserByBothUsernames(usernameSender, usernameReceiver, this.client)) {
+        } else if ((await accountFriendsRequest.getBlockedUserByBothUsernames(usernameSender, usernameReceiver, this.client)).length) {
             res.json({status: -3});
             return;
-        } else if (await accountFriendsRequest.getBlockedByByBothUsernames(usernameReceiver, usernameSender, this.client)) {
+        } else if ((await accountFriendsRequest.getBlockedByByBothUsernames(usernameReceiver, usernameSender, this.client)).length) {
             res.json({status: -4});
             return;
-        } else if (await accountFriendsRequest.getFriendByBothUsernames(usernameSender, usernameReceiver, this.client)) {
+        } else if ((await accountFriendsRequest.getFriendByBothUsernames(usernameSender, usernameReceiver, this.client)).length) {
             res.json({status: 0});
             return;
-        } else if(await accountFriendsRequest.getPendingFriendsRequestByBothUsernames(usernameSender, usernameReceiver, this.client)){
+        } else if((await accountFriendsRequest.getPendingFriendsRequestByBothUsernames(usernameSender, usernameReceiver, this.client)).length){
             await accountFriendsRequest.removePendingFriendsRequests(usernameSender, usernameReceiver, this.client);
             await accountFriendsRequest.addFriend(usernameSender, usernameReceiver, this.client);
             await accountFriendsRequest.addFriend(usernameReceiver, usernameSender, this.client);
@@ -122,7 +121,7 @@ export class AccountFriends{
 
     public async getOtherUsers(username: string, itemsPerPage: number, page: number, res: Response): Promise<void>{
         const otherUsers: any[] = await accountFriendsRequest.getOtherUsers(username, itemsPerPage, page, this.client);
-        res.json(otherUsers);
+        res.json({status: 1, data: otherUsers});
         return;
     }
 
@@ -143,7 +142,7 @@ export class AccountFriends{
             //add the message to the database
             let dataMessage: any[] = await accountFriendsRequest.newMessage(socket.data.username, username, message, dateISO, this.client);
 
-            if(dataMessage.length != undefined) {
+            if(dataMessage.length !== undefined) {
                 await this.accountNotification.addNotificationsMessage(username, dataMessage[0].id);
             }
 

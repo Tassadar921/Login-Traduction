@@ -212,7 +212,7 @@ module accountRouting {
 
         app.post('/test', async function (req: Request, res: Response, next : NextFunction): Promise<void> {
             try {
-                //code
+                //test code
                 await res.json({status: 1});
             } catch (error) {
                 next(error);

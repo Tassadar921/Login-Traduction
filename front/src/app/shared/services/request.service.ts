@@ -93,7 +93,6 @@ export class RequestService {
   }
 
   public async test(message: string): Promise<Object> {
-    console.log(message);
     return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/test',
       {message}
     ));
@@ -134,7 +133,7 @@ export class RequestService {
   }
 
   public async askIfNotAddFriend(senderUsername: string, sessionToken: string, receiverUsername: string): Promise<Object> {
-    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/askFriend',
+    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/askIfNotAddFriend',
       {senderUsername, sessionToken, receiverUsername}
     ));
   }

@@ -37,11 +37,5 @@ export class MessagesPage implements OnInit {
       10,
       1
     ));
-    console.log(await this.requestService.getOtherUsers(
-      await this.cookieService.getCookie('username'),
-      await this.cookieService.getCookie('sessionToken'),
-      10,
-      1
-    ));
   }
 }

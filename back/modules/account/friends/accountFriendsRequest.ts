@@ -9,7 +9,7 @@ import { Client } from "edgedb";
 
 module accountFriendsRequest {
     export async function newMessage(sender : string, receiver : string, message : string, date : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve) => {
+        return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 INSERT Message {
                     sender := (SELECT User FILTER .username = "${sender}" limit 1),
@@ -22,7 +22,7 @@ module accountFriendsRequest {
     }
 
     export async function getMessage(receiver : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve) => {
+        return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 SELECT Message {
                     sender : {
@@ -37,7 +37,7 @@ module accountFriendsRequest {
     }
 
     export async function getFriends(username : string, page : number, itemsPerPage : number, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve) => {
+        return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 Select (Select User {
                     friends : {
@@ -53,7 +53,7 @@ module accountFriendsRequest {
     }
 
     export async function getEnteringPendingFriendsRequests(username : string, page : number, itemsPerPage : number, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve) => {
+        return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 Select (Select User {
                     pendingFriendsRequests : {
@@ -69,7 +69,7 @@ module accountFriendsRequest {
     }
 
     export async function getExitingPendingFriendsRequests(username : string, page : number, itemsPerPage : number, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve) => {
+        return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 Select User {
                     id,
@@ -83,7 +83,7 @@ module accountFriendsRequest {
     }
 
     export async function addPendingFriendsRequests(usernameReceiver : string, usernameSender : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve) => {
+        return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 Update User 
                 Filter .username = "${usernameReceiver}"
@@ -95,7 +95,7 @@ module accountFriendsRequest {
     }
 
     export async function getFriendByBothUsernames(usernameReceiver : string, usernameSender : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve) => {
+        return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 Select User {
                 }
@@ -105,7 +105,7 @@ module accountFriendsRequest {
     }
 
     export async function getPendingFriendsRequestByBothUsernames(usernameReceiver : string, usernameSender : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve) => {
+        return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 Select User {
                     pendingFriendsRequests : {}
@@ -116,7 +116,7 @@ module accountFriendsRequest {
     }
 
     export async function removePendingFriendsRequests(usernameReceiver : string, usernameSender : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve) => {
+        return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 Update User 
                 Filter .username = "${usernameReceiver}"
@@ -128,7 +128,7 @@ module accountFriendsRequest {
     }
 
     export async function addFriend(username1 : string, username2 : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve) => {
+        return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 Update User 
                 Filter .username = "${username1}"
@@ -140,7 +140,7 @@ module accountFriendsRequest {
     }
 
     export async function removeFriend(username1 : string, username2 : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve) => {
+        return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 Update User 
                 Filter .username = "${username1}"
@@ -152,7 +152,7 @@ module accountFriendsRequest {
     }
 
     export async function getUserByUsername(username : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve) => {
+        return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 Select User {
                 } Filter .username = "${username}"
@@ -161,7 +161,7 @@ module accountFriendsRequest {
     }
 
     export async function getOtherUsers(username : string, itemsPerPage : number, page : number, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve) => {
+        return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
             Select (with x :=   (Select User {
                         id,
@@ -221,7 +221,7 @@ module accountFriendsRequest {
     }
 
     export async function addBlockedUser(username1 : string, username2 : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve) => {
+        return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 Update User 
                 Filter .username = "${username1}"
@@ -233,7 +233,7 @@ module accountFriendsRequest {
     }
 
     export async function addBlockedBy(username1 : string, username2 : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve) => {
+        return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 Update User 
                 Filter .username = "${username1}"
@@ -245,7 +245,7 @@ module accountFriendsRequest {
     }
 
     export async function removeBlockedUser(username1 : string, username2 : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve) => {
+        return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 Update User 
                 Filter .username = "${username1}"
@@ -257,7 +257,7 @@ module accountFriendsRequest {
     }
 
     export async function removeBlockedBy(username1 : string, username2 : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve) => {
+        return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 Update User 
                 Filter .username = "${username1}"
@@ -269,7 +269,7 @@ module accountFriendsRequest {
     }
 
     export async function getBlockedUsers(username : string, itemsPerPage : number, page : number, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve) => {
+        return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 Select (Select User {
                     blockedUsers : {
@@ -285,7 +285,7 @@ module accountFriendsRequest {
     }
 
     export async function getBlockedUserByBothUsernames(username1 : string, username2 : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve) => {
+        return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 Select User {
                     blockedUsers : {}
@@ -296,7 +296,7 @@ module accountFriendsRequest {
     }
 
     export async function getBlockedByByBothUsernames(username1 : string, username2 : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve) => {
+        return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 Select User {
                     blockedBy : {}
