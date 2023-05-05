@@ -131,7 +131,7 @@ export class AccountFriends{
             res.json({status: 0});
             return;
         } else if((await accountFriendsRequest.getPendingFriendsRequestByBothUsernames(usernameSender, usernameReceiver, this.client)).length){
-            await accountFriendsRequest.removePendingFriendsRequests(usernameSender, usernameReceiver, this.client);
+            await accountFriendsRequest.removePendingFriendsRequests(usernameReceiver, usernameSender, this.client);
             await accountFriendsRequest.addFriend(usernameSender, usernameReceiver, this.client);
             await accountFriendsRequest.addFriend(usernameReceiver, usernameSender, this.client);
             res.json({status: 10});
