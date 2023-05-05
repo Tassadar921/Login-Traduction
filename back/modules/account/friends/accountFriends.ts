@@ -31,6 +31,7 @@ export class AccountFriends{
             return;
         } else {
             await accountFriendsRequest.removePendingFriendsRequests(username, usernameReceiver, this.client);
+            res.json({status: 1});
         }
     }
 

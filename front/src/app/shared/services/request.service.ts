@@ -144,4 +144,10 @@ export class RequestService {
       {username, sessionToken, receiverUsername}
     ));
   }
+
+  public async removeFriend(username: string, sessionToken: string, receiverUsername: string): Promise<Object> {
+    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/removeFriend ',
+      {username, sessionToken, receiverUsername}
+    ));
+  }
 }

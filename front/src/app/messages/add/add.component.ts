@@ -78,4 +78,18 @@ export class AddComponent implements OnInit {
       await this.setUsers(this.currentPage);
     }
   }
+
+  public async removeFriend(receiverUsername: string): Promise<void> {
+    this.waiting = true;
+    const rtrn: Object = await this.requestService.removeFriend(
+      await this.cookieService.getCookie('username'),
+      await this.cookieService.getCookie('sessionToken'),
+      receiverUsername
+    );
+    this.waiting = false;
+    console.log(rtrn);
+    if(Object(rtrn).status){
+      await this.setUsers(this.currentPage);
+    }
+  }
 }

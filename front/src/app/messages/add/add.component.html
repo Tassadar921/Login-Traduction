@@ -8,7 +8,7 @@
   </ion-button>
 
   <div *ngIf="user.boolFriend[0]">
-    <ion-button fill="clear">
+    <ion-button fill="clear" (click)="removeFriend(user.username)">
       <ion-icon name="person-remove" slot="icon-only" color="danger"></ion-icon>
     </ion-button>
   </div>
