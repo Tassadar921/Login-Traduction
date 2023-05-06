@@ -6,7 +6,7 @@
   "scripts": {
     "storeLogs":"run-script-os",
     "storeLogs:win32":"",
-    "storeLogs:linux":"cp -a ./logs/*.log ./logs/old/ && mkdir ./logs/old/$(date +%d-%m-%Y-%H:%M:%S)/ && mv ./logs/old/combined.log ./logs/old/$(date +%d-%m-%Y-%H:%M:%S)/combined_$(date +%d-%m-%Y-%H:%M:%S).log && mv ./logs/old/error.log ./logs/old/$(date +%d-%m-%Y-%H:%M:%S)/error_$(date +%d-%m-%Y-%H:%M:%S).log",
+    "storeLogs:linux":"touch ./logs/combined.log && touch ./logs/error.log && cp -a ./logs/*.log ./logs/old/ && mkdir ./logs/old/$(date +%d-%m-%Y-%H:%M:%S)/ && mv ./logs/old/combined.log ./logs/old/$(date +%d-%m-%Y-%H:%M:%S)/combined_$(date +%d-%m-%Y-%H:%M:%S).log && mv ./logs/old/error.log ./logs/old/$(date +%d-%m-%Y-%H:%M:%S)/error_$(date +%d-%m-%Y-%H:%M:%S).log",
     "deleteFilesfolder": "npm run storeLogs && run-script-os",
     "deleteFilesfolder:win32": "if exist build rmdir build /q /s",
     "deleteFilesfolder:linux": "rm -rf build",
