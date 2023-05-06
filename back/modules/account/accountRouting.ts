@@ -249,6 +249,20 @@ module accountRouting {
             }
         });
 
+        app.post('getNumberOfOtherUsers', async function (req: Request, res: Response, next : NextFunction): Promise<void> {
+            try {
+                logger.logger.info(`getNumberOfOtherUsers, { username : ${req.body.username}}`);
+                if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res)){
+                    await accountFriends.getNumberOfOtherUsers(req.body.username, res);
+                }
+                else{
+                    await res.json({status: 0});
+                }
+            } catch (error) {
+                next(error);
+            }
+        });
+
         /*--------------------------------------Notification-------------------------------------*/
 
 

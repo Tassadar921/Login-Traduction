@@ -305,6 +305,21 @@ module accountFriendsRequest {
             `));
         });
     }
+
+    export async function getNumberOfOtherUsers(username : string, client : Client) : Promise<unknown[]> {
+        return new Promise<any[]>((resolve): void => {
+            resolve(client.query(`
+                with x := (Select User Filter .username != "${username}"),
+                     y := (Select User {
+                     blockedBy
+                     } Filter .username = "${username}").blockedBy,
+                     z := (Select User {
+                     blockedUsers
+                     } Filter .username = "${username}").blockedUsers,
+                Select { count(x) - count(y) - count(z)}
+            `));
+        });
+    }
 }
 
 export default accountFriendsRequest;

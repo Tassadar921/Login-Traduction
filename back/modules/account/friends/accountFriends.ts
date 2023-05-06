@@ -22,6 +22,11 @@ export class AccountFriends{
         this.accountNotification = accountNotification;
     }
 
+    public async getNumberOfOtherUsers(username: string, res: Response): Promise<void> {
+        const numberOfOtherUsers = await accountFriendsRequest.getNumberOfOtherUsers(username, this.client);
+        res.json({numberOfOtherUsers: numberOfOtherUsers});
+    }
+
     public async cancelFriendRequest(username: string, usernameReceiver: string, res: Response): Promise<void> {
         if (username === usernameReceiver) {
             res.json({status: -1});
