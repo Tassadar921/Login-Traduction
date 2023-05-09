@@ -35,7 +35,6 @@ export class AddComponent implements OnInit {
       this.users = Object(rtrn).data;
     }
     this.waiting = false;
-    console.log(this.users);
   }
 
   public async addFriend(username: string): Promise<void> {
@@ -59,7 +58,6 @@ export class AddComponent implements OnInit {
       senderUsername
     );
     this.waiting = false;
-    console.log(rtrn);
     if(Object(rtrn).status){
       await this.setUsers(this.currentPage);
     }
@@ -73,7 +71,6 @@ export class AddComponent implements OnInit {
       receiverUsername
     );
     this.waiting = false;
-    console.log(rtrn);
     if(Object(rtrn).status){
       await this.setUsers(this.currentPage);
     }
@@ -87,7 +84,6 @@ export class AddComponent implements OnInit {
       receiverUsername
     );
     this.waiting = false;
-    console.log(rtrn);
     if(Object(rtrn).status){
       await this.setUsers(this.currentPage);
     }
