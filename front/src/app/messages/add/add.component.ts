@@ -14,6 +14,9 @@ export class AddComponent implements OnInit {
   public users: Array<any> = [];
   public waiting: boolean = false;
   public usersNumber: number = 0;
+  public filter: string = '';
+  public pagesNumber: number = 0;
+  private usersPerPage: number = 1;
 
   constructor(
     private requestService: RequestService,
@@ -28,23 +31,22 @@ export class AddComponent implements OnInit {
       await this.cookieService.getCookie('sessionToken')
     );
     if(Object(rtrn).status){
-      this.usersNumber = Object(rtrn).data;
+      this.pagesNumber = Math.ceil(Object(rtrn).data/this.usersPerPage);
     }
-    console.log(this.usersNumber);
   }
 
   public async setUsers(page: number): Promise<void> {
     this.waiting = true;
-    this.currentPage = page;
     const rtrn: Object = await this.requestService.getOtherUsers(
       await this.cookieService.getCookie('username'),
       await this.cookieService.getCookie('sessionToken'),
-      10,
+      this.usersPerPage,
       page
     );
     if(Object(rtrn).status){
       this.users = Object(rtrn).data;
     }
+    this.currentPage = page;
     this.waiting = false;
   }
 

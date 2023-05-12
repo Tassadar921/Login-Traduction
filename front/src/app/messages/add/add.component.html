@@ -1,3 +1,5 @@
+<ion-searchbar [(ngModel)]="filter" (ionChange)="setUsers(1)"></ion-searchbar>
+
 <div *ngFor="let user of users" class="user">
   <div *ngIf="!waiting">
     <p>{{user.username}}</p>
@@ -37,3 +39,21 @@
   </div>
   <ion-spinner color="light" *ngIf="waiting"></ion-spinner>
 </div>
+
+<ion-footer>
+  <ion-row>
+    <ion-col>
+      <ion-button fill="clear" (click)="setUsers(currentPage-1)" [disabled]="currentPage === 1">
+        <ion-icon name="arrow-back" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-col>
+    <ion-col>
+      <ion-label>{{currentPage}}/{{pagesNumber}}</ion-label>
+    </ion-col>
+    <ion-col>
+      <ion-button fill="clear" (click)="setUsers(currentPage+1)" [disabled]="currentPage === pagesNumber">
+        <ion-icon name="arrow-forward" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-footer>
