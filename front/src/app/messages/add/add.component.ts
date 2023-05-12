@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {CookieService} from '../../shared/services/cookie.service';
 import {RequestService} from '../../shared/services/request.service';
 import {ActionSheetController} from '@ionic/angular';
+import {DevicePlatformService} from '../../shared/services/device-platform.service';
 
 @Component({
   selector: 'app-add',
@@ -13,34 +14,43 @@ export class AddComponent implements OnInit {
   public currentPage: number = 1;
   public users: Array<any> = [];
   public waiting: boolean = false;
-  public usersNumber: number = 0;
   public filter: string = '';
   public pagesNumber: number = 0;
-  private usersPerPage: number = 1;
+  public totalUsers: number = 0;
 
   constructor(
     private requestService: RequestService,
     private cookieService: CookieService,
     private actionSheetController: ActionSheetController,
+    public devicePlatformService: DevicePlatformService
   ) {}
 
   async ngOnInit(): Promise<void> {
-    await this.setUsers(1);
+    window.addEventListener(('resize'), async (): Promise<void> => {
+      await this.onChangeAndInit();
+    });
+    await this.onChangeAndInit();
+  }
+
+  async onChangeAndInit(): Promise<void> {
     const rtrn: Object = await this.requestService.getNumberOfOtherUsers(
       await this.cookieService.getCookie('username'),
       await this.cookieService.getCookie('sessionToken')
     );
     if(Object(rtrn).status){
-      this.pagesNumber = Math.ceil(Object(rtrn).data/this.usersPerPage);
+      this.totalUsers = Object(rtrn).data;
     }
+    this.pagesNumber = Math.ceil(this.totalUsers/this.devicePlatformService.itemsPerPage);
+    await this.setUsers(this.currentPage);
   }
 
   public async setUsers(page: number): Promise<void> {
+    console.log(this.devicePlatformService.itemsPerPage);
     this.waiting = true;
     const rtrn: Object = await this.requestService.getOtherUsers(
       await this.cookieService.getCookie('username'),
       await this.cookieService.getCookie('sessionToken'),
-      this.usersPerPage,
+      this.devicePlatformService.itemsPerPage,
       page
     );
     if(Object(rtrn).status){
