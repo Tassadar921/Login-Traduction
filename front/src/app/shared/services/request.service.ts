@@ -127,6 +127,12 @@ export class RequestService {
     ));
   }
 
+  public async getNumberOfOtherUsers(username: string, sessionToken: string): Promise<Object> {
+    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/getNumberOfOtherUsers ',
+      {username, sessionToken}
+    ));
+  }
+
   public async askIfNotAddFriend(senderUsername: string, sessionToken: string, receiverUsername: string): Promise<Object> {
     return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/askIfNotAddFriend',
       { senderUsername, sessionToken, receiverUsername }
@@ -148,6 +154,12 @@ export class RequestService {
   public async removeFriend(username: string, sessionToken: string, receiverUsername: string): Promise<Object> {
     return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/removeFriend ',
       {username, sessionToken, receiverUsername}
+    ));
+  }
+
+  public async blockUser(username: string, sessionToken: string, blockedUsername: string): Promise<Object> {
+    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/blockUser ',
+      {username, sessionToken, blockedUsername}
     ));
   }
 }

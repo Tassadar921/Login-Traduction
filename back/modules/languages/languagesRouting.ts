@@ -11,7 +11,7 @@ import logger from "modules/common/logger/logger";
 
 module languagesRouting {
     export function init(app : any): void {
-        const languages = new Languages();
+        const languages: Languages = new Languages();
         
         app.get('/languages/list', async function(req : Request, res : Response) {
             logger.logger.info('languages/list');

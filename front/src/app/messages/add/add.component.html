@@ -9,7 +9,7 @@
     </ion-button>
 
     <div *ngIf="user.boolFriend[0]">
-      <ion-button fill="clear" (click)="removeFriend(user.username)">
+      <ion-button fill="clear" (click)="actionSheetRemoveFriend(user.username)">
         <ion-icon name="person-remove" slot="icon-only" color="danger"></ion-icon>
       </ion-button>
     </div>
@@ -30,6 +30,10 @@
         <ion-icon name="close" slot="icon-only" color="danger"></ion-icon>
       </ion-button>
     </div>
+
+    <ion-button fill="clear" (click)="actionSheetBlockUser(user.username)">
+      <ion-icon name="trash" slot="icon-only" color="danger"></ion-icon>
+    </ion-button>
   </div>
   <ion-spinner color="light" *ngIf="waiting"></ion-spinner>
 </div>

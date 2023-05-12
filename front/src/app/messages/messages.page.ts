@@ -19,23 +19,23 @@ export class MessagesPage implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
-    console.log(await this.requestService.getFriends(
-      await this.cookieService.getCookie('username'),
-      await this.cookieService.getCookie('sessionToken'),
-      10,
-      1
-    ));
-    console.log(await this.requestService.getEnteringPendingFriendsRequests(
-      await this.cookieService.getCookie('username'),
-      await this.cookieService.getCookie('sessionToken'),
-      10,
-      1
-    ));
-    console.log(await this.requestService.getExitingPendingFriendsRequests(
-      await this.cookieService.getCookie('username'),
-      await this.cookieService.getCookie('sessionToken'),
-      10,
-      1
-    ));
+    // console.log(await this.requestService.getFriends(
+    //   await this.cookieService.getCookie('username'),
+    //   await this.cookieService.getCookie('sessionToken'),
+    //   10,
+    //   1
+    // ));
+    // console.log(await this.requestService.getEnteringPendingFriendsRequests(
+    //   await this.cookieService.getCookie('username'),
+    //   await this.cookieService.getCookie('sessionToken'),
+    //   10,
+    //   1
+    // ));
+    // console.log(await this.requestService.getExitingPendingFriendsRequests(
+    //   await this.cookieService.getCookie('username'),
+    //   await this.cookieService.getCookie('sessionToken'),
+    //   10,
+    //   1
+    // ));
   }
 }
