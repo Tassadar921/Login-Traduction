@@ -36,23 +36,7 @@ module accountFriendsRequest {
         });
     }
 
-    export async function getFriends(username : string, page : number, itemsPerPage : number, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve): void => {
-            resolve(client.query(`
-                Select (Select User {
-                    friends : {
-                    id,
-                    username    
-                    }
-                } filter .username = "${username}").friends
-                order by .username
-                offset ${itemsPerPage}*(${page}-1)
-                limit ${itemsPerPage}
-            `));
-        });
-    }
-
-    export async function getEnteringPendingFriendsRequests(username : string, page : number, itemsPerPage : number, client : Client) : Promise<unknown[]> {
+    export async function getEnteringPendingFriendsRequests(username : string, itemsPerPage : number, page : number, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 Select (Select User {
@@ -68,7 +52,7 @@ module accountFriendsRequest {
         });
     }
 
-    export async function getExitingPendingFriendsRequests(username : string, page : number, itemsPerPage : number, client : Client) : Promise<unknown[]> {
+    export async function getExitingPendingFriendsRequests(username : string, itemsPerPage : number, page : number, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 Select User {
@@ -97,9 +81,23 @@ module accountFriendsRequest {
     export async function getFriendByBothUsernames(usernameSender : string, usernameReceiver : string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
-                Select User {
-                }
+                Select User {}
                 Filter .friends.username = "${usernameSender}" AND .username = "${usernameReceiver}"
+            `));
+        });
+    }
+
+    export async function getFriendUsers(username : string, itemsPerPage : number, page : number, client : Client) : Promise<unknown[]> {
+        console.log(username, itemsPerPage, page);
+        console.log(itemsPerPage*(page-1));
+        return new Promise<any[]>((resolve): void => {
+            resolve(client.query(`
+                Select (Select User {
+                    id, username
+                }filter .friends.username = "${username}")
+                order by .username
+                offset ${itemsPerPage}*(${page}-1)
+                limit ${itemsPerPage}
             `));
         });
     }
@@ -269,6 +267,8 @@ module accountFriendsRequest {
     }
 
     export async function getBlockedUsers(username : string, itemsPerPage : number, page : number, client : Client) : Promise<unknown[]> {
+        console.log(username, itemsPerPage, page);
+        console.log(itemsPerPage*(page-1));
         return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 Select (Select User {
@@ -306,7 +306,7 @@ module accountFriendsRequest {
         });
     }
 
-    export async function getOthersUsersNumber(username : string, client : Client) : Promise<number[]> {
+    export async function getOtherUsersNumber(username : string, client : Client) : Promise<number[]> {
         return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 with x := (Select User Filter .username != "${username}"),
@@ -325,6 +325,15 @@ module accountFriendsRequest {
         return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 with x := (Select User Filter .blockedBy.username = "${username}"),
+                Select { count(x) }
+            `));
+        });
+    }
+
+    export async function getFriendUsersNumber(username : string, client : Client) : Promise<number[]> {
+        return new Promise<any[]>((resolve): void => {
+            resolve(client.query(`
+                with x := (Select User Filter .friends.username = "${username}"),
                 Select { count(x) }
             `));
         });

@@ -23,7 +23,7 @@ export class PagesService {
   async onChangeAndInit(requestHeader: string): Promise<void> {
     // @ts-ignore
     const totalItemsNumber: Object = await this[`get${requestHeader}UsersNumber`]();
-    console.log(totalItemsNumber);
+    console.log(`get${requestHeader}UsersNumber`, totalItemsNumber);
     if(Object(totalItemsNumber).status){
       if(Object(totalItemsNumber).data) {
         this.totalPages = Math.ceil(Object(totalItemsNumber).data / this.devicePlatformService.itemsPerPage);
@@ -35,11 +35,10 @@ export class PagesService {
   }
 
   public async setUsers(requestHeader: string, page: number): Promise<void> {
-    console.log('là');
     this.waiting = true;
     // @ts-ignore
     const rtrn: Object = await this[`get${requestHeader}Users`](page);
-    console.log(rtrn);
+    console.log(`get${requestHeader}Users`, rtrn);
     if(Object(rtrn).status){
       this.users = Object(rtrn).data;
     }
@@ -64,7 +63,6 @@ export class PagesService {
   }
 
   private async getBlockedUsers(page: number): Promise<Object> {
-    console.log('ici');
     return await this.requestService.getBlockedUsers(
       await this.cookieService.getCookie('username'),
       await this.cookieService.getCookie('sessionToken'),
@@ -75,6 +73,22 @@ export class PagesService {
 
   private async getBlockedUsersNumber(): Promise<Object> {
     return await this.requestService.getBlockedUsersNumber(
+      await this.cookieService.getCookie('username'),
+      await this.cookieService.getCookie('sessionToken')
+    );
+  }
+
+  private async getFriendsUsers(page: number): Promise<Object> {
+    return await this.requestService.getFriendUsers(
+      await this.cookieService.getCookie('username'),
+      await this.cookieService.getCookie('sessionToken'),
+      this.devicePlatformService.itemsPerPage,
+      page
+    );
+  }
+
+  private async getFriendsUsersNumber(): Promise<Object> {
+    return await this.requestService.getFriendUsersNumber(
       await this.cookieService.getCookie('username'),
       await this.cookieService.getCookie('sessionToken')
     );

@@ -13,14 +13,20 @@ export class RequestService {
     private cookieService: CookieService,
   ) {}
 
+  public async test(message: string): Promise<Object> {
+    return await lastValueFrom(this.http.post<Object>(`${environment.apiUrl}/test`,
+      { message }
+    ));
+  }
+
   //returns array containing all available languages, with their full name and id
   public async getLanguagesList (): Promise<Array<Object>> {
-    return await lastValueFrom(this.http.get<Array<Object>>(environment.apiUrl + '/languages/list'));
+    return await lastValueFrom(this.http.get<Array<Object>>(`${environment.apiUrl}/languages/list`));
   }
 
   //returns json of the language id selected language if it exists
   public async getTranslation(languageID: string): Promise<any> {
-    return await lastValueFrom(this.http.get<Object>(environment.apiUrl + '/languages/' + languageID));
+    return await lastValueFrom(this.http.get<Object>(`${environment.apiUrl}/languages/${languageID}`));
   }
 
   /*
@@ -34,7 +40,7 @@ export class RequestService {
 		{status : 1} success
 	*/
   public async signIn(identifier: string, password: string): Promise<Object> {
-    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/signIn',
+    return await lastValueFrom(this.http.post<Object>(`${environment.apiUrl}/signIn`,
       { identifier, password }
     ));
   }
@@ -44,7 +50,7 @@ export class RequestService {
 		{status: 1, sessionToken, username, permission} success
 	*/
   public async signUp(username: string, email: string, password: string): Promise<Object> {
-    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/signUp',
+    return await lastValueFrom(this.http.post<Object>(`${environment.apiUrl}/signUp`,
       { username, password, email, language: await this.cookieService.getCookie('language') },
     ));
   }
@@ -54,7 +60,7 @@ export class RequestService {
 		{status: 1, sessionToken, username, permission} success
   */
   public async confirmSignUp(urlToken: string): Promise<Object> {
-    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/confirmSignUp',
+    return await lastValueFrom(this.http.post<Object>(`${environment.apiUrl}/confirmSignUp`,
       { urlToken }
     ));
   }
@@ -66,7 +72,7 @@ export class RequestService {
 		{status : 1} success
   */
   public async resetPassword(email: string): Promise<Object> {
-    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/resetPassword',
+    return await lastValueFrom(this.http.post<Object>(`${environment.apiUrl}/resetPassword`,
       { email, language: await this.cookieService.getCookie('language') }
     ));
   }
@@ -76,20 +82,14 @@ export class RequestService {
 		{status : 1} success
   */
   public async confirmResetPassword(urlToken: string, password: string): Promise<Object> {
-    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/confirmResetPassword',
+    return await lastValueFrom(this.http.post<Object>(`${environment.apiUrl}/confirmResetPassword`,
       { urlToken, password }
     ));
   }
 
   public async signOut(username: string, sessionToken: string): Promise<Object> {
-    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/signOut',
+    return await lastValueFrom(this.http.post<Object>(`${environment.apiUrl}/signOut`,
       { username, sessionToken }
-    ));
-  }
-
-  public async test(message: string): Promise<Object> {
-    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/test',
-      { message }
     ));
   }
 
@@ -98,85 +98,85 @@ export class RequestService {
 		{status : 1} everything is fine
   */
   public async checkSession(username: string, sessionToken: string): Promise<Object> {
-    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/checkSession',
+    return await lastValueFrom(this.http.post<Object>(`${environment.apiUrl}/checkSession`,
       { username, sessionToken }
     ));
   }
 
-  public async getFriends(username: string, sessionToken: string, itemsPerPage: number, page: number): Promise<Object> {
-    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/getFriends',
+  public async getFriendUsers(username: string, sessionToken: string, itemsPerPage: number, page: number): Promise<Object> {
+    return await lastValueFrom(this.http.post<Object>(`${environment.apiUrl}/getFriendUsers`,
       { username, sessionToken, itemsPerPage, page }
+    ));
+  }
+
+  public async getFriendUsersNumber(username: string, sessionToken: string): Promise<Object> {
+    return await lastValueFrom(this.http.post<Object>(`${environment.apiUrl}/getFriendUsersNumber`,
+      { username, sessionToken }
     ));
   }
 
   public async getEnteringPendingFriendsRequests(username: string, sessionToken: string, itemsPerPage: number, page: number): Promise<Object> {
-    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/getEnteringPendingFriendsRequests',
-      { username, sessionToken, itemsPerPage, page }
-    ));
-  }
-
-  public async getExitingPendingFriendsRequests(username: string, sessionToken: string, itemsPerPage: number, page: number): Promise<Object> {
-    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/getExitingPendingFriendsRequests',
+    return await lastValueFrom(this.http.post<Object>(`${environment.apiUrl}/getEnteringPendingFriendsRequests`,
       { username, sessionToken, itemsPerPage, page }
     ));
   }
 
   public async getOtherUsers(username: string, sessionToken: string, itemsPerPage: number, page: number): Promise<Object> {
-    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/getOtherUsers',
+    return await lastValueFrom(this.http.post<Object>(`${environment.apiUrl}/getOtherUsers`,
       { username, sessionToken, itemsPerPage, page }
     ));
   }
 
   public async getOthersUsersNumber(username: string, sessionToken: string): Promise<Object> {
-    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/getOthersUsersNumber ',
+    return await lastValueFrom(this.http.post<Object>(`${environment.apiUrl}/getOtherUsersNumber`,
       { username, sessionToken }
     ));
   }
 
   public async askIfNotAddFriend(senderUsername: string, sessionToken: string, receiverUsername: string): Promise<Object> {
-    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/askIfNotAddFriend',
+    return await lastValueFrom(this.http.post<Object>(`${environment.apiUrl}/askIfNotAddFriend`,
       { senderUsername, sessionToken, receiverUsername }
     ));
   }
 
   public async refuseFriendRequest(username: string, sessionToken: string, senderUsername: string): Promise<Object> {
-    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/refuseFriendRequest ',
+    return await lastValueFrom(this.http.post<Object>(`${environment.apiUrl}/refuseFriendRequest`,
       { username, sessionToken, senderUsername }
     ));
   }
 
   public async cancelFriendRequest(username: string, sessionToken: string, receiverUsername: string): Promise<Object> {
-    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/cancelFriendRequest ',
+    return await lastValueFrom(this.http.post<Object>(`${environment.apiUrl}/cancelFriendRequest`,
       { username, sessionToken, receiverUsername }
     ));
   }
 
   public async removeFriend(username: string, sessionToken: string, receiverUsername: string): Promise<Object> {
-    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/removeFriend ',
+    return await lastValueFrom(this.http.post<Object>(`${environment.apiUrl}/removeFriend`,
       { username, sessionToken, receiverUsername }
     ));
   }
 
   public async blockUser(username: string, sessionToken: string, blockedUsername: string): Promise<Object> {
-    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/blockUser ',
+    return await lastValueFrom(this.http.post<Object>(`${environment.apiUrl}/blockUser`,
       { username, sessionToken, blockedUsername }
     ));
   }
 
   public async unblockUser(username: string, sessionToken: string, blockedUsername: string): Promise<Object> {
-    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/unblockUser ',
+    return await lastValueFrom(this.http.post<Object>(`${environment.apiUrl}/unblockUser`,
       { username, sessionToken, blockedUsername }
     ));
   }
 
   public async getBlockedUsers(username: string, sessionToken: string, itemsPerPage: number, page: number): Promise<Object> {
-    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/getBlockedUsers ',
+    return await lastValueFrom(this.http.post<Object>(`${environment.apiUrl}/getBlockedUsers`,
       { username, sessionToken, itemsPerPage, page }
     ));
   }
 
   public async getBlockedUsersNumber(username: string, sessionToken: string): Promise<Object> {
-    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/getBlockedUsersNumber ',
+    return await lastValueFrom(this.http.post<Object>(`${environment.apiUrl}/getBlockedUsersNumber`,
       { username, sessionToken }
     ));
   }

@@ -11,7 +11,7 @@ export class ToastService {
   ) {}
 
   public async displayToast(message: string, position: "top"|"bottom"|"middle", duration: number = 3000): Promise<void> {
-      const toast = await this.toastController.create({
+      const toast: HTMLIonToastElement = await this.toastController.create({
         message,
         duration,
         position,

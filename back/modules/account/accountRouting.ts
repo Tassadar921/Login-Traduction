@@ -139,13 +139,29 @@ module accountRouting {
             }
         });
 
-        app.post('/getFriends', async function (req: Request, res: Response, next : NextFunction): Promise<void> {
+        app.post('/getFriendUsers', async function (req: Request, res: Response, next : NextFunction): Promise<void> {
             try {
                 logger.logger.info(
-                    `getFriends, { username : ${req.body.username}, sessionToken : ${req.body.sessionToken}, itemsPerPage : ${req.body.itemsPerPage}, page : ${req.body.page} }`
+                    `getFriend, { username : ${req.body.username}, sessionToken : ${req.body.sessionToken}, itemsPerPage : ${req.body.itemsPerPage}, page : ${req.body.page} }`
                 );
                 if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res)){
-                    await accountFriends.getFriends(req.body.username, req.body.itemsPerPage,  req.body.page, res);
+                    await accountFriends.getFriendUsers(req.body.username, req.body.itemsPerPage,  req.body.page, res);
+                }
+                else{
+                    await res.json({status: 0});
+                }
+            } catch (error) {
+                next(error);
+            }
+        });
+
+        app.post('/getFriendUsersNumber', async function (req: Request, res: Response, next : NextFunction): Promise<void> {
+            try {
+                logger.logger.info(
+                    `getFriendUsersNumber, { username : ${req.body.username}, sessionToken : ${req.body.sessionToken} }`
+                );
+                if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res)){
+                    await accountFriends.getFriendUsersNumber(req.body.username, req.body.itemsPerPage,  req.body.page, res);
                 }
                 else{
                     await res.json({status: 0});
@@ -318,12 +334,12 @@ module accountRouting {
             }
         });
 
-        app.post('/getOthersUsersNumber', async function (req: Request, res: Response, next : NextFunction): Promise<void> {
+        app.post('/getOtherUsersNumber', async function (req: Request, res: Response, next : NextFunction): Promise<void> {
             try {
                 logger.logger.info(
                     `getNumberOfOtherUsers, { username : ${req.body.username}, sessionToken : ${req.body.sessionToken} }`);
                 if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken, res)){
-                    await accountFriends.getOthersUsersNumber(req.body.username, res);
+                    await accountFriends.getOthersUserNumber(req.body.username, res);
                 }
                 else{
                     await res.json({status: 0});

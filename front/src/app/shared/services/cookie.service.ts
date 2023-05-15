@@ -30,7 +30,7 @@ export class CookieService {
   }
 
   //disconnects user by removing cookies session token and username
-  public async signOut(popover: boolean = false)  {
+  public async signOut(popover: boolean = false): Promise<void>  {
     this.username = '';
     await Preferences.remove({ key: 'username' });
     await Preferences.remove({ key: 'sessionToken' });

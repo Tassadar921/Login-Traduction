@@ -11,7 +11,7 @@ export class FormValidatorsService {
   ) {}
 
   //signup validator containing username, email, password and confirmPassword
-  public getSignUpValidator(){
+  public getSignUpValidator(): FormGroup<{username: FormControl<any>, email: FormControl<any>, password: FormControl<any>, confirmPassword: FormControl<any>}>{
     return this.formBuilder.group({
       username: this.formBuilder.control(
         '',
@@ -60,7 +60,7 @@ export class FormValidatorsService {
   }
 
   //resetPassword validator containing password and confirmPassword
-  public getResetPasswordValidator(){
+  public getResetPasswordValidator(): FormGroup<{password: FormControl<any>, confirmPassword: FormControl<any>}>{
     return this.formBuilder.group({
       password: this.formBuilder.control(
         '',
@@ -89,7 +89,7 @@ export class FormValidatorsService {
   }
 
   //forgotPassword validator containing email
-  getForgotPasswordValidator(){
+  getForgotPasswordValidator(): FormGroup<{email: FormControl<any>}>{
     return this.formBuilder.group({
       email: new FormControl(
         '',
@@ -105,7 +105,7 @@ export class FormValidatorsService {
   }
 
   //custom matching validator, checks if controlOne and controlTwo are equal
-  private matchValidator(controlOne: string, controlTwo: string) {
+  private matchValidator(controlOne: string, controlTwo: string): any {
     return (formGroup: FormGroup): void => {
       const control1: AbstractControl<any, any> = formGroup.controls[controlOne];
       const control2: AbstractControl<any, any> = formGroup.controls[controlTwo];

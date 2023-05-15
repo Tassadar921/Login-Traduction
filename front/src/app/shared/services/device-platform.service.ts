@@ -23,7 +23,7 @@ export class DevicePlatformService {
   }
 
   //returns the current platform theme
-  public getDeviceTheme(): "dark" | "light" {
+  public getDeviceTheme(): 'dark' | 'light' {
     if(window.matchMedia("(prefers-color-scheme: dark)").matches){
       return 'dark';
     }else{
