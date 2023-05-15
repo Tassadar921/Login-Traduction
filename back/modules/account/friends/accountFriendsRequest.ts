@@ -306,7 +306,7 @@ module accountFriendsRequest {
         });
     }
 
-    export async function getNumberOfOtherUsers(username : string, client : Client) : Promise<unknown[]> {
+    export async function getOthersUsersNumber(username : string, client : Client) : Promise<number[]> {
         return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 with x := (Select User Filter .username != "${username}"),
@@ -317,6 +317,15 @@ module accountFriendsRequest {
                      blockedUsers
                      } Filter .username = "${username}").blockedUsers,
                 Select { count(x) - count(y) - count(z)}
+            `));
+        });
+    }
+
+    export async function getBlockedUsersNumber(username : string, client : Client) : Promise<number[]> {
+        return new Promise<any[]>((resolve): void => {
+            resolve(client.query(`
+                with x := (Select User Filter .blockedBy.username = "${username}"),
+                Select { count(x) }
             `));
         });
     }

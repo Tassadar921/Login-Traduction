@@ -3,6 +3,7 @@ import {CookieService} from '../../shared/services/cookie.service';
 import {RequestService} from '../../shared/services/request.service';
 import {ActionSheetController} from '@ionic/angular';
 import {DevicePlatformService} from '../../shared/services/device-platform.service';
+import {PagesService} from '../../shared/services/pages.service';
 
 @Component({
   selector: 'app-add',
@@ -11,91 +12,57 @@ import {DevicePlatformService} from '../../shared/services/device-platform.servi
 })
 export class AddComponent implements OnInit {
 
-  public currentPage: number = 1;
-  public users: Array<any> = [];
-  public waiting: boolean = false;
-  public filter: string = '';
-  public pagesNumber: number = 0;
-  public totalUsers: number = 0;
-
   constructor(
     private requestService: RequestService,
     private cookieService: CookieService,
     private actionSheetController: ActionSheetController,
-    public devicePlatformService: DevicePlatformService
+    public devicePlatformService: DevicePlatformService,
+    public pagesService: PagesService
   ) {}
 
   async ngOnInit(): Promise<void> {
     window.addEventListener(('resize'), async (): Promise<void> => {
-      await this.onChangeAndInit();
+      await this.pagesService.onChangeAndInit('Others');
     });
-    await this.onChangeAndInit();
-  }
-
-  async onChangeAndInit(): Promise<void> {
-    const rtrn: Object = await this.requestService.getNumberOfOtherUsers(
-      await this.cookieService.getCookie('username'),
-      await this.cookieService.getCookie('sessionToken')
-    );
-    if(Object(rtrn).status){
-      this.totalUsers = Object(rtrn).data;
-    }
-    this.pagesNumber = Math.ceil(this.totalUsers/this.devicePlatformService.itemsPerPage);
-    await this.setUsers(this.currentPage);
-  }
-
-  public async setUsers(page: number): Promise<void> {
-    console.log(this.devicePlatformService.itemsPerPage);
-    this.waiting = true;
-    const rtrn: Object = await this.requestService.getOtherUsers(
-      await this.cookieService.getCookie('username'),
-      await this.cookieService.getCookie('sessionToken'),
-      this.devicePlatformService.itemsPerPage,
-      page
-    );
-    if(Object(rtrn).status){
-      this.users = Object(rtrn).data;
-    }
-    this.currentPage = page;
-    this.waiting = false;
+    await this.pagesService.onChangeAndInit('Others');
   }
 
   public async addFriend(username: string): Promise<void> {
-    this.waiting = true;
+    this.pagesService.waiting = true;
     const rtrn: Object = await this.requestService.askIfNotAddFriend(
       await this.cookieService.getCookie('username'),
       await this.cookieService.getCookie('sessionToken'),
       username
     );
-    this.waiting = false;
+    this.pagesService.waiting = false;
     if(Object(rtrn).status){
-      await this.setUsers(this.currentPage);
+      await this.pagesService.onChangeAndInit('Others');
     }
   }
 
   public async refuseFriendRequest(senderUsername: string): Promise<void> {
-    this.waiting = true;
+    this.pagesService.waiting = true;
     const rtrn: Object = await this.requestService.refuseFriendRequest(
       await this.cookieService.getCookie('username'),
       await this.cookieService.getCookie('sessionToken'),
       senderUsername
     );
-    this.waiting = false;
+    this.pagesService.waiting = false;
     if(Object(rtrn).status){
-      await this.setUsers(this.currentPage);
+      await this.pagesService.onChangeAndInit('Others');
     }
   }
 
   public async cancelFriendRequest(receiverUsername: string): Promise<void> {
-    this.waiting = true;
+    this.pagesService.waiting = true;
     const rtrn: Object = await this.requestService.cancelFriendRequest(
       await this.cookieService.getCookie('username'),
       await this.cookieService.getCookie('sessionToken'),
       receiverUsername
     );
-    this.waiting = false;
+    this.pagesService.waiting = false;
     if(Object(rtrn).status){
-      await this.setUsers(this.currentPage);
+      await this.pagesService.onChangeAndInit('Others');
     }
   }
 
@@ -140,29 +107,28 @@ export class AddComponent implements OnInit {
   }
 
   public async removeFriend(receiverUsername: string): Promise<void> {
-    this.waiting = true;
+    this.pagesService.waiting = true;
     const rtrn: Object = await this.requestService.removeFriend(
       await this.cookieService.getCookie('username'),
       await this.cookieService.getCookie('sessionToken'),
       receiverUsername
     );
-    this.waiting = false;
+    this.pagesService.waiting = false;
     if(Object(rtrn).status){
-      await this.setUsers(this.currentPage);
+      await this.pagesService.onChangeAndInit('Others');
     }
   }
 
   public async blockUser(blockedUsername: string): Promise<void> {
-    this.waiting = true;
+    this.pagesService.waiting = true;
     const rtrn: Object = await this.requestService.blockUser(
       await this.cookieService.getCookie('username'),
       await this.cookieService.getCookie('sessionToken'),
       blockedUsername
     );
-    console.log(rtrn);
-    this.waiting = false;
+    this.pagesService.waiting = false;
     if(Object(rtrn).status){
-      await this.setUsers(this.currentPage);
+      await this.pagesService.onChangeAndInit('Others');
     }
   }
 }

@@ -127,9 +127,9 @@ export class RequestService {
     ));
   }
 
-  public async getNumberOfOtherUsers(username: string, sessionToken: string): Promise<Object> {
-    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/getNumberOfOtherUsers ',
-      {username, sessionToken}
+  public async getOthersUsersNumber(username: string, sessionToken: string): Promise<Object> {
+    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/getOthersUsersNumber ',
+      { username, sessionToken }
     ));
   }
 
@@ -147,19 +147,37 @@ export class RequestService {
 
   public async cancelFriendRequest(username: string, sessionToken: string, receiverUsername: string): Promise<Object> {
     return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/cancelFriendRequest ',
-      {username, sessionToken, receiverUsername}
+      { username, sessionToken, receiverUsername }
     ));
   }
 
   public async removeFriend(username: string, sessionToken: string, receiverUsername: string): Promise<Object> {
     return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/removeFriend ',
-      {username, sessionToken, receiverUsername}
+      { username, sessionToken, receiverUsername }
     ));
   }
 
   public async blockUser(username: string, sessionToken: string, blockedUsername: string): Promise<Object> {
     return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/blockUser ',
-      {username, sessionToken, blockedUsername}
+      { username, sessionToken, blockedUsername }
+    ));
+  }
+
+  public async unblockUser(username: string, sessionToken: string, blockedUsername: string): Promise<Object> {
+    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/unblockUser ',
+      { username, sessionToken, blockedUsername }
+    ));
+  }
+
+  public async getBlockedUsers(username: string, sessionToken: string, itemsPerPage: number, page: number): Promise<Object> {
+    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/getBlockedUsers ',
+      { username, sessionToken, itemsPerPage, page }
+    ));
+  }
+
+  public async getBlockedUsersNumber(username: string, sessionToken: string): Promise<Object> {
+    return await lastValueFrom(this.http.post<Object>(environment.apiUrl + '/getBlockedUsersNumber ',
+      { username, sessionToken }
     ));
   }
 }

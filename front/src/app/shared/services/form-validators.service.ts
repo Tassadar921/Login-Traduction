@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {AbstractControlOptions, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, AbstractControlOptions, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -106,9 +106,9 @@ export class FormValidatorsService {
 
   //custom matching validator, checks if controlOne and controlTwo are equal
   private matchValidator(controlOne: string, controlTwo: string) {
-    return (formGroup: FormGroup) => {
-      const control1 = formGroup.controls[controlOne];
-      const control2 = formGroup.controls[controlTwo];
+    return (formGroup: FormGroup): void => {
+      const control1: AbstractControl<any, any> = formGroup.controls[controlOne];
+      const control2: AbstractControl<any, any> = formGroup.controls[controlTwo];
       if (control1.errors && !control2.errors?.['match']) {
         return;
       }

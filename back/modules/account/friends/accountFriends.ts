@@ -22,8 +22,8 @@ export class AccountFriends{
         this.accountNotification = accountNotification;
     }
 
-    public async getNumberOfOtherUsers(username: string, res: Response): Promise<void> {
-        const numberOfOtherUsers: Array<unknown> = await accountFriendsRequest.getNumberOfOtherUsers(username, this.client);
+    public async getOthersUsersNumber(username: string, res: Response): Promise<void> {
+        const numberOfOtherUsers: Array<unknown> = await accountFriendsRequest.getOthersUsersNumber(username, this.client);
         res.json({status:1, data: numberOfOtherUsers[0]});
     }
 
@@ -63,31 +63,40 @@ export class AccountFriends{
             await accountFriendsRequest.removeFriend(usernameSender, usernameReceiver, this.client);
             await accountFriendsRequest.removeFriend(usernameReceiver, usernameSender, this.client);
             await accountFriendsRequest.addBlockedUser(usernameSender, usernameReceiver, this.client);
-            await accountFriendsRequest.addBlockedBy(usernameReceiver, usernameSender, this.client);
+            await accountFriendsRequest.addBlockedBy(usernameSender, usernameReceiver, this.client);
             res.json({status: 1});
             return;
         } else if((await accountFriendsRequest.getPendingFriendsRequestByBothUsernames(usernameSender, usernameReceiver, this.client)).length){
-            console.log('là');
             console.log(await accountFriendsRequest.getPendingFriendsRequestByBothUsernames(usernameSender, usernameReceiver, this.client));
             await accountFriendsRequest.removePendingFriendsRequests(usernameSender, usernameReceiver, this.client);
             await accountFriendsRequest.addBlockedUser(usernameSender, usernameReceiver, this.client);
-            await accountFriendsRequest.addBlockedBy(usernameReceiver, usernameSender, this.client);
+            await accountFriendsRequest.addBlockedBy(usernameSender, usernameReceiver, this.client);
             res.json({status: 1});
             return;
         } else if((await accountFriendsRequest.getPendingFriendsRequestByBothUsernames(usernameReceiver, usernameSender, this.client)).length) {
-            console.log('ici');
             console.log(await accountFriendsRequest.getPendingFriendsRequestByBothUsernames(usernameReceiver, usernameSender, this.client));
             await accountFriendsRequest.removePendingFriendsRequests(usernameReceiver, usernameSender, this.client);
             await accountFriendsRequest.addBlockedUser(usernameSender, usernameReceiver, this.client);
-            await accountFriendsRequest.addBlockedBy(usernameReceiver, usernameSender, this.client);
+            await accountFriendsRequest.addBlockedBy(usernameSender, usernameReceiver, this.client);
             res.json({status: 1});
             return;
         } else {
             await accountFriendsRequest.addBlockedUser(usernameSender, usernameReceiver, this.client);
-            await accountFriendsRequest.addBlockedBy(usernameReceiver, usernameSender, this.client);
+            await accountFriendsRequest.addBlockedBy(usernameSender, usernameReceiver, this.client);
             res.json({status: 1});
             return;
         }
+    }
+
+    public async getBlockedUsers(username: string, itemsPerPage: number, page: number, res: Response): Promise<void> {
+        const blockedUsers: Array<unknown> = await accountFriendsRequest.getBlockedUsers(username, itemsPerPage, page, this.client);
+        res.json({status: 1, data: blockedUsers});
+    }
+
+    public async getBlockedUsersNumber(username: string, res: Response): Promise<void> {
+        const blockedUsersNumber: Array<unknown> = await accountFriendsRequest.getBlockedUsersNumber(username, this.client);
+        console.log(blockedUsersNumber[0]);
+        res.json({status:1, data: blockedUsersNumber[0]});
     }
 
     public async removeFriend(usernameSender: string, usernameReceiver: string, res: Response): Promise<void> {

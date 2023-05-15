@@ -13,7 +13,6 @@ export class DevicePlatformService {
 
   //updates currentPlatform in function of the window size
   public calculatePlatform(): void {
-    console.log('calculatePlatform');
     if(window.innerWidth <= 900){
       this.currentPlatform = 'small';
       this.itemsPerPage = 10;
