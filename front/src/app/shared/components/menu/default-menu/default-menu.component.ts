@@ -24,7 +24,7 @@ export class DefaultMenuComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     setTimeout(():void => {
       for(const menuItem of this.menuItems) {
-        let menuItemElement = document.getElementById('menuItem'+this.menuItems.indexOf(menuItem));
+        let menuItemElement: HTMLElement | null = document.getElementById('menuItem'+this.menuItems.indexOf(menuItem));
         menuItemElement!.addEventListener('pointerenter', (): void => {
           let left: number = 0;
           for(let i: number = 0; i<this.menuItems.indexOf(menuItem); i++) {

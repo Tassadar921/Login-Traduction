@@ -22,9 +22,9 @@ export class AddComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     window.addEventListener(('resize'), async (): Promise<void> => {
-      await this.pagesService.onChangeAndInit('Others');
+      await this.pagesService.onChangeAndInit('Other');
     });
-    await this.pagesService.onChangeAndInit('Others');
+    await this.pagesService.onChangeAndInit('Other');
   }
 
   public async addFriend(username: string): Promise<void> {
@@ -36,7 +36,7 @@ export class AddComponent implements OnInit {
     );
     this.pagesService.waiting = false;
     if(Object(rtrn).status){
-      await this.pagesService.onChangeAndInit('Others');
+      await this.pagesService.onChangeAndInit('Other');
     }
   }
 
@@ -49,7 +49,7 @@ export class AddComponent implements OnInit {
     );
     this.pagesService.waiting = false;
     if(Object(rtrn).status){
-      await this.pagesService.onChangeAndInit('Others');
+      await this.pagesService.onChangeAndInit('Other');
     }
   }
 
@@ -62,7 +62,7 @@ export class AddComponent implements OnInit {
     );
     this.pagesService.waiting = false;
     if(Object(rtrn).status){
-      await this.pagesService.onChangeAndInit('Others');
+      await this.pagesService.onChangeAndInit('Other');
     }
   }
 
@@ -115,7 +115,7 @@ export class AddComponent implements OnInit {
     );
     this.pagesService.waiting = false;
     if(Object(rtrn).status){
-      await this.pagesService.onChangeAndInit('Others');
+      await this.pagesService.onChangeAndInit('Other');
     }
   }
 
@@ -128,7 +128,7 @@ export class AddComponent implements OnInit {
     );
     this.pagesService.waiting = false;
     if(Object(rtrn).status){
-      await this.pagesService.onChangeAndInit('Others');
+      await this.pagesService.onChangeAndInit('Other');
     }
   }
 }

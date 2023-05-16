@@ -88,8 +88,6 @@ module accountFriendsRequest {
     }
 
     export async function getFriendUsers(username : string, itemsPerPage : number, page : number, client : Client) : Promise<unknown[]> {
-        console.log(username, itemsPerPage, page);
-        console.log(itemsPerPage*(page-1));
         return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 Select (Select User {
@@ -267,8 +265,6 @@ module accountFriendsRequest {
     }
 
     export async function getBlockedUsers(username : string, itemsPerPage : number, page : number, client : Client) : Promise<unknown[]> {
-        console.log(username, itemsPerPage, page);
-        console.log(itemsPerPage*(page-1));
         return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 Select (Select User {

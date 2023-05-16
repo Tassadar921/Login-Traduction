@@ -63,7 +63,7 @@ export class AccountSignIn {
     }
 
     //checks if the token is valid for the user
-    public async checkSession(username: string, sessionToken: string, res: Response): Promise<number> {
+    public async checkSession(username: string, sessionToken: string): Promise<number> {
         if (!regexRequest.checkRegexUsername(username) || !regexRequest.checkRegexSessionToken(sessionToken, this.sessionTokenLength)) {
             return 0;
         }

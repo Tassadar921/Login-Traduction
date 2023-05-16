@@ -1,0 +1,23 @@
+<ion-footer>
+  <ion-row>
+    <ion-col>
+      <ion-button
+        fill="clear"
+        (click)="pagesService.setUsers('Common', pagesService.getCommonCurrentPage()-1)"
+        [disabled]="pagesService.getCommonCurrentPage()===1">
+        <ion-icon name="arrow-back" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-col>
+    <ion-col>
+      <ion-label>{{pagesService.getCommonCurrentPage()}}/{{pagesService.getCommonTotalPages()}}</ion-label>
+    </ion-col>
+    <ion-col>
+      <ion-button
+        fill="clear"
+        (click)="pagesService.setUsers('Common', pagesService.getCommonCurrentPage()+1)"
+        [disabled]="pagesService.getCommonCurrentPage()===pagesService.getCommonTotalPages()">
+        <ion-icon name="arrow-forward" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-footer>

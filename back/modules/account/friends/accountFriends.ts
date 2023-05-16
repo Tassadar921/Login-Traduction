@@ -67,15 +67,13 @@ export class AccountFriends{
             res.json({ status: 1 });
             return;
         } else if((await accountFriendsRequest.getPendingFriendsRequestByBothUsernames(usernameSender, usernameReceiver, this.client)).length){
-            console.log(await accountFriendsRequest.getPendingFriendsRequestByBothUsernames(usernameSender, usernameReceiver, this.client));
-            await accountFriendsRequest.removePendingFriendsRequests(usernameSender, usernameReceiver, this.client);
+            await accountFriendsRequest.removePendingFriendsRequests(usernameReceiver, usernameSender, this.client);
             await accountFriendsRequest.addBlockedUser(usernameSender, usernameReceiver, this.client);
             await accountFriendsRequest.addBlockedBy(usernameSender, usernameReceiver, this.client);
             res.json({ status: 1 });
             return;
         } else if((await accountFriendsRequest.getPendingFriendsRequestByBothUsernames(usernameReceiver, usernameSender, this.client)).length) {
-            console.log(await accountFriendsRequest.getPendingFriendsRequestByBothUsernames(usernameReceiver, usernameSender, this.client));
-            await accountFriendsRequest.removePendingFriendsRequests(usernameReceiver, usernameSender, this.client);
+            await accountFriendsRequest.removePendingFriendsRequests(usernameSender, usernameReceiver, this.client);
             await accountFriendsRequest.addBlockedUser(usernameSender, usernameReceiver, this.client);
             await accountFriendsRequest.addBlockedBy(usernameSender, usernameReceiver, this.client);
             res.json({ status: 1 });
@@ -164,9 +162,12 @@ export class AccountFriends{
     }
 
     public async getFriendUsers(username: string, itemsPerPage: number, page: number, res: Response): Promise<void>{
-        console.log(username, itemsPerPage, page);
         const friends: any[] = await accountFriendsRequest.getFriendUsers(username, itemsPerPage, page, this.client);
-        console.log(friends);
+        for(const friend of friends){
+            if(await this.accountNotification.findSocketOfUsername(friend.username)){
+                friend.online = true;
+            }
+        }
         res.json({ status: 1, data: friends });
         return;
     }
@@ -195,7 +196,7 @@ export class AccountFriends{
         return;
     }
 
-    public async sendMessage(username : string, message : string, date : Date, socket : Socket): Promise<void> {
+    public async sendMessage(username : string, message : string, date : number, socket : Socket): Promise<void> {
         //start by finding the socket if it exists else get undefined (if the user is not connected)
         if(socket.data.username === username) {
             return;

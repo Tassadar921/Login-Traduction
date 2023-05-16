@@ -23,32 +23,33 @@ export class AccountNotification {
         this.client = createClient({});
     }
 
-    public async initSocketData(socket: Socket, username: string, token: string): Promise<void> {
-        //initialise the socket data after the connection
-        socket.data.sessionToken = token;
+    //initialise the socket data after the connection
+    public async initSocketData(socket: Socket, username: string, sessionToken: string): Promise<void> {
+        socket.data.sessionToken = sessionToken;
         socket.data.username = username;
-        logger.logger.info(socket.data.username, 'is connected and his token is :', socket.data.sessionToken);
+
+        logger.logger.info(`${socket.data.username} is connected and his token is ${socket.data.sessionToken}`);
         return;
     }
 
+    //get the notifications from the database for the user
     public async synchronizeNotificationsWithSocket(socket: Socket): Promise<void> {
-        //get the notifications from the database for the user
         const dataNotification : any[] = await AccountNotificationRequest.getNotifications(socket.data.sessionToken, this.client);
         
         socket.emit('synchronizeNotifications', dataNotification);
         return;
     }
 
+    //get the notifications from the database and send it to a specific user (remoteSocket)
     private async synchronizeNotificationsWithRemoteSocket(socket: RemoteSocket<socketOptions.ServerToClientEvents, socketOptions.SocketData>): Promise<void> {
-        //get the notifications from the database and send it to a specific user (remoteSocket)
         const dataNotification : any[] = await AccountNotificationRequest.getNotifications(socket.data.sessionToken, this.client);
 
         socket.emit('synchronizeNotifications', dataNotification);
         return;
     }
 
+    //verify that the uuid is syntactically correct
     public async notificationIsSeen(socket: Socket, id: string): Promise<void> {
-        //verify that the uuid is syntactically correct
         if (!regexRequest.checkRegexUUID(id)) {
             return;
         } else {
@@ -73,11 +74,7 @@ export class AccountNotification {
 
     public async addNotificationsMessage(username: string, idMessage: string): Promise<void> {
         //start by finding the socket if it exists else get undefined (if the user is not connected)
-        const socketOfUsername : RemoteSocket<DefaultEventsMap, any> | undefined =
-            (await ioServer.io.fetchSockets()).find(
-                (socketTmp: RemoteSocket<DefaultEventsMap, any>): boolean =>
-                    socketTmp.data.username === username
-            );
+        const socketOfUsername: RemoteSocket<DefaultEventsMap, any> | undefined = await this.findSocketOfUsername(username);
 
         //convert the date to ISO format
         const date : string = new Date().toISOString();
@@ -91,8 +88,16 @@ export class AccountNotification {
             await this.synchronizeNotificationsWithRemoteSocket(socketOfUsername);
         }else{
             //offline notification
-            logger.logger.info('the user', username, 'is not connected');
+            logger.logger.info(`User ${username} is not connected`);
         }
         return;
+    }
+
+    public async findSocketOfUsername(username: string): Promise<RemoteSocket<DefaultEventsMap, any> | undefined> {
+        //find the socket of the user if he is connected
+        return (await(ioServer.io.fetchSockets())).find(
+                (socketTmp: RemoteSocket<DefaultEventsMap, any>): boolean =>
+                    socketTmp.data.username === username
+            );
     }
 }

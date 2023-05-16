@@ -1,8 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {DevicePlatformService} from "../../services/device-platform.service";
-import {RequestService} from "../../services/request.service";
-import {CookieService} from '../../services/cookie.service';
-import {LanguageService} from "../../services/language.service";
+import { Component, OnInit } from '@angular/core';
+import { DevicePlatformService } from "../../services/device-platform.service";
+import { RequestService } from "../../services/request.service";
+import { CookieService } from '../../services/cookie.service';
+import { LanguageService } from "../../services/language.service";
+import { SocketService } from '../../services/socket.service';
 
 @Component({
   selector: 'app-menu',
@@ -19,9 +20,9 @@ export class MenuComponent implements OnInit {
     public devicePlatformService: DevicePlatformService,
     public requestService: RequestService,
     private cookieService: CookieService,
-    private languageService: LanguageService
-  ) {
-  }
+    private languageService: LanguageService,
+    public socketService: SocketService
+  ) {}
 
   async ngOnInit(): Promise<void> {
     this.menuItems = this.setMenuItems();

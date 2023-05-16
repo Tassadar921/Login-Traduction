@@ -8,11 +8,15 @@ import {DevicePlatformService} from './device-platform.service';
 })
 export class PagesService {
 
-  private totalPages: number = 0;
+  private commonTotalPages: number = 0;
+  private commonCurrentPage: number = 1;
+  private friendsTotalPages: number = 0;
+  private friendsCurrentPage: number = 1;
   public filter: string = '';
-  private currentPage: number = 1;
   public waiting: boolean = false;
-  private users: Array<any> = [];
+  private other: Array<any> = [];
+  private friends: Array<any> = [];
+  private blocked: Array<any> = [];
 
   constructor(
     private requestService: RequestService,
@@ -23,14 +27,21 @@ export class PagesService {
   async onChangeAndInit(requestHeader: string): Promise<void> {
     // @ts-ignore
     const totalItemsNumber: Object = await this[`get${requestHeader}UsersNumber`]();
-    console.log(`get${requestHeader}UsersNumber`, totalItemsNumber);
     if(Object(totalItemsNumber).status){
       if(Object(totalItemsNumber).data) {
-        this.totalPages = Math.ceil(Object(totalItemsNumber).data / this.devicePlatformService.itemsPerPage);
+        if(requestHeader === 'Friends') {
+          this.friendsTotalPages = Math.ceil(Object(totalItemsNumber).data / this.devicePlatformService.itemsPerPage);
+        }else{
+          this.commonTotalPages = Math.ceil(Object(totalItemsNumber).data / this.devicePlatformService.itemsPerPage);
+        }
       }else{
-        this.totalPages = 1;
+        if(requestHeader === 'Friends') {
+          this.friendsTotalPages = 1;
+        }else{
+          this.commonTotalPages = 1;
+        }
       }
-      await this.setUsers(requestHeader, this.currentPage);
+      await this.setUsers(requestHeader, this.commonCurrentPage);
     }
   }
 
@@ -38,15 +49,19 @@ export class PagesService {
     this.waiting = true;
     // @ts-ignore
     const rtrn: Object = await this[`get${requestHeader}Users`](page);
-    console.log(`get${requestHeader}Users`, rtrn);
     if(Object(rtrn).status){
-      this.users = Object(rtrn).data;
+      // @ts-ignore
+      this[requestHeader.toLowerCase()] = Object(rtrn).data;
     }
-    this.currentPage = page;
+    if(requestHeader === 'Friends') {
+      this.friendsCurrentPage = page;
+    }else{
+      this.commonCurrentPage = page;
+    }
     this.waiting = false;
   }
 
-  private async getOthersUsers(page: number): Promise<Object> {
+  private async getOtherUsers(page: number): Promise<Object> {
     return await this.requestService.getOtherUsers(
       await this.cookieService.getCookie('username'),
       await this.cookieService.getCookie('sessionToken'),
@@ -55,7 +70,7 @@ export class PagesService {
     );
   }
 
-  private async getOthersUsersNumber(): Promise<Object> {
+  private async getOtherUsersNumber(): Promise<Object> {
     return await this.requestService.getOthersUsersNumber(
       await this.cookieService.getCookie('username'),
       await this.cookieService.getCookie('sessionToken')
@@ -94,15 +109,31 @@ export class PagesService {
     );
   }
 
-  public getTotalPages(): number {
-    return this.totalPages;
+  public getCommonTotalPages(): number {
+    return this.commonTotalPages;
   }
 
-  public getCurrentPage(): number {
-    return this.currentPage;
+  public getCommonCurrentPage(): number {
+    return this.commonCurrentPage;
   }
 
-  public getUsers(): Array<any> {
-    return this.users;
+  public getFriendsTotalPages(): number {
+    return this.friendsTotalPages;
+  }
+
+  public getFriendsCurrentPage(): number {
+    return this.friendsCurrentPage;
+  }
+
+  public getOther(): Array<any> {
+    return this.other;
+  }
+
+  public getBlocked(): Array<any> {
+    return this.blocked;
+  }
+
+  public getFriends(): Array<any> {
+    return this.friends;
   }
 }

@@ -18,7 +18,7 @@ export class SocketPage implements OnInit {
       this.socket.emit('initSocketData',await cookieService.getCookie('username'),await cookieService.getCookie('sessionToken'));
       this.socket.emit('synchronizeNotifications');
     });
-    this.socket.on('synchronizeNotifications', (data : any) => {
+    this.socket.on('synchronizeNotifications', (data : any): void => {
       console.log(data);
       if(data.length > 0) {
 
@@ -30,37 +30,38 @@ export class SocketPage implements OnInit {
       }
     });
 
-    this.socket.on('message', () => {
+    this.socket.on('message', (): void => {
       this.socket.emit('getChat');
       this.socket.emit('synchronizeNotifications');
     });
 
-    this.socket.on('getMessage', (data : any) => {
+    this.socket.on('getMessage', (data : any): void => {
       this.lastMessage = data.map((lastMessage : any) => {lastMessage.date = new Date(lastMessage.date); return lastMessage;})
     });
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.socket.connect();
-  }
-
-  public emit1() {
     this.socket.emit('synchronizeNotifications');
   }
-  public emit2() {
+
+  public emit1(): void {
+    this.socket.emit('synchronizeNotifications');
+  }
+  public emit2(): void {
     this.socket.emit('notificationIsSeen', this.id);
   }
-  public emit3() {
+  public emit3(): void {
     this.socket.emit('deleteNotification', this.id);
   }
-  public async emit4() {
+  public async emit4(): Promise<void> {
     this.socket.emit('addNotifications', await this.cookieService.getCookie('username'), "titre", "texte");
   }
-  public async emit5() {
-    this.socket.emit('sendMessage', await this.cookieService.getCookie('username'), "texte", Date.now());
+  public async emit5(): Promise<void> {
+    this.socket.emit('sendMessage', await this.cookieService.getCookie('username'), "texte");
     this.messageSuccess = false;
   }
-  public emit6() {
+  public emit6(): void {
     this.socket.emit('getChat');
   }
 }

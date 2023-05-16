@@ -1,7 +1,24 @@
-<ion-grid>
+<ion-content>
   <ion-row id="sidebar">
     <ion-col>
-      <p>{{languageService.dictionary.data?.components.friends.friends}}</p>
+      <h1>{{languageService.dictionary.data?.components.friends.friends}}</h1>
+      <ion-row *ngFor="let user of pagesService.getFriends()">
+        <ion-col>
+          <ion-item button="true">
+            <ion-row>
+              <ion-col size="1"></ion-col>
+              <ion-col>
+                <p>{{user.username}}</p>
+              </ion-col>
+              <ion-col size="1">
+                <ion-icon name="ellipse" [color]="user.online?'success':'danger'"></ion-icon>
+              </ion-col>
+            </ion-row>
+          </ion-item>
+        </ion-col>
+      </ion-row>
     </ion-col>
   </ion-row>
-</ion-grid>
+</ion-content>
+
+<app-friends-pages-system-footer></app-friends-pages-system-footer>
