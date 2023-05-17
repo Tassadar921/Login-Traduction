@@ -158,6 +158,7 @@ export class AccountFriends{
             return;
         } else {
             await accountFriendsRequest.addPendingFriendsRequests(usernameSender, usernameReceiver, this.client);
+            await this.accountNotification.addNotificationAskFriend(usernameReceiver, usernameSender);
             res.json({ status: 11 });
             return;
         }
@@ -224,18 +225,6 @@ export class AccountFriends{
                 ioServer.io.to(socketOfUsername.id).emit('message');
             }
             return
-        }
-    }
-
-    public async addNotificationAskFriend(username : string, socket : Socket): Promise<void> {
-        if(socket.data.username === username) {
-            return;
-        } else {
-            const message: string = `${socket.data.username} wants to add you as a friend`;
-            const dateISO: string = new Date(Date.now()).toISOString();
-            //add the message to the database
-            let dataMessage: any[] = await accountFriendsRequest.newMessage(socket.data.username, username, message, dateISO, this.client);
-            await this.accountNotification.addNotificationAskFriend(username, dataMessage[0].id);
         }
     }
 

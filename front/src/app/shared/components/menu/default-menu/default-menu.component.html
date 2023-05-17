@@ -15,7 +15,7 @@
                 [id]="cookieService.getUsername()?'connectedIcon':'disconnectedIcon'">
       </ion-icon>
     </ion-item>
-    <ion-item button="true" color="transparent">
+    <ion-item button="true" color="transparent" id="notifications">
       <ion-icon name="notifications" color="warning"></ion-icon>
       <ion-badge>{{notificationService.getNotifications().length}}</ion-badge>
     </ion-item>
@@ -29,6 +29,14 @@
   <ng-template>
     <ion-content>
       <app-profile-popover [signOut]="signOut"></app-profile-popover>
+    </ion-content>
+  </ng-template>
+</ion-popover>
+
+<ion-popover trigger="notifications">
+  <ng-template>
+    <ion-content>
+      <app-notifications></app-notifications>
     </ion-content>
   </ng-template>
 </ion-popover>

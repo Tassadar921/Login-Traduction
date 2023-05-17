@@ -13,11 +13,12 @@ import {RouterLink} from '@angular/router';
 import {LanguageModule} from "../language/language.module";
 import {IonFabLanguageModule} from "../ion-fab-language/ion-fab-language.module";
 import {ProfilePopoverComponent} from './default-menu/profile-popover/profile-popover.component';
+import {NotificationsModule} from '../notifications/notifications.module';
 
 
 @NgModule({
     declarations: [MenuComponent, MobileMenuComponent, DefaultMenuComponent, DefaultMenuItemComponent, MobileMenuItemComponent, ProfilePopoverComponent],
-    imports: [CommonModule, IonicModule, ModalCloseButtonModule, MatSidenavModule, RouterLink, LanguageModule, IonFabLanguageModule],
+  imports: [CommonModule, IonicModule, ModalCloseButtonModule, MatSidenavModule, RouterLink, LanguageModule, IonFabLanguageModule, NotificationsModule],
   exports: [MenuComponent]
 })
 export class MenuModule { }

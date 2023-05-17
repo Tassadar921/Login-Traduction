@@ -439,16 +439,6 @@ module accountRouting {
                 }
             });
 
-            socket.on('addNotificationAskFriend', async (username: string): Promise<any> => {
-                try {
-                    logger.logger.info(`addNotificationAskFriend, { username : ${username} }`);
-                    await accountFriends.addNotificationAskFriend(username, socket);
-                } catch(error) {
-                    logger.logger.error(error);
-                    socket.emit('error');
-                }
-            });
-
             socket.on('disconnect', async (): Promise<void> => {
                 logger.logger.info('client déconnecté');
             });

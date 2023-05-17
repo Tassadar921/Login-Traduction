@@ -69,17 +69,28 @@ module AccountNotificationRequest {
         });
     }
 
-    export async function addNotificationAskFriend(username: string, component: string, date: string, idMessage: string, client: Client): Promise<unknown[]> {
+    export async function addNotificationAskFriend(receiverUsername: string, component: string, date: string, client: Client): Promise<unknown[]> {
         return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
-                UPDATE User 
-                filter .username = "${username}"
+                SELECT ( UPDATE User 
+                filter .username = "${receiverUsername}"
                 SET {
                     notifications += (INSERT Notification {
                         component := "${component}",
                         date := <datetime>"${date}",
-                        object := (SELECT Message FILTER .id = <uuid>"${idMessage}"),
                     })
+                }).notifications ORDER BY .date DESC LIMIT 1
+            `));
+        });
+    }
+
+    export async function addNotificationSenderAskFriend(senderUsername: string, idNotification: string, client: Client): Promise<unknown[]> {
+        return new Promise<any[]>((resolve): void => {
+            resolve(client.query(`
+                UPDATE Notification 
+                filter .id = <uuid>"${idNotification}"
+                SET {
+                    object := (SELECT User FILTER .username = "${senderUsername}"),
                 }
             `));
         });

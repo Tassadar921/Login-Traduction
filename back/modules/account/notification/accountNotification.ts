@@ -15,6 +15,7 @@ import ioServer from '../../common/socket/socket';
 import regexRequest from 'modules/common/regex/regexRequest';
 import {DefaultEventsMap} from 'socket.io/dist/typed-events';
 import logger from 'modules/common/logger/logger';
+import accountNotificationRequest from './accountNotificationRequest';
 
 export class AccountNotification {
     private readonly client: Client;
@@ -92,15 +93,23 @@ export class AccountNotification {
         return;
     }
 
-    public async addNotificationAskFriend(username: string, idMessage: string): Promise<void> {
+    public async addNotificationAskFriend(receiverUsername: string, senderUsername: string): Promise<void> {
         //start by finding the socket if it exists else get undefined (if the user is not connected)
-        const socketOfUsername: RemoteSocket<DefaultEventsMap, any> | undefined = await this.findSocketOfUsername(username);
+        const socketOfUsername: RemoteSocket<DefaultEventsMap, any> | undefined =
+            await this.findSocketOfUsername(receiverUsername);
 
         //convert the date to ISO format
         const date: string = new Date().toISOString();
 
         //add the notification to the database
-        await AccountNotificationRequest.addNotificationAskFriend(username, 'addFriend', date, idMessage, this.client);
+        const dataNotification: any[] = await AccountNotificationRequest.addNotificationAskFriend(
+            receiverUsername,
+            'addFriend',
+            date,
+            this.client
+        );
+        console.log(dataNotification[0].id);
+        await accountNotificationRequest.addNotificationSenderAskFriend(senderUsername, dataNotification[0].id, this.client);
 
         //if the user is connected, synchronize the notifications with the socket
         //if he's not connected, do nothing for the moment
@@ -108,7 +117,7 @@ export class AccountNotification {
             await this.synchronizeNotificationsWithRemoteSocket(socketOfUsername);
         }else{
             //offline notification
-            logger.logger.info(`User ${username} is not connected`);
+            logger.logger.info(`User ${receiverUsername} is not connected`);
         }
         return;
     }
