@@ -62,10 +62,25 @@
         "settings": "Settings",
         "signOut": "Sign out"
       },
-      "friends": {
-        "friends": "Friends",
+      "messages": {
         "add": "Add",
         "blocked": "Blocked"
+      },
+      "sidebar": {
+        "friends": "Friends"
+      },
+      "add": {
+        "requestSent": "Request sent",
+        "answerRequest": "Answer request",
+        "blockUser": "Block <USERNAME> ?",
+        "removeFriend": "Remove <USERNAME> from friends ?",
+        "confirm": "Confirm",
+        "cancel": "Cancel",
+        "search": "Search"
+      },
+      "blocked": {
+        "unblock": "Unblock",
+        "search": "Search"
       }
     },
     "services": {}

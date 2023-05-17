@@ -1,0 +1,30 @@
+<ion-grid>
+  <ion-row>
+    <ion-col>
+      <ion-item button="true" href="/account-settings">
+        <ion-row>
+          <ion-col size="2">
+            <ion-icon name="settings"></ion-icon>
+          </ion-col>
+          <ion-col>
+            <p>{{languageService.dictionary.data?.components.menu.settings}}</p>
+          </ion-col>
+        </ion-row>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <ion-item button="true" (click)="signOut()" id="signOut">
+        <ion-row>
+          <ion-col size="2">
+            <ion-icon name="log-out"></ion-icon>
+          </ion-col>
+          <ion-col>
+            <p>{{languageService.dictionary.data?.components.menu.signOut}}</p>
+          </ion-col>
+        </ion-row>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+</ion-grid>

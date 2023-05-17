@@ -6,34 +6,36 @@
 //1.1.0 - 25/04/2023 - Iémélian RAMBEAU - New version of the notification type in the database, the requests are now adapted to the new database
 //--------------------------------------------------------------------------------------------
 
-import { Client } from "edgedb";
+import {Client} from 'edgedb';
 
 module AccountNotificationRequest {
-    export async function getNotifications(token : string, client : Client) : Promise<any[]> {
-        return new Promise<any[]>((resolve) => {
+    export async function getNotifications(sessionToken: string, client: Client): Promise<any[]> {
+        return new Promise<any[]>((resolve): void => {
             //for every new type in subject, add a new corresponding object in the query
             resolve(client.query(`
-                SELECT Notification {
+            Select (
+                SELECT User {
+                    notifications: {
                         id,
                         component,
                         date,
                         seen,
                         object := Notification.object[is Message]{
-                                id,
-                                sender : {username}
-                            } 
-                            union Notification.object[is User]{
-                                username,
-                            }
+                            id,
+                            sender : {username}
+                        } 
+                        union Notification.object[is User]{
+                            username,
+                        }
                     }
-                    FILTER User.token = "${token}"
+                } FILTER .token = "${sessionToken}").notifications
             `));
         });
     }
-    
 
-    export async function notificationIsSeen(id : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve) => {
+
+    export async function notificationIsSeen(id: string, client: Client): Promise<unknown[]> {
+        return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 UPDATE Notification
                 FILTER .id = <uuid>"${id}"
@@ -42,8 +44,8 @@ module AccountNotificationRequest {
         });
     }
 
-    export async function deleteNotification(id : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve) => {
+    export async function deleteNotification(id: string, client: Client): Promise<unknown[]> {
+        return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 DELETE Notification 
                 FILTER .id = <uuid>"${id}";
@@ -51,8 +53,24 @@ module AccountNotificationRequest {
         });
     }
 
-    export async function addNotificationsMessage(username : string, component : string, date : string, idMessage : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve) => {
+    export async function addNotificationMessage(username: string, component: string, date: string, idMessage: string, client: Client): Promise<unknown[]> {
+        return new Promise<any[]>((resolve): void => {
+            resolve(client.query(`
+                UPDATE User 
+                filter .username = "${username}"
+                SET {
+                    notifications += (INSERT Notification {
+                        component := "${component}",
+                        date := <datetime>"${date}",
+                        object := (SELECT Message FILTER .id = <uuid>"${idMessage}"),
+                    })
+                }
+            `));
+        });
+    }
+
+    export async function addNotificationAskFriend(username: string, component: string, date: string, idMessage: string, client: Client): Promise<unknown[]> {
+        return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 UPDATE User 
                 filter .username = "${username}"

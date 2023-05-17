@@ -3,32 +3,6 @@ ion-row {
   height: 40px;
 }
 
-ion-popover {
-  ion-icon{
-    color: white;
-  }
-  ion-item {
-    color: white;
-    width: 100%;
-    --background: transparent;
-    p, ion-icon{
-      -webkit-transition: color .7s ease;
-    }
-  }
-  ion-item:hover{
-    p, ion-icon{
-      color: #a8a5a5;
-    }
-  }
-  #signOut{
-    background-color: #6d0707;
-    -webkit-transition: background-color .7s ease;
-  }
-  #signOut:hover{
-    background-color: #920909;
-  }
-}
-
 .bold {
   font-weight: bold;
 }
@@ -60,6 +34,11 @@ ion-item {
     margin-bottom: 10px;
     -webkit-transition: color .7s ease;
   }
+}
+
+ion-badge{
+  --background : transparent;
+  margin-bottom: 15px;
 }
 
 #connectedIcon {

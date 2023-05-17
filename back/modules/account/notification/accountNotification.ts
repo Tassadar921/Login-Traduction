@@ -32,28 +32,27 @@ export class AccountNotification {
         return;
     }
 
-    //get the notifications from the database for the user
+    //gets the notifications from the database for the user
     public async synchronizeNotificationsWithSocket(socket: Socket): Promise<void> {
         const dataNotification : any[] = await AccountNotificationRequest.getNotifications(socket.data.sessionToken, this.client);
-        
         socket.emit('synchronizeNotifications', dataNotification);
+
         return;
     }
 
-    //get the notifications from the database and send it to a specific user (remoteSocket)
+    //gets the notifications from the database and sends it to a specific user (socket)
     private async synchronizeNotificationsWithRemoteSocket(socket: RemoteSocket<socketOptions.ServerToClientEvents, socketOptions.SocketData>): Promise<void> {
         const dataNotification : any[] = await AccountNotificationRequest.getNotifications(socket.data.sessionToken, this.client);
-
         socket.emit('synchronizeNotifications', dataNotification);
+
         return;
     }
 
-    //verify that the uuid is syntactically correct
+    //sets the notification to seen
     public async notificationIsSeen(socket: Socket, id: string): Promise<void> {
         if (!regexRequest.checkRegexUUID(id)) {
             return;
         } else {
-            //set the notification to seen
             await AccountNotificationRequest.notificationIsSeen(id, this.client);
             await this.synchronizeNotificationsWithSocket(socket);
             return;
@@ -72,7 +71,7 @@ export class AccountNotification {
         }
     }
 
-    public async addNotificationsMessage(username: string, idMessage: string): Promise<void> {
+    public async addNotificationMessage(username: string, idMessage: string): Promise<void> {
         //start by finding the socket if it exists else get undefined (if the user is not connected)
         const socketOfUsername: RemoteSocket<DefaultEventsMap, any> | undefined = await this.findSocketOfUsername(username);
 
@@ -80,7 +79,28 @@ export class AccountNotification {
         const date : string = new Date().toISOString();
 
         //add the notification to the database
-        await AccountNotificationRequest.addNotificationsMessage(username, 'message', date, idMessage, this.client);
+        await AccountNotificationRequest.addNotificationMessage(username, 'message', date, idMessage, this.client);
+
+        //if the user is connected, synchronize the notifications with the socket
+        //if he's not connected, do nothing for the moment
+        if (socketOfUsername !== undefined) {
+            await this.synchronizeNotificationsWithRemoteSocket(socketOfUsername);
+        }else{
+            //offline notification
+            logger.logger.info(`User ${username} is not connected`);
+        }
+        return;
+    }
+
+    public async addNotificationAskFriend(username: string, idMessage: string): Promise<void> {
+        //start by finding the socket if it exists else get undefined (if the user is not connected)
+        const socketOfUsername: RemoteSocket<DefaultEventsMap, any> | undefined = await this.findSocketOfUsername(username);
+
+        //convert the date to ISO format
+        const date: string = new Date().toISOString();
+
+        //add the notification to the database
+        await AccountNotificationRequest.addNotificationAskFriend(username, 'addFriend', date, idMessage, this.client);
 
         //if the user is connected, synchronize the notifications with the socket
         //if he's not connected, do nothing for the moment

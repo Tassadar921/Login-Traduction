@@ -62,10 +62,25 @@
         "settings": "Paramètres",
         "signOut": "Déconnexion"
       },
-      "friends": {
-        "friends": "Amis",
+      "messages": {
         "add": "Ajouter",
         "blocked": "Bloqués"
+      },
+      "sidebar": {
+        "friends": "Amis"
+      },
+      "add": {
+        "requestSent": "Demande envoyée",
+        "answerRequest": "Répondre à la demande",
+        "blockUser": "Bloquer <USERNAME> ?",
+        "removeFriend": "Retirer <USERNAME> des amis ?",
+        "confirm": "Confirmer",
+        "cancel": "Annuler",
+        "search": "Rechercher"
+      },
+      "blocked": {
+        "unblock": "Débloquer",
+        "search": "Rechercher"
       }
     },
     "services": {}

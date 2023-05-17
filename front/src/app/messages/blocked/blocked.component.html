@@ -2,11 +2,16 @@
 
 <div *ngFor="let user of pagesService.getBlocked()" class="user">
   <div *ngIf="!pagesService.waiting">
-    <p>{{user.username}}</p>
-
-    <ion-button (click)="actionSheetUnblockUser(user.username)" color="danger">
-      Unblock
-    </ion-button>
+    <ion-row>
+      <ion-col>
+        <p>{{user.username}}</p>
+      </ion-col>
+      <ion-col>
+        <ion-button (click)="actionSheetUnblockUser(user.username)" color="danger" shape="round" size="small">
+          Unblock
+        </ion-button>
+      </ion-col>
+    </ion-row>
   </div>
 </div>
 <ion-spinner color="light" *ngIf="pagesService.waiting"></ion-spinner>

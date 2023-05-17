@@ -3,6 +3,7 @@ import {CookieService} from "../../../services/cookie.service";
 import {DevicePlatformService} from "../../../services/device-platform.service";
 import {Router} from "@angular/router";
 import {LanguageService} from "../../../services/language.service";
+import {NotificationsService} from '../../../services/notifications.service';
 
 @Component({
   selector: 'app-default-menu',
@@ -12,13 +13,14 @@ import {LanguageService} from "../../../services/language.service";
 export class DefaultMenuComponent implements AfterViewInit {
 
   @Input() menuItems: any[] = [];
-  @Input() public async signOut() {};
+  @Input() public async signOut(): Promise <void> {};
 
   constructor(
     public cookieService: CookieService,
     public devicePlatformService: DevicePlatformService,
     public languageService: LanguageService,
-    public router: Router
+    public router: Router,
+    public notificationService: NotificationsService
   ) {}
 
   ngAfterViewInit(): void {

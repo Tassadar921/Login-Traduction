@@ -49,6 +49,8 @@ export class AccountFriends{
             return;
         } else {
             await accountFriendsRequest.removePendingFriendsRequests(usernameSender, username, this.client);
+            res.json({ status: 1 });
+            return;
         }
     }
 
@@ -196,7 +198,7 @@ export class AccountFriends{
         return;
     }
 
-    public async sendMessage(username : string, message : string, date : number, socket : Socket): Promise<void> {
+    public async sendMessage(username : string, message : string, socket : Socket): Promise<void> {
         //start by finding the socket if it exists else get undefined (if the user is not connected)
         if(socket.data.username === username) {
             return;
@@ -208,13 +210,13 @@ export class AccountFriends{
             );
 
             //convert the date to ISO format
-            const dateISO: string = new Date(date).toISOString()
+            const dateISO: string = new Date(Date.now()).toISOString();
 
             //add the message to the database
             let dataMessage: any[] = await accountFriendsRequest.newMessage(socket.data.username, username, message, dateISO, this.client);
 
             if(dataMessage.length !== undefined) {
-                await this.accountNotification.addNotificationsMessage(username, dataMessage[0].id);
+                await this.accountNotification.addNotificationMessage(username, dataMessage[0].id);
             }
 
             //if the socket exists send the message to the user
@@ -222,6 +224,18 @@ export class AccountFriends{
                 ioServer.io.to(socketOfUsername.id).emit('message');
             }
             return
+        }
+    }
+
+    public async addNotificationAskFriend(username : string, socket : Socket): Promise<void> {
+        if(socket.data.username === username) {
+            return;
+        } else {
+            const message: string = `${socket.data.username} wants to add you as a friend`;
+            const dateISO: string = new Date(Date.now()).toISOString();
+            //add the message to the database
+            let dataMessage: any[] = await accountFriendsRequest.newMessage(socket.data.username, username, message, dateISO, this.client);
+            await this.accountNotification.addNotificationAskFriend(username, dataMessage[0].id);
         }
     }
 

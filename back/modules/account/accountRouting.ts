@@ -390,13 +390,13 @@ module accountRouting {
             socket.on('synchronizeNotifications', async (): Promise<void> => {
                 try {
                     logger.logger.info('synchronizeNotifications');
-
                     await accountNotification.synchronizeNotificationsWithSocket(socket);
                 } catch (error) {
                     logger.logger.error(error);
                     socket.emit('error');
                 }
             });
+
             socket.on('notificationIsSeen', async (id: string): Promise<void> => {
                 try {
                     logger.logger.info(`notificationIsSeen, { id : ${id}}`);
@@ -406,6 +406,7 @@ module accountRouting {
                     socket.emit('error');
                 }
             });
+
             socket.on('deleteNotification', async (id: string): Promise<void> => {
                 try {
                     logger.logger.info(`deleteNotification, { id : ${id}}`);
@@ -427,12 +428,22 @@ module accountRouting {
                     socket.emit('error');
                 }
             });
+
             socket.on('sendMessage', async (username: string, message: string): Promise<void> => {
                 try {
                     logger.logger.info(`sendMessage, { username : ${username}, message : ${message} }`);
-                    const date: number = Date.now();
-                    await accountFriends.sendMessage(username, message, date, socket);
+                    await accountFriends.sendMessage(username, message, socket);
                 } catch (error) {
+                    logger.logger.error(error);
+                    socket.emit('error');
+                }
+            });
+
+            socket.on('addNotificationAskFriend', async (username: string): Promise<any> => {
+                try {
+                    logger.logger.info(`addNotificationAskFriend, { username : ${username} }`);
+                    await accountFriends.addNotificationAskFriend(username, socket);
+                } catch(error) {
                     logger.logger.error(error);
                     socket.emit('error');
                 }

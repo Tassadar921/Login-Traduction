@@ -12,10 +12,11 @@ import {MobileMenuItemComponent} from './mobile-menu/mobile-menu-item/mobile-men
 import {RouterLink} from '@angular/router';
 import {LanguageModule} from "../language/language.module";
 import {IonFabLanguageModule} from "../ion-fab-language/ion-fab-language.module";
+import {ProfilePopoverComponent} from './default-menu/profile-popover/profile-popover.component';
 
 
 @NgModule({
-    declarations: [MenuComponent, MobileMenuComponent, DefaultMenuComponent, DefaultMenuItemComponent, MobileMenuItemComponent],
+    declarations: [MenuComponent, MobileMenuComponent, DefaultMenuComponent, DefaultMenuItemComponent, MobileMenuItemComponent, ProfilePopoverComponent],
     imports: [CommonModule, IonicModule, ModalCloseButtonModule, MatSidenavModule, RouterLink, LanguageModule, IonFabLanguageModule],
   exports: [MenuComponent]
 })

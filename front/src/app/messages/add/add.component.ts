@@ -4,6 +4,8 @@ import {RequestService} from '../../shared/services/request.service';
 import {ActionSheetController} from '@ionic/angular';
 import {DevicePlatformService} from '../../shared/services/device-platform.service';
 import {PagesService} from '../../shared/services/pages.service';
+import {SocketService} from '../../shared/services/socket.service';
+import {LanguageService} from '../../shared/services/language.service';
 
 @Component({
   selector: 'app-add',
@@ -17,7 +19,9 @@ export class AddComponent implements OnInit {
     private cookieService: CookieService,
     private actionSheetController: ActionSheetController,
     public devicePlatformService: DevicePlatformService,
-    public pagesService: PagesService
+    public pagesService: PagesService,
+    private socketService: SocketService,
+    public languageService: LanguageService
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -27,7 +31,7 @@ export class AddComponent implements OnInit {
     await this.pagesService.onChangeAndInit('Other');
   }
 
-  public async addFriend(username: string): Promise<void> {
+  public async addFriend(username: string, ask: boolean): Promise<void> {
     this.pagesService.waiting = true;
     const rtrn: Object = await this.requestService.askIfNotAddFriend(
       await this.cookieService.getCookie('username'),
@@ -36,6 +40,9 @@ export class AddComponent implements OnInit {
     );
     this.pagesService.waiting = false;
     if(Object(rtrn).status){
+      if(ask){
+        await this.socketService.addNotificationAskFriend(username);
+      }
       await this.pagesService.onChangeAndInit('Other');
     }
   }
@@ -68,17 +75,17 @@ export class AddComponent implements OnInit {
 
   public async actionSheetRemoveFriend(receiverUsername: string): Promise<void> {
     const actionSheet: HTMLIonActionSheetElement = await this.actionSheetController.create({
-      header: `Remove ${receiverUsername} from friends ?`,
+      header: this.languageService.dictionary.data?.components.add.removeFriend?.replace('<USERNAME>', receiverUsername),
       buttons: [
         {
-          text: 'Accept',
+          text: this.languageService.dictionary.data?.components.add.confirm,
           icon: 'checkmark',
           handler: async(): Promise<void> => {
             await this.removeFriend(receiverUsername)
           },
         },
         {
-          text: 'Decline',
+          text: this.languageService.dictionary.data?.components.add.cancel,
           icon: 'close',
         }
       ],
@@ -88,17 +95,17 @@ export class AddComponent implements OnInit {
 
   public async actionSheetBlockUser(receiverUsername: string): Promise<void> {
     const actionSheet: HTMLIonActionSheetElement = await this.actionSheetController.create({
-      header: `Block ${receiverUsername} ?`,
+      header: this.languageService.dictionary.data?.components.add.blockUser?.replace('<USERNAME>', receiverUsername),
       buttons: [
         {
-          text: 'Block',
+          text: this.languageService.dictionary.data?.components.add.confirm,
           icon: 'close',
           handler: async(): Promise<void> => {
             await this.blockUser(receiverUsername)
           },
         },
         {
-          text: 'Cancel',
+          text: this.languageService.dictionary.data?.components.add.cancel,
           icon: 'close',
         }
       ],
