@@ -13,19 +13,17 @@ module AccountNotificationRequest {
         return new Promise<any[]>((resolve): void => {
             //for every new type in subject, add a new corresponding object in the query
             resolve(client.query(`
-            Select (
+            SELECT (
                 SELECT User {
                     notifications: {
                         id,
                         component,
                         date,
                         seen,
-                        object := Notification.object[is Message]{
-                            id,
-                            sender : {username}
-                        } 
-                        union Notification.object[is User]{
-                            username,
+                        object : {
+                          id,
+                          [is User].username,
+                          [is Message].sender : {username}
                         }
                     }
                 } FILTER .token = "${sessionToken}").notifications
