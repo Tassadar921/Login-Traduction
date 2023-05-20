@@ -5,16 +5,17 @@ import { Injectable } from '@angular/core';
 })
 export class NotificationsService {
 
-  private notifications : [{id : string, title : string, text : string, date : Date, seen : boolean}] | unknown[] = [];
+  private notifications : { id : string, type : string, object: { username: string }[], date : Date, seen : boolean }[] | [] = [];
 
   constructor() {}
 
-  public getNotifications() : [{ id: string; title: string; text: string; date: Date; seen: boolean }] | unknown[] {
+  public getNotifications() : { id : string, type : string, object: { username: string }[], date : Date, seen : boolean }[] | [] {
     return this.notifications;
   }
 
-  public setNotifications(notifications : [{ id : string, title : string, text : string, date : Date, seen : boolean }]) : void {
+  public setNotifications(notifications : { id : string, type : string, object: { username: string }[], date : Date, seen : boolean }[]) : void {
     this.notifications = notifications;
+    console.log(this.notifications);
     return;
   }
 }

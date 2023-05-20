@@ -19,9 +19,10 @@ export class SocketService implements OnInit{
         await cookieService.getCookie('username'),
         await cookieService.getCookie('sessionToken')
       );
-      this.socket.emit('synchronizeNotifications');
+      this.synchronizeNotifications();
     });
     this.socket.on('synchronizeNotifications', (data : any): void => {
+        console.log('synchronizeNotifications from server');
         this.notificationsService.setNotifications(data.map((notification : any) => {notification.date = new Date(notification.date); return notification;}));
     });
   }
@@ -31,7 +32,16 @@ export class SocketService implements OnInit{
     this.socket.emit('synchronizeNotifications');
   }
 
+  public synchronizeNotifications(): void {
+    this.socket.emit('synchronizeNotifications');
+  }
+
   public async addNotificationAskFriend(username: string): Promise<void> {
     this.socket.emit('addNotificationAskFriend', username);
+  }
+
+  public deleteNotification(id: string): void {
+    console.log(id);
+    this.socket.emit('deleteNotification', id);
   }
 }

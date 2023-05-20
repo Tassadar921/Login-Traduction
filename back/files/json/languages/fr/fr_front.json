@@ -81,6 +81,9 @@
       "blocked": {
         "unblock": "Débloquer",
         "search": "Rechercher"
+      },
+      "notifications": {
+        "addFriend": "<USERNAME> veut vous ajouter à ses amis"
       }
     },
     "services": {}

@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import {CookieService} from '../../shared/services/cookie.service';
-import {RequestService} from '../../shared/services/request.service';
-import {ActionSheetController} from '@ionic/angular';
-import {DevicePlatformService} from '../../shared/services/device-platform.service';
-import {PagesService} from '../../shared/services/pages.service';
-import {SocketService} from '../../shared/services/socket.service';
-import {LanguageService} from '../../shared/services/language.service';
+import { CookieService } from '../../shared/services/cookie.service';
+import { RequestService } from '../../shared/services/request.service';
+import { ActionSheetController } from '@ionic/angular';
+import { DevicePlatformService } from '../../shared/services/device-platform.service';
+import { PagesService } from '../../shared/services/pages.service';
+import { LanguageService } from '../../shared/services/language.service';
+import { FriendRequestService } from '../../shared/services/friend-request.service';
 
 @Component({
   selector: 'app-add',
@@ -20,8 +20,8 @@ export class AddComponent implements OnInit {
     private actionSheetController: ActionSheetController,
     public devicePlatformService: DevicePlatformService,
     public pagesService: PagesService,
-    private socketService: SocketService,
-    public languageService: LanguageService
+    public languageService: LanguageService,
+    public friendRequestService: FriendRequestService
   ) {}
 
   async ngOnInit(): Promise<void> {
@@ -31,47 +31,7 @@ export class AddComponent implements OnInit {
     await this.pagesService.onChangeAndInit('Other');
   }
 
-  public async addFriend(username: string, ask: boolean): Promise<void> {
-    this.pagesService.waiting = true;
-    const rtrn: Object = await this.requestService.askIfNotAddFriend(
-      await this.cookieService.getCookie('username'),
-      await this.cookieService.getCookie('sessionToken'),
-      username
-    );
-    this.pagesService.waiting = false;
-    if(Object(rtrn).status){
-      if(ask){
-        await this.socketService.addNotificationAskFriend(username);
-      }
-      await this.pagesService.onChangeAndInit('Other');
-    }
-  }
 
-  public async refuseFriendRequest(senderUsername: string): Promise<void> {
-    this.pagesService.waiting = true;
-    const rtrn: Object = await this.requestService.refuseFriendRequest(
-      await this.cookieService.getCookie('username'),
-      await this.cookieService.getCookie('sessionToken'),
-      senderUsername
-    );
-    this.pagesService.waiting = false;
-    if(Object(rtrn).status){
-      await this.pagesService.onChangeAndInit('Other');
-    }
-  }
-
-  public async cancelFriendRequest(receiverUsername: string): Promise<void> {
-    this.pagesService.waiting = true;
-    const rtrn: Object = await this.requestService.cancelFriendRequest(
-      await this.cookieService.getCookie('username'),
-      await this.cookieService.getCookie('sessionToken'),
-      receiverUsername
-    );
-    this.pagesService.waiting = false;
-    if(Object(rtrn).status){
-      await this.pagesService.onChangeAndInit('Other');
-    }
-  }
 
   public async actionSheetRemoveFriend(receiverUsername: string): Promise<void> {
     const actionSheet: HTMLIonActionSheetElement = await this.actionSheetController.create({

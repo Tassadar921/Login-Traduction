@@ -81,6 +81,9 @@
       "blocked": {
         "unblock": "Unblock",
         "search": "Search"
+      },
+      "notifications": {
+        "addFriend": "<USERNAME> wants to be your friend"
       }
     },
     "services": {}
