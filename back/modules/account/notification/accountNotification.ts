@@ -35,14 +35,14 @@ export class AccountNotification {
 
     //gets the notifications from the database for the user
     public async synchronizeNotificationsWithSocket(socket: Socket): Promise<void> {
-        const dataNotification : any[] = await AccountNotificationRequest.getNotifications(socket.data.sessionToken, this.client);
+        const dataNotification: any[] = await AccountNotificationRequest.getNotifications(socket.data.sessionToken, this.client);
         socket.emit('synchronizeNotifications', dataNotification);
         return;
     }
 
     //gets the notifications from the database and sends it to a specific user (socket)
     private async synchronizeNotificationsWithRemoteSocket(socket: RemoteSocket<socketOptions.ServerToClientEvents, socketOptions.SocketData>): Promise<void> {
-        const dataNotification : any[] = await AccountNotificationRequest.getNotifications(socket.data.sessionToken, this.client);
+        const dataNotification: any[] = await AccountNotificationRequest.getNotifications(socket.data.sessionToken, this.client);
         socket.emit('synchronizeNotifications', dataNotification);
         return;
     }
@@ -63,16 +63,16 @@ export class AccountNotification {
         if (!regexRequest.checkRegexUUID(id)) {
             return;
         } else {
-            const notificationInformations : any [] = await AccountNotificationRequest.getNotificationInformations(id, this.client);
-            if(notificationInformations[0].type === 'addFriend'){
-                const user : any [] = await AccountNotificationRequest.getUsernameAttachedToNotification(id, this.client);
-                if(!(user[0].username === socket.data.username)){
-                    await this.notificationChanged(user[0].username);
-                }
-            }
+            const notificationInformations: any [] = await AccountNotificationRequest.getNotificationInformations(id, this.client);
+            const user: any[] = await AccountNotificationRequest.getUsernameAttachedToNotification(id, this.client);
             //delete the notification
             await AccountNotificationRequest.deleteNotification(id, this.client);
             await this.synchronizeNotificationsWithSocket(socket);
+            if (notificationInformations[0].type === 'addFriend') {
+                if (!(user[0].username === socket.data.username)) {
+                    await this.notificationChanged(user[0].username);
+                }
+            }
             return;
         }
     }
@@ -82,7 +82,7 @@ export class AccountNotification {
         const socketOfUsername: RemoteSocket<DefaultEventsMap, any> | undefined = await this.findSocketOfUsername(username);
 
         //convert the date to ISO format
-        const date : string = new Date().toISOString();
+        const date: string = new Date().toISOString();
 
         //add the notification to the database
         await AccountNotificationRequest.addNotificationMessage(username, 'message', date, idMessage, this.client);
@@ -91,21 +91,21 @@ export class AccountNotification {
         //if he's not connected, do nothing for the moment
         if (socketOfUsername !== undefined) {
             await this.synchronizeNotificationsWithRemoteSocket(socketOfUsername);
-        }else{
+        } else {
             //offline notification
             logger.logger.info(`User ${username} is not connected`);
         }
         return;
     }
 
-    public async notificationChanged(username: string): Promise<void>{
+    public async notificationChanged(username: string): Promise<void> {
         //start by finding the socket if it exists else get undefined (if the user is not connected)
         const socketOfUsername: RemoteSocket<DefaultEventsMap, any> | undefined = await this.findSocketOfUsername(username);
         //if the user is connected, synchronize the notifications with the socket
         //if he's not connected, do nothing for the moment
         if (socketOfUsername !== undefined) {
             await this.synchronizeNotificationsWithRemoteSocket(socketOfUsername);
-        }else{
+        } else {
             //offline notification
             logger.logger.info(`User ${username} is not connected`);
         }
@@ -130,9 +130,9 @@ export class AccountNotification {
 
     public async findSocketOfUsername(username: string): Promise<RemoteSocket<DefaultEventsMap, any> | undefined> {
         //find the socket of the user if he is connected
-        return (await(ioServer.io.fetchSockets())).find(
-                (socketTmp: RemoteSocket<DefaultEventsMap, any>): boolean =>
-                    socketTmp.data.username === username
-            );
+        return (await (ioServer.io.fetchSockets())).find(
+            (socketTmp: RemoteSocket<DefaultEventsMap, any>): boolean =>
+                socketTmp.data.username === username
+        );
     }
 }
