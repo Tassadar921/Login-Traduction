@@ -17,6 +17,7 @@ export class PagesService {
   private other: Array<any> = [];
   private friends: Array<any> = [];
   private blocked: Array<any> = [];
+  public currentComponent: string = '';
 
   constructor(
     private requestService: RequestService,

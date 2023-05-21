@@ -36,6 +36,7 @@ export class AccountFriends{
             return;
         } else {
             await accountFriendsRequest.removePendingFriendsRequests(username, usernameReceiver, this.client);
+            await this.updateDisplay(usernameReceiver, 'AddComponent');
             res.json({ status: 1 });
         }
     }
@@ -49,6 +50,7 @@ export class AccountFriends{
             return;
         } else {
             await accountFriendsRequest.removePendingFriendsRequests(usernameSender, username, this.client);
+            await this.updateDisplay(usernameSender, 'AddComponent');
             res.json({ status: 1 });
             return;
         }
@@ -66,23 +68,28 @@ export class AccountFriends{
             await accountFriendsRequest.removeFriend(usernameReceiver, usernameSender, this.client);
             await accountFriendsRequest.addBlockedUser(usernameSender, usernameReceiver, this.client);
             await accountFriendsRequest.addBlockedBy(usernameSender, usernameReceiver, this.client);
+            await this.updateDisplay(usernameSender, 'AddComponent');
+            await this.updateDisplay(usernameReceiver, 'AddComponent');
             res.json({ status: 1 });
             return;
         } else if((await accountFriendsRequest.getPendingFriendsRequestByBothUsernames(usernameSender, usernameReceiver, this.client)).length){
             await accountFriendsRequest.removePendingFriendsRequests(usernameReceiver, usernameSender, this.client);
             await accountFriendsRequest.addBlockedUser(usernameSender, usernameReceiver, this.client);
             await accountFriendsRequest.addBlockedBy(usernameSender, usernameReceiver, this.client);
+            await this.updateDisplay(usernameReceiver, 'AddComponent');
             res.json({ status: 1 });
             return;
         } else if((await accountFriendsRequest.getPendingFriendsRequestByBothUsernames(usernameReceiver, usernameSender, this.client)).length) {
             await accountFriendsRequest.removePendingFriendsRequests(usernameSender, usernameReceiver, this.client);
             await accountFriendsRequest.addBlockedUser(usernameSender, usernameReceiver, this.client);
             await accountFriendsRequest.addBlockedBy(usernameSender, usernameReceiver, this.client);
+            await this.updateDisplay(usernameReceiver, 'AddComponent');
             res.json({ status: 1 });
             return;
         } else {
             await accountFriendsRequest.addBlockedUser(usernameSender, usernameReceiver, this.client);
             await accountFriendsRequest.addBlockedBy(usernameSender, usernameReceiver, this.client);
+            await this.updateDisplay(usernameReceiver, 'AddComponent');
             res.json({ status: 1 });
             return;
         }
@@ -108,6 +115,8 @@ export class AccountFriends{
         } else if ((await accountFriendsRequest.getFriendByBothUsernames(usernameSender, usernameReceiver, this.client)).length) {
             await accountFriendsRequest.removeFriend(usernameSender, usernameReceiver, this.client);
             await accountFriendsRequest.removeFriend(usernameReceiver, usernameSender, this.client);
+            await this.updateDisplay(usernameSender, 'AddComponent');
+            await this.updateDisplay(usernameReceiver, 'AddComponent');
             res.json({ status: 1 });
             return;
         } else {
@@ -126,6 +135,7 @@ export class AccountFriends{
         } else if (await accountFriendsRequest.getBlockedUserByBothUsernames(usernameSender, usernameReceiver, this.client)) {
             await accountFriendsRequest.removeBlockedUser(usernameSender, usernameReceiver, this.client);
             await accountFriendsRequest.removeBlockedBy(usernameReceiver, usernameSender, this.client);
+            await this.updateDisplay(usernameReceiver, 'AddComponent');
             res.json({ status: 1 });
             return;
         } else {
@@ -154,11 +164,15 @@ export class AccountFriends{
             await accountFriendsRequest.removePendingFriendsRequests(usernameReceiver, usernameSender, this.client);
             await accountFriendsRequest.addFriend(usernameSender, usernameReceiver, this.client);
             await accountFriendsRequest.addFriend(usernameReceiver, usernameSender, this.client);
+            await this.updateDisplay(usernameSender, 'AddComponent');
+            await this.updateDisplay(usernameReceiver, 'AddComponent');
             res.json({ status: 10 });
             return;
         } else {
             await accountFriendsRequest.addPendingFriendsRequests(usernameSender, usernameReceiver, this.client);
             await this.accountNotification.addNotificationAskFriend(usernameReceiver, usernameSender);
+            await this.updateDisplay(usernameSender, 'AddComponent');
+            await this.updateDisplay(usernameReceiver, 'AddComponent');
             res.json({ status: 11 });
             return;
         }
@@ -197,6 +211,13 @@ export class AccountFriends{
         const otherUsers: any[] = await accountFriendsRequest.getOtherUsers(username, itemsPerPage, page, this.client);
         res.json({ status: 1, data: otherUsers });
         return;
+    }
+
+    public async updateDisplay(username: string, component: string): Promise<void> {
+        const socket: RemoteSocket<DefaultEventsMap, any> | undefined = await this.accountNotification.findSocketOfUsername(username);
+        if(socket){
+            socket.emit(`update${component}`);
+        }
     }
 
     public async sendMessage(username : string, message : string, socket : Socket): Promise<void> {

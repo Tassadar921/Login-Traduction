@@ -122,7 +122,6 @@ export class AccountNotification {
             date,
             this.client
         );
-        console.log(dataNotification[0].id);
         await accountNotificationRequest.addNotificationSenderAskFriend(senderUsername, dataNotification[0].id, this.client);
         await this.notificationChanged(receiverUsername);
         return;

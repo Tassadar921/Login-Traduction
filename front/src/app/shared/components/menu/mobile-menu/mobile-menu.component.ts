@@ -11,22 +11,22 @@ import {LanguageService} from "../../../services/language.service";
 })
 export class MobileMenuComponent implements OnInit {
 
-  public sidenavIsOpen = false;
+  public sidenavIsOpen: boolean = false;
   @ViewChild('menu') sidenav!: MatSidenav;
   @Input() menuItems: any[] = [];
 
   constructor(
     public devicePlatformService: DevicePlatformService,
     public cookieService: CookieService,
-    public languageService: LanguageService,
+    public languageService: LanguageService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit(): void {}
 
-  public async toggleSidenav() {
+  public async toggleSidenav(): Promise<void> {
     this.sidenavIsOpen = !this.sidenavIsOpen;
     await this.sidenav.toggle();
   }
 
-  @Input() public async signOut() {}
+  @Input() public async signOut(): Promise<void> {}
 }

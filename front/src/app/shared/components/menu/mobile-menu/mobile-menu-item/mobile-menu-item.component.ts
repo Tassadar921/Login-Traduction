@@ -1,6 +1,6 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {DevicePlatformService} from '../../../../services/device-platform.service';
-import {Router} from "@angular/router";
+import { Component, Input, OnInit } from '@angular/core';
+import { DevicePlatformService } from '../../../../services/device-platform.service';
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-mobile-menu-item',
@@ -16,5 +16,5 @@ export class MobileMenuItemComponent implements OnInit {
     public router: Router
     ) { }
 
-  ngOnInit() {}
+  ngOnInit(): void {}
 }

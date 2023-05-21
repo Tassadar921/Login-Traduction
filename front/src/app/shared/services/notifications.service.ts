@@ -15,7 +15,6 @@ export class NotificationsService {
 
   public setNotifications(notifications : { id : string, type : string, object: { username: string }[], date : Date, seen : boolean }[]) : void {
     this.notifications = notifications;
-    console.log(this.notifications);
     return;
   }
 }

@@ -25,6 +25,7 @@ export class AddComponent implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
+    this.pagesService.currentComponent = 'add';
     window.addEventListener(('resize'), async (): Promise<void> => {
       await this.pagesService.onChangeAndInit('Other');
     });

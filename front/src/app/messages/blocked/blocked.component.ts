@@ -21,6 +21,7 @@ export class BlockedComponent implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {
+    this.pagesService.currentComponent = 'blocked';
     window.addEventListener(('resize'), async (): Promise<void> => {
       await this.pagesService.onChangeAndInit('Blocked');
     });

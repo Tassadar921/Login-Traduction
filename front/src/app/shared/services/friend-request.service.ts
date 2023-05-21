@@ -9,6 +9,8 @@ import {SocketService} from './socket.service';
 })
 export class FriendRequestService {
 
+  public currentComponent: string = 'add';
+
   constructor(
     private pagesService: PagesService,
     private requestService: RequestService,

@@ -1,7 +1,8 @@
-import {Injectable, OnInit} from '@angular/core';
-import {Socket} from "ngx-socket-io";
-import {CookieService} from './cookie.service';
+import { Injectable, OnInit } from '@angular/core';
+import { Socket } from "ngx-socket-io";
+import { CookieService } from './cookie.service';
 import {NotificationsService} from './notifications.service';
+import { PagesService } from './pages.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,8 @@ export class SocketService implements OnInit{
   constructor(
     private socket: Socket,
     private cookieService: CookieService,
-    private notificationsService: NotificationsService
+    private notificationsService: NotificationsService,
+    private pagesService: PagesService
   ) {
     this.socket.on("initSocketData", async (): Promise<void> => {
       this.socket.emit(
@@ -21,10 +23,18 @@ export class SocketService implements OnInit{
       );
       this.synchronizeNotifications();
     });
+
     this.socket.on('synchronizeNotifications', (data : any): void => {
-        console.log('synchronizeNotifications from server');
         this.notificationsService.setNotifications(data.map((notification : any) => {notification.date = new Date(notification.date); return notification;}));
     });
+
+    this.socket.on('updateAddComponent', async (): Promise<void> => {
+      if(this.pagesService.currentComponent === 'add'){
+        await this.pagesService.onChangeAndInit('Other');
+        await this.pagesService.onChangeAndInit('Friends');
+      }
+    });
+    // console.log(navController.navigateForward('/home'));
   }
 
   ngOnInit(): void {
