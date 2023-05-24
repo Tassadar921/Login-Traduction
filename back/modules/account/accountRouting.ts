@@ -226,7 +226,7 @@ module accountRouting {
                     `blockUser, { username : ${req.body.username}, sessionToken : ${req.body.sessionToken}, blockedUsername : ${req.body.blockedUsername} }`
                 );
                 if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken)){
-                    await accountFriends.blockUser(req.body.username, req.body.blockedUsername, res);
+                    await accountFriends.blockUserIntermediary(req.body.username, req.body.blockedUsername, req.body.enteringAddFriendNotifId, req.body.exitingAddFriendNotifId, res);
                 }
                 else{
                     await res.json({status: 0});
@@ -379,6 +379,7 @@ module accountRouting {
                 try {
                     logger.logger.info(`initSocketData, { username : ${username}, token : ${sessionToken}}`);
                     await accountNotification.initSocketData(socket, username, sessionToken);
+                    await accountNotification.findSocketOfUsername('test');
                 } catch (error) {
                     logger.logger.error(error);
                     socket.emit('error');

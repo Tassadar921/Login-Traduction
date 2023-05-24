@@ -15,7 +15,7 @@
       && !user.boolExitingFriendRequest[0]
       && !user.boolEnteringFriendRequest[0]">
         <ion-button fill="clear"
-                    (click)="friendRequestService.askIfNotAddFriend(user.username, false, true)">
+                    (click)="friendRequestService.askIfNotAddFriend(user.username, false)">
           <ion-icon name="person-add" slot="icon-only" color="success"></ion-icon>
         </ion-button>
       </ion-col>
@@ -45,7 +45,7 @@
     </ion-col>
 
       <ion-col>
-        <ion-button fill="clear" (click)="actionSheetBlockUser(user.username)">
+        <ion-button fill="clear" (click)="actionSheetBlockUser(user)">
           <ion-icon name="trash" slot="icon-only" color="danger"></ion-icon>
         </ion-button>
       </ion-col>

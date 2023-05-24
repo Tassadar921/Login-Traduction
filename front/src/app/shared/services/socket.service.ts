@@ -1,8 +1,9 @@
 import { Injectable, OnInit } from '@angular/core';
 import { Socket } from "ngx-socket-io";
 import { CookieService } from './cookie.service';
-import {NotificationsService} from './notifications.service';
+import { NotificationsService } from './notifications.service';
 import { PagesService } from './pages.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,8 @@ export class SocketService implements OnInit{
     private socket: Socket,
     private cookieService: CookieService,
     private notificationsService: NotificationsService,
-    private pagesService: PagesService
+    private pagesService: PagesService,
+    private router: Router
   ) {
     this.socket.on("initSocketData", async (): Promise<void> => {
       this.socket.emit(
@@ -29,12 +31,22 @@ export class SocketService implements OnInit{
     });
 
     this.socket.on('updateAddComponent', async (): Promise<void> => {
-      if(this.pagesService.currentComponent === 'add'){
-        await this.pagesService.onChangeAndInit('Other');
+      if(this.router.url === '/messages') {
         await this.pagesService.onChangeAndInit('Friends');
+        if(this.pagesService.currentComponent === 'add'){
+          await this.pagesService.onChangeAndInit('Other');
+        }
       }
     });
-    // console.log(navController.navigateForward('/home'));
+
+    this.socket.on('updateBlockedComponent', async (): Promise<void> => {
+      if(this.router.url === '/messages') {
+        await this.pagesService.onChangeAndInit('Friends');
+        if(this.pagesService.currentComponent === 'blocked'){
+          await this.pagesService.onChangeAndInit('Blocked');
+        }
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -51,7 +63,6 @@ export class SocketService implements OnInit{
   }
 
   public deleteNotification(id: string): void {
-    console.log(id);
     this.socket.emit('deleteNotification', id);
   }
 }

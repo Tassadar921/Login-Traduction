@@ -9,8 +9,6 @@ import {SocketService} from './socket.service';
 })
 export class FriendRequestService {
 
-  public currentComponent: string = 'add';
-
   constructor(
     private pagesService: PagesService,
     private requestService: RequestService,
@@ -18,7 +16,7 @@ export class FriendRequestService {
     private socketService: SocketService
   ) {}
 
-  public async askIfNotAddFriend(username: string, notification: boolean, ask: boolean, id: string = ''): Promise<void> {
+  public async askIfNotAddFriend(username: string, notification: boolean, id: string = ''): Promise<void> {
     this.pagesService.waiting = true;
     const rtrn: Object = await this.requestService.askIfNotAddFriend(
       await this.cookieService.getCookie('username'),
@@ -27,10 +25,10 @@ export class FriendRequestService {
     );
     this.pagesService.waiting = false;
     if(Object(rtrn).status){
-      if(ask){
-        await this.socketService.addNotificationAskFriend(username);
-      }else{
+      if(id){
         this.socketService.deleteNotification(id);
+      }else{
+        await this.socketService.addNotificationAskFriend(username);
       }
       if(!notification) {
         await this.pagesService.onChangeAndInit('Other');

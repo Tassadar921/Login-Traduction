@@ -56,9 +56,6 @@ export class BlockedComponent implements OnInit {
       blockedUser
     );
     this.pagesService.waiting = false;
-    if(Object(rtrn).status){
-      await this.pagesService.onChangeAndInit('Blocked');
-    }
   }
 
 }

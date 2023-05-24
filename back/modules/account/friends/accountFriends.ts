@@ -12,6 +12,7 @@ import accountFriendsRequest from './accountFriendsRequest';
 import createClient, { Client } from 'edgedb';
 import {DefaultEventsMap} from 'socket.io/dist/typed-events';
 import {Response} from 'express';
+import accountNotificationRequest from '../notification/accountNotificationRequest';
 
 export class AccountFriends{
     private accountNotification: AccountNotification;
@@ -56,7 +57,7 @@ export class AccountFriends{
         }
     }
 
-    public async blockUser(usernameSender: string, usernameReceiver: string, res: Response): Promise<void> {
+    public async blockUserIntermediary(usernameSender: string, usernameReceiver: string, enteringAddFriendNotifId: string, exitingAddFriendNotifId: string, res: Response): Promise<void> {
         if (usernameSender === usernameReceiver) {
             res.json({ status: -1 });
             return;
@@ -66,33 +67,30 @@ export class AccountFriends{
         } else if ((await accountFriendsRequest.getFriendByBothUsernames(usernameSender, usernameReceiver, this.client)).length) {
             await accountFriendsRequest.removeFriend(usernameSender, usernameReceiver, this.client);
             await accountFriendsRequest.removeFriend(usernameReceiver, usernameSender, this.client);
-            await accountFriendsRequest.addBlockedUser(usernameSender, usernameReceiver, this.client);
-            await accountFriendsRequest.addBlockedBy(usernameSender, usernameReceiver, this.client);
-            await this.updateDisplay(usernameSender, 'AddComponent');
-            await this.updateDisplay(usernameReceiver, 'AddComponent');
-            res.json({ status: 1 });
+            await this.blockUser(usernameSender, usernameReceiver, res);
             return;
         } else if((await accountFriendsRequest.getPendingFriendsRequestByBothUsernames(usernameSender, usernameReceiver, this.client)).length){
             await accountFriendsRequest.removePendingFriendsRequests(usernameReceiver, usernameSender, this.client);
-            await accountFriendsRequest.addBlockedUser(usernameSender, usernameReceiver, this.client);
-            await accountFriendsRequest.addBlockedBy(usernameSender, usernameReceiver, this.client);
-            await this.updateDisplay(usernameReceiver, 'AddComponent');
-            res.json({ status: 1 });
+            await accountNotificationRequest.deleteNotification(enteringAddFriendNotifId, this.client);
+            await this.blockUser(usernameSender, usernameReceiver, res);
             return;
         } else if((await accountFriendsRequest.getPendingFriendsRequestByBothUsernames(usernameReceiver, usernameSender, this.client)).length) {
             await accountFriendsRequest.removePendingFriendsRequests(usernameSender, usernameReceiver, this.client);
-            await accountFriendsRequest.addBlockedUser(usernameSender, usernameReceiver, this.client);
-            await accountFriendsRequest.addBlockedBy(usernameSender, usernameReceiver, this.client);
-            await this.updateDisplay(usernameReceiver, 'AddComponent');
-            res.json({ status: 1 });
+            await accountNotificationRequest.deleteNotification(exitingAddFriendNotifId, this.client);
+            await this.blockUser(usernameSender, usernameReceiver, res);
             return;
         } else {
-            await accountFriendsRequest.addBlockedUser(usernameSender, usernameReceiver, this.client);
-            await accountFriendsRequest.addBlockedBy(usernameSender, usernameReceiver, this.client);
-            await this.updateDisplay(usernameReceiver, 'AddComponent');
-            res.json({ status: 1 });
+            await this.blockUser(usernameSender, usernameReceiver, res);
             return;
         }
+    }
+
+    private async blockUser(usernameSender: string, usernameReceiver: string, res: Response): Promise<void> {
+        await accountFriendsRequest.addBlockedUser(usernameSender, usernameReceiver, this.client);
+        await accountFriendsRequest.addBlockedBy(usernameSender, usernameReceiver, this.client);
+        await this.updateDisplay(usernameSender, 'AddComponent');
+        await this.updateDisplay(usernameReceiver, 'AddComponent');
+        res.json({ status: 1 });
     }
 
     public async getBlockedUsers(username: string, itemsPerPage: number, page: number, res: Response): Promise<void> {
@@ -117,6 +115,7 @@ export class AccountFriends{
             await accountFriendsRequest.removeFriend(usernameReceiver, usernameSender, this.client);
             await this.updateDisplay(usernameSender, 'AddComponent');
             await this.updateDisplay(usernameReceiver, 'AddComponent');
+            console.log('ici')
             res.json({ status: 1 });
             return;
         } else {
@@ -136,6 +135,7 @@ export class AccountFriends{
             await accountFriendsRequest.removeBlockedUser(usernameSender, usernameReceiver, this.client);
             await accountFriendsRequest.removeBlockedBy(usernameReceiver, usernameSender, this.client);
             await this.updateDisplay(usernameReceiver, 'AddComponent');
+            await this.updateDisplay(usernameSender, 'BlockedComponent');
             res.json({ status: 1 });
             return;
         } else {
@@ -216,6 +216,7 @@ export class AccountFriends{
     public async updateDisplay(username: string, component: string): Promise<void> {
         const socket: RemoteSocket<DefaultEventsMap, any> | undefined = await this.accountNotification.findSocketOfUsername(username);
         if(socket){
+            await this.accountNotification.synchronizeNotificationsWithSocket(socket);
             socket.emit(`update${component}`);
         }
     }

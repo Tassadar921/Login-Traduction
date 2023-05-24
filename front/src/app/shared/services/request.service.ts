@@ -157,9 +157,9 @@ export class RequestService {
     ));
   }
 
-  public async blockUser(username: string, sessionToken: string, blockedUsername: string): Promise<Object> {
+  public async blockUser(username: string, sessionToken: string, blockedUsername: string, enteringAddFriendNotifId: string, exitingAddFriendNotifId: string): Promise<Object> {
     return await lastValueFrom(this.http.post<Object>(`${environment.apiUrl}/blockUser`,
-      { username, sessionToken, blockedUsername }
+      { username, sessionToken, blockedUsername, enteringAddFriendNotifId, exitingAddFriendNotifId }
     ));
   }
 

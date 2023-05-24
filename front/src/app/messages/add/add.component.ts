@@ -32,8 +32,6 @@ export class AddComponent implements OnInit {
     await this.pagesService.onChangeAndInit('Other');
   }
 
-
-
   public async actionSheetRemoveFriend(receiverUsername: string): Promise<void> {
     const actionSheet: HTMLIonActionSheetElement = await this.actionSheetController.create({
       header: this.languageService.dictionary.data?.components.add.removeFriend?.replace('<USERNAME>', receiverUsername),
@@ -54,15 +52,15 @@ export class AddComponent implements OnInit {
     await actionSheet.present();
   }
 
-  public async actionSheetBlockUser(receiverUsername: string): Promise<void> {
+  public async actionSheetBlockUser(user: { username: string, enteringAddFriendNotifId: { id: string }[], exitingAddFriendNotifId: { id: string }[] }): Promise<void> {
     const actionSheet: HTMLIonActionSheetElement = await this.actionSheetController.create({
-      header: this.languageService.dictionary.data?.components.add.blockUser?.replace('<USERNAME>', receiverUsername),
+      header: this.languageService.dictionary.data?.components.add.blockUser?.replace('<USERNAME>', user.username),
       buttons: [
         {
           text: this.languageService.dictionary.data?.components.add.confirm,
           icon: 'close',
           handler: async(): Promise<void> => {
-            await this.blockUser(receiverUsername)
+            await this.blockUser(user.username, user.enteringAddFriendNotifId[0]?.id, user.exitingAddFriendNotifId[0]?.id)
           },
         },
         {
@@ -87,16 +85,15 @@ export class AddComponent implements OnInit {
     }
   }
 
-  public async blockUser(blockedUsername: string): Promise<void> {
+  public async blockUser(blockedUsername: string, enteringAddFriendNotifId: string, exitingAddFriendNotifId: string): Promise<void> {
     this.pagesService.waiting = true;
-    const rtrn: Object = await this.requestService.blockUser(
+    await this.requestService.blockUser(
       await this.cookieService.getCookie('username'),
       await this.cookieService.getCookie('sessionToken'),
-      blockedUsername
+      blockedUsername,
+      enteringAddFriendNotifId,
+      exitingAddFriendNotifId
     );
     this.pagesService.waiting = false;
-    if(Object(rtrn).status){
-      await this.pagesService.onChangeAndInit('Other');
-    }
   }
 }
