@@ -34,14 +34,14 @@ export class AccountNotification {
     }
 
     //gets the notifications from the database for the user
-    public async synchronizeNotificationsWithSocket(socket: any): Promise<void> {
+    public async synchronizeNotificationsWithSocket(socket: Socket): Promise<void> {
         const dataNotification: any[] = await AccountNotificationRequest.getNotifications(socket.data.sessionToken, this.client);
         socket.emit('synchronizeNotifications', dataNotification);
         return;
     }
 
     //gets the notifications from the database and sends it to a specific user (socket)
-    private async synchronizeNotificationsWithRemoteSocket(socket: RemoteSocket<socketOptions.ServerToClientEvents, socketOptions.SocketData>): Promise<void> {
+    public async synchronizeNotificationsWithRemoteSocket(socket: RemoteSocket<socketOptions.ServerToClientEvents, socketOptions.SocketData>): Promise<void> {
         const dataNotification: any[] = await AccountNotificationRequest.getNotifications(socket.data.sessionToken, this.client);
         socket.emit('synchronizeNotifications', dataNotification);
         return;

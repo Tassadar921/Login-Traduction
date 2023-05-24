@@ -216,7 +216,7 @@ export class AccountFriends{
     public async updateDisplay(username: string, component: string): Promise<void> {
         const socket: RemoteSocket<DefaultEventsMap, any> | undefined = await this.accountNotification.findSocketOfUsername(username);
         if(socket){
-            await this.accountNotification.synchronizeNotificationsWithSocket(socket);
+            await this.accountNotification.synchronizeNotificationsWithRemoteSocket(socket);
             socket.emit(`update${component}`);
         }
     }
