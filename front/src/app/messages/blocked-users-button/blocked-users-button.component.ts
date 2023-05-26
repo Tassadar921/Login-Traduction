@@ -12,8 +12,7 @@ export class BlockedUsersButtonComponent implements OnInit {
 
   constructor(
     public languageService: LanguageService,
-    public devicePlatformService: DevicePlatformService,
-    private pagesService: PagesService
+    public devicePlatformService: DevicePlatformService
   ) { }
 
   ngOnInit(): void {}

@@ -1,4 +1,5 @@
-<ion-button size="large" shape="round" color="success" id="add">
+<ion-button [size]="devicePlatformService.currentPlatform==='mobile'?'large':''"
+            shape="round" color="success" id="add">
   {{languageService.dictionary.data?.components.messages.add}}
 </ion-button>
 

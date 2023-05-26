@@ -1,4 +1,5 @@
-<ion-button size="large" shape="round" color="danger" id="blocked">
+<ion-button [size]="devicePlatformService.currentPlatform==='mobile'?'large':''"
+            shape="round" color="danger" id="blocked">
   {{languageService.dictionary.data?.components.messages.blocked}}
 </ion-button>
 
