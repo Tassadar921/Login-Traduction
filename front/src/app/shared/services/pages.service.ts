@@ -114,6 +114,14 @@ export class PagesService {
     );
   }
 
+  public updateFriendStatus(friend: string, connected: boolean): void {
+    this.friends.forEach((item: any): void => {
+      if(item.username === friend) {
+        item.online = connected;
+      }
+    });
+  }
+
   public getCommonTotalPages(): number {
     return this.commonTotalPages;
   }

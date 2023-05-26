@@ -48,15 +48,15 @@ export class SocketService implements OnInit{
       }
     });
 
-    this.socket.on('userConnected', async (): Promise<void> => {
+    this.socket.on('userConnected', async (username: string): Promise<void> => {
       if(this.router.url==='/messages'){
-        await this.pagesService.onChangeAndInit('Friends');
+        await this.pagesService.updateFriendStatus(username, true);
       }
     });
 
-    this.socket.on('userDisconnected', async (): Promise<void> => {
+    this.socket.on('userDisconnected', async (username: string): Promise<void> => {
       if(this.router.url==='/messages'){
-        await this.pagesService.onChangeAndInit('Friends');
+        await this.pagesService.updateFriendStatus(username, false);
       }
     });
   }

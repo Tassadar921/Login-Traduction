@@ -228,7 +228,7 @@ export class AccountFriends{
         for(const friend of rtrn){
             const socket: RemoteSocket<DefaultEventsMap, any> | undefined = await this.accountNotification.findSocketOfUsername(friend.username);
             if(socket) {
-                socket.emit(`user${status}`);
+                socket.emit(`user${status}`, username);
             }
         }
         while(rtrn.length === 100) {
