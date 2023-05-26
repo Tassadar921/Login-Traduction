@@ -14,6 +14,8 @@ import { BlockedComponent } from './blocked/blocked.component';
 import { AddComponent } from './add/add.component';
 import { FriendsPagesSystemFooterModule } from '../shared/components/friends-pages-system-footer/friends-pages-system-footer.module';
 import { CommonPagesSystemFooterModule } from '../shared/components/common-pages-system-footer/common-pages-system-footer.module';
+import {AddFriendButtonComponent} from './add-friend-button/add-friend-button.component';
+import {BlockedUsersButtonComponent} from './blocked-users-button/blocked-users-button.component';
 
 @NgModule({
   imports: [
@@ -26,7 +28,7 @@ import { CommonPagesSystemFooterModule } from '../shared/components/common-pages
     FriendsPagesSystemFooterModule,
     CommonPagesSystemFooterModule
   ],
-  declarations: [MessagesPage, SideBarComponent, BlockedComponent, AddComponent]
+  declarations: [MessagesPage, SideBarComponent, BlockedComponent, AddComponent, AddFriendButtonComponent, BlockedUsersButtonComponent]
 })
 export class MessagesPageModule {
 }

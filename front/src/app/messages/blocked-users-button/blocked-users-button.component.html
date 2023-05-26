@@ -1,0 +1,12 @@
+<ion-button size="large" shape="round" color="danger" id="blocked">
+  {{languageService.dictionary.data?.components.messages.blocked}}
+</ion-button>
+
+<ion-modal trigger="blocked" (ionModalDidDismiss)="modalClosed()">
+  <ng-template>
+    <ion-content [color]="devicePlatformService.getDeviceTheme()==='dark'?'':'dark'">
+      <app-blocked></app-blocked>
+    </ion-content>
+    <app-modal-close-button></app-modal-close-button>
+  </ng-template>
+</ion-modal>

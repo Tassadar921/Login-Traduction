@@ -1,0 +1,12 @@
+<ion-button size="large" shape="round" color="success" id="add">
+  {{languageService.dictionary.data?.components.messages.add}}
+</ion-button>
+
+<ion-modal trigger="add" (ionModalDidDismiss)="modalClosed()">
+  <ng-template>
+    <ion-content [color]="devicePlatformService.getDeviceTheme()==='dark'?'':'dark'">
+      <app-add></app-add>
+    </ion-content>
+    <app-modal-close-button></app-modal-close-button>
+  </ng-template>
+</ion-modal>
