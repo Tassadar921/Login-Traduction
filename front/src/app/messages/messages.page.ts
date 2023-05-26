@@ -17,4 +17,9 @@ export class MessagesPage implements OnInit {
   ) {}
 
   async ngOnInit(): Promise<void> {}
+
+  public modalClosed(): void {
+    this.pagesService.currentComponent = '';
+    this.pagesService.commonFilter = '';
+  }
 }

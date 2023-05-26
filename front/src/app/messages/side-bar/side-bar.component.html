@@ -2,6 +2,11 @@
   <ion-row id="sidebar">
     <ion-col>
       <h1>{{languageService.dictionary.data?.components.sidebar.friends}}</h1>
+      <ion-searchbar
+        [(ngModel)]="pagesService.friendsFilter"
+        (ionChange)="pagesService.setUsers('Friends', 1)"
+        [placeholder]="languageService.dictionary.data?.components.sidebar.search">
+      </ion-searchbar>
       <ion-row *ngFor="let user of pagesService.getFriends()">
         <ion-col>
           <ion-item button="true">

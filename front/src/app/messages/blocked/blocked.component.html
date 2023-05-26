@@ -1,4 +1,8 @@
-<ion-searchbar [(ngModel)]="pagesService.filter" (ionChange)="pagesService.setUsers('Blocked', 1)"></ion-searchbar>
+<ion-searchbar
+  [(ngModel)]="pagesService.commonFilter"
+  (ionChange)="pagesService.setUsers('Others', 1)"
+  [placeholder]="languageService.dictionary.data?.components.blocked.search">
+</ion-searchbar>
 
 <div *ngFor="let user of pagesService.getBlocked()" class="user">
   <div *ngIf="!pagesService.waiting">
@@ -8,7 +12,7 @@
       </ion-col>
       <ion-col>
         <ion-button (click)="actionSheetUnblockUser(user.username)" color="danger" shape="round" size="small">
-          Unblock
+          {{languageService.dictionary.data?.components.blocked.unblock}}
         </ion-button>
       </ion-col>
     </ion-row>

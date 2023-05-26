@@ -16,7 +16,7 @@
   </ion-row>
 </ion-grid>
 
-<ion-modal trigger="blocked" (ionModalDidDismiss)="pagesService.currentComponent = ''">
+<ion-modal trigger="blocked" (ionModalDidDismiss)="modalClosed()">
   <ng-template>
     <ion-content [color]="devicePlatformService.getDeviceTheme()==='dark'?'':'dark'">
       <app-blocked></app-blocked>
@@ -25,7 +25,7 @@
   </ng-template>
 </ion-modal>
 
-<ion-modal trigger="add" (ionModalDidDismiss)="pagesService.currentComponent = ''">
+<ion-modal trigger="add" (ionModalDidDismiss)="modalClosed()">
   <ng-template>
     <ion-content [color]="devicePlatformService.getDeviceTheme()==='dark'?'':'dark'">
       <app-add></app-add>

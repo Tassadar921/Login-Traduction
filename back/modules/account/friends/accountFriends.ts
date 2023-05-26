@@ -93,8 +93,8 @@ export class AccountFriends{
         res.json({ status: 1 });
     }
 
-    public async getBlockedUsers(username: string, itemsPerPage: number, page: number, res: Response): Promise<void> {
-        const blockedUsers: Array<unknown> = await accountFriendsRequest.getBlockedUsers(username, itemsPerPage, page, this.client);
+    public async getBlockedUsers(username: string, itemsPerPage: number, page: number, filter: string, res: Response): Promise<void> {
+        const blockedUsers: Array<unknown> = await accountFriendsRequest.getBlockedUsers(username, itemsPerPage, page, filter, this.client);
         res.json({ status: 1, data: blockedUsers });
     }
 
@@ -178,8 +178,8 @@ export class AccountFriends{
         }
     }
 
-    public async getFriendUsers(username: string, itemsPerPage: number, page: number, res: Response): Promise<void>{
-        const friends: any[] = await accountFriendsRequest.getFriendUsers(username, itemsPerPage, page, this.client);
+    public async getFriendUsers(username: string, itemsPerPage: number, page: number, filter: string, res: Response): Promise<void> {
+        const friends: any[] = await accountFriendsRequest.getFriendUsers(username, itemsPerPage, page, filter, this.client);
         for(const friend of friends){
             if(await this.accountNotification.findSocketOfUsername(friend.username)){
                 friend.online = true;
@@ -189,27 +189,51 @@ export class AccountFriends{
         return;
     }
 
-    public async getFriendUsersNumber(username: string, itemsPerPage: number, page: number, res: Response): Promise<void>{
+    public async getFriendUsersNumber(username: string, itemsPerPage: number, page: number, res: Response): Promise<void> {
         const friends: any[] = await accountFriendsRequest.getFriendUsersNumber(username, this.client);
         res.json({ status: 1, data: friends[0] });
         return;
     }
 
-    public async getEnteringPendingFriendsRequests(username: string, itemsPerPage: number, page: number, res: Response): Promise<void>{
+    public async getEnteringPendingFriendsRequests(username: string, itemsPerPage: number, page: number, res: Response): Promise<void> {
         const pendingFriendsRequests: any[] = await accountFriendsRequest.getEnteringPendingFriendsRequests(username, itemsPerPage, page, this.client);
         res.json({ status: 1, data: pendingFriendsRequests });
         return;
     }
 
-    public async getExitingPendingFriendsRequests(username: string, itemsPerPage: number, page: number, res: Response): Promise<void>{
+    public async getExitingPendingFriendsRequests(username: string, itemsPerPage: number, page: number, res: Response): Promise<void> {
         const pendingFriendsRequests: any[] = await accountFriendsRequest.getExitingPendingFriendsRequests(username, itemsPerPage, page, this.client);
         res.json({ status: 1, data: pendingFriendsRequests });
         return;
     }
 
-    public async getOtherUsers(username: string, itemsPerPage: number, page: number, res: Response): Promise<void>{
-        const otherUsers: any[] = await accountFriendsRequest.getOtherUsers(username, itemsPerPage, page, this.client);
+    public async getOtherUsers(username: string, itemsPerPage: number, page: number, filter: string, res: Response): Promise<void> {
+        const otherUsers: any[] = await accountFriendsRequest.getOtherUsers(username, itemsPerPage, page, filter, this.client);
         res.json({ status: 1, data: otherUsers });
+        return;
+    }
+
+    public async userConnected(username: string): Promise<void> {
+        await this.updateMyStatus(username, 'Connected', 1);
+        return;
+    }
+
+    public async userDisconnected(username: string): Promise<void> {
+        await this.updateMyStatus(username, 'Disconnected', 1);
+        return;
+    }
+
+    private async updateMyStatus(username: string, status: string, page: number): Promise<void> {
+        let rtrn: any[] = await accountFriendsRequest.getFriendUsers(username, 100, page, '', this.client);
+        for(const friend of rtrn){
+            const socket: RemoteSocket<DefaultEventsMap, any> | undefined = await this.accountNotification.findSocketOfUsername(friend.username);
+            if(socket) {
+                socket.emit(`user${status}`);
+            }
+        }
+        while(rtrn.length === 100) {
+            await this.updateMyStatus(username, status, page+1);
+        }
         return;
     }
 

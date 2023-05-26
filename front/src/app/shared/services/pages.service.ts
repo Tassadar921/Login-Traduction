@@ -12,7 +12,8 @@ export class PagesService {
   private commonCurrentPage: number = 1;
   private friendsTotalPages: number = 0;
   private friendsCurrentPage: number = 1;
-  public filter: string = '';
+  public commonFilter: string = '';
+  public friendsFilter: string = '';
   public waiting: boolean = false;
   private other: Array<any> = [];
   private friends: Array<any> = [];
@@ -67,7 +68,8 @@ export class PagesService {
       await this.cookieService.getCookie('username'),
       await this.cookieService.getCookie('sessionToken'),
       this.devicePlatformService.itemsPerPage,
-      page
+      page,
+      this.commonFilter
     );
   }
 
@@ -83,7 +85,8 @@ export class PagesService {
       await this.cookieService.getCookie('username'),
       await this.cookieService.getCookie('sessionToken'),
       this.devicePlatformService.itemsPerPage,
-      page
+      page,
+      this.commonFilter
     );
   }
 
@@ -99,7 +102,8 @@ export class PagesService {
       await this.cookieService.getCookie('username'),
       await this.cookieService.getCookie('sessionToken'),
       this.devicePlatformService.itemsPerPage,
-      page
+      page,
+      this.friendsFilter
     );
   }
 

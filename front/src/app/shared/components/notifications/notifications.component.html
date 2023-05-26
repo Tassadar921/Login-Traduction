@@ -22,4 +22,7 @@
       </ion-item>
     </ion-col>
   </ion-row>
+  <ion-row *ngIf="!notificationsService.getNotifications().length">
+    <p>pas de notif</p>
+  </ion-row>
 </ion-grid>

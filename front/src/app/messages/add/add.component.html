@@ -1,8 +1,7 @@
 <ion-searchbar
-  [(ngModel)]="pagesService.filter"
-  (ionChange)="pagesService.setUsers('Others', 1)"
+  [(ngModel)]="pagesService.commonFilter"
+  (ionChange)="pagesService.setUsers('Other', 1)"
   [placeholder]="languageService.dictionary.data?.components.add.search">
-
 </ion-searchbar>
 
 <div *ngFor="let user of pagesService.getOther()" class="user">

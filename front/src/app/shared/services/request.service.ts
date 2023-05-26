@@ -103,9 +103,9 @@ export class RequestService {
     ));
   }
 
-  public async getFriendUsers(username: string, sessionToken: string, itemsPerPage: number, page: number): Promise<Object> {
+  public async getFriendUsers(username: string, sessionToken: string, itemsPerPage: number, page: number, filter: string): Promise<Object> {
     return await lastValueFrom(this.http.post<Object>(`${environment.apiUrl}/getFriendUsers`,
-      { username, sessionToken, itemsPerPage, page }
+      { username, sessionToken, itemsPerPage, page, filter }
     ));
   }
 
@@ -121,9 +121,9 @@ export class RequestService {
     ));
   }
 
-  public async getOtherUsers(username: string, sessionToken: string, itemsPerPage: number, page: number): Promise<Object> {
+  public async getOtherUsers(username: string, sessionToken: string, itemsPerPage: number, page: number, filter: string): Promise<Object> {
     return await lastValueFrom(this.http.post<Object>(`${environment.apiUrl}/getOtherUsers`,
-      { username, sessionToken, itemsPerPage, page }
+      { username, sessionToken, itemsPerPage, page, filter }
     ));
   }
 
@@ -169,9 +169,9 @@ export class RequestService {
     ));
   }
 
-  public async getBlockedUsers(username: string, sessionToken: string, itemsPerPage: number, page: number): Promise<Object> {
+  public async getBlockedUsers(username: string, sessionToken: string, itemsPerPage: number, page: number, filter: string): Promise<Object> {
     return await lastValueFrom(this.http.post<Object>(`${environment.apiUrl}/getBlockedUsers`,
-      { username, sessionToken, itemsPerPage, page }
+      { username, sessionToken, itemsPerPage, page, filter }
     ));
   }
 

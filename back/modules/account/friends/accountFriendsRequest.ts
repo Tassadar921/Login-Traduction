@@ -87,12 +87,12 @@ module accountFriendsRequest {
         });
     }
 
-    export async function getFriendUsers(username : string, itemsPerPage : number, page : number, client : Client) : Promise<unknown[]> {
+    export async function getFriendUsers(username : string, itemsPerPage : number, page : number, filter: string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
-                Select (Select User {
+                Select (Select (Select User {
                     id, username
-                }filter .friends.username = "${username}")
+                }filter .friends.username = "${username}")) Filter contains(str_lower(.username), str_lower("${filter}"))
                 order by .username
                 offset ${itemsPerPage}*(${page}-1)
                 limit ${itemsPerPage}
@@ -156,10 +156,10 @@ module accountFriendsRequest {
         });
     }
 
-    export async function getOtherUsers(username : string, itemsPerPage : number, page : number, client : Client) : Promise<unknown[]> {
+    export async function getOtherUsers(username : string, itemsPerPage : number, page : number, filter: string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
-            Select (with
+            Select (Select (with
                 usernameId := (Select User {id} Filter .username = '${username}'),
                 x := (Select User {
                     id,
@@ -221,7 +221,8 @@ module accountFriendsRequest {
                     boolEnteringFriendRequest := exists .boolEnteringFriendRequest,
                     boolExitingFriendRequest := exists .boolExitingFriendRequest,
                 }
-                filter exists .c1 != true and exists .c2 != true
+                filter exists .c1 != true and exists .c2 != true)
+                filter contains(str_lower(.username), str_lower('${filter}'))
                 order by .username
                 offset ${itemsPerPage}*(${page}-1)
                 limit ${itemsPerPage}
@@ -277,15 +278,15 @@ module accountFriendsRequest {
         });
     }
 
-    export async function getBlockedUsers(username : string, itemsPerPage : number, page : number, client : Client) : Promise<unknown[]> {
+    export async function getBlockedUsers(username : string, itemsPerPage : number, page : number, filter: string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
-                Select (Select User {
+                Select (Select (Select User {
                     blockedUsers : {
                         id,
                         username
                     }
-                } Filter .username = "${username}").blockedUsers
+                } Filter .username = "${username}").blockedUsers) Filter contains(str_lower(.username), str_lower("${filter}"))
                 order by .username
                 offset ${itemsPerPage}*(${page}-1)
                 limit ${itemsPerPage}
