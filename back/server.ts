@@ -25,10 +25,9 @@ if (app.get('env') === 'production') {
     app.set('trust proxy', 1);
 }
 
-
 const server: http.Server<any> = http.createServer(app);
-
 ioServer.init(server);
+
 logger.init();
 
 /*-----------------------------------------Boot start Method--------------------------------------------*/
