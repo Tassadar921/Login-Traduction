@@ -87,12 +87,12 @@ module accountFriendsRequest {
         });
     }
 
-    export async function getFriendUsers(username : string, itemsPerPage : number, page : number, client : Client) : Promise<unknown[]> {
+    export async function getFriendUsers(username : string, itemsPerPage : number, page : number, filter: string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
-                Select (Select User {
+                Select (Select (Select User {
                     id, username
-                }filter .friends.username = "${username}")
+                }filter .friends.username = "${username}")) Filter contains(str_lower(.username), str_lower("${filter}"))
                 order by .username
                 offset ${itemsPerPage}*(${page}-1)
                 limit ${itemsPerPage}
@@ -156,59 +156,73 @@ module accountFriendsRequest {
         });
     }
 
-    export async function getOtherUsers(username : string, itemsPerPage : number, page : number, client : Client) : Promise<unknown[]> {
+    export async function getOtherUsers(username : string, itemsPerPage : number, page : number, filter: string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
-            Select (with x :=   (Select User {
-                        id,
-                        username
-                    } Filter .username != "${username}"),
-                    y := ((Select User {
+            Select (Select (with
+                usernameId := (Select User {id} Filter .username = '${username}'),
+                x := (Select User {
+                    id,
+                    username,
+                } Filter .username != '${username}'),
+                y := ((Select User {
                     friends : {
                         id,
                         username
-                    }} Filter .username = "${username}").friends),
-                    zexit := (Select User {
-                                    id,
-                                    username
-                            } Filter User.pendingFriendsRequests.username = "${username}"),
-                    zenter := (Select User {
-                                    pendingFriendsRequests : {
-                                        id,
-                                        username
-                                    }
-                                } Filter .username = "${username}").pendingFriendsRequests,
-                    w1 := (Select User {
-                                    blockedUsers : {
-                                        id,
-                                        username
-                                    }
-                                } Filter .username = "${username}").blockedUsers,
-                    w2 := (Select User {
-                                    blockedBy : {
-                                        id,
-                                        username
-                                    }
-                                } Filter .username = "${username}").blockedBy,
-                Select {
-                    (x {
+                    }
+                } Filter .username = '${username}').friends),
+                enteringAddFriendNotifId := (Select Notification {
+                    id
+                } Filter .type = 'addFriend' AND .object.id = x.id),
+                exitingAddFriendNotifId := (Select Notification {
+                    id
+                } Filter .type = 'addFriend' AND .object.id = usernameId.id),
+                zexit := (Select User {
+                    id,
+                    username
+                } Filter User.pendingFriendsRequests.username = '${username}'),
+                zenter := (Select User {
+                    pendingFriendsRequests : {
+                        id,
+                        username
+                    }
+                } Filter .username = '${username}').pendingFriendsRequests,
+                w1 := (Select User {
+                    blockedUsers : {
+                        id,
+                        username
+                    }
+                } Filter .username = '${username}').blockedUsers,
+                w2 := (Select User {
+                    blockedBy : {
+                        id,
+                        username
+                    }
+                } Filter .username = '${username}').blockedBy,
+                Select {(
+                x {
                     username,
                     id,
+                    enteringAddFriendNotifId := (Select enteringAddFriendNotifId),
+                    exitingAddFriendNotifId := (Select exitingAddFriendNotifId),
                     boolFriend := (Select y filter y.username = x.username) = x,
                     boolEnteringFriendRequest := (Select zenter filter zenter.username = x.username) = x,
                     boolExitingFriendRequest := (Select zexit filter zexit.username = x.username) = x,
                     c1 := ((Select w1 filter w1.username = x.username) = x),
                     c2 := (Select w2 filter w2.username = x.username) = x,
                     })
-                }) 
+                })
                 {
                     username,
                     id,
+                    enteringAddFriendNotifId,
+                    exitingAddFriendNotifId,
                     boolFriend := exists .boolFriend,
                     boolEnteringFriendRequest := exists .boolEnteringFriendRequest,
                     boolExitingFriendRequest := exists .boolExitingFriendRequest,
                 }
-                filter exists .c1 != true and exists .c2 != true
+                filter exists .c1 != true and exists .c2 != true)
+                filter contains(str_lower(.username), str_lower('${filter}'))
                 order by .username
                 offset ${itemsPerPage}*(${page}-1)
                 limit ${itemsPerPage}
@@ -264,15 +278,15 @@ module accountFriendsRequest {
         });
     }
 
-    export async function getBlockedUsers(username : string, itemsPerPage : number, page : number, client : Client) : Promise<unknown[]> {
+    export async function getBlockedUsers(username : string, itemsPerPage : number, page : number, filter: string, client : Client) : Promise<unknown[]> {
         return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
-                Select (Select User {
+                Select (Select (Select User {
                     blockedUsers : {
                         id,
                         username
                     }
-                } Filter .username = "${username}").blockedUsers
+                } Filter .username = "${username}").blockedUsers) Filter contains(str_lower(.username), str_lower("${filter}"))
                 order by .username
                 offset ${itemsPerPage}*(${page}-1)
                 limit ${itemsPerPage}

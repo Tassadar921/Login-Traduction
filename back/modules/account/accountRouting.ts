@@ -142,10 +142,10 @@ module accountRouting {
         app.post('/getFriendUsers', async function (req: Request, res: Response, next : NextFunction): Promise<void> {
             try {
                 logger.logger.info(
-                    `getFriend, { username : ${req.body.username}, sessionToken : ${req.body.sessionToken}, itemsPerPage : ${req.body.itemsPerPage}, page : ${req.body.page} }`
+                    `getFriend, { username : ${req.body.username}, sessionToken : ${req.body.sessionToken}, itemsPerPage : ${req.body.itemsPerPage}, page : ${req.body.page}, filter : ${req.body.filter } }`
                 );
                 if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken)){
-                    await accountFriends.getFriendUsers(req.body.username, req.body.itemsPerPage,  req.body.page, res);
+                    await accountFriends.getFriendUsers(req.body.username, req.body.itemsPerPage,  req.body.page, req.body.filter, res);
                 }
                 else{
                     await res.json({status: 0});
@@ -207,10 +207,10 @@ module accountRouting {
         app.post('/getOtherUsers', async function (req: Request, res: Response, next : NextFunction): Promise<void> {
             try {
                 logger.logger.info(
-                    `getOtherUsers, { username : ${req.body.username}, sessionToken : ${req.body.sessionToken}, itemsPerPage : ${req.body.itemsPerPage}, page : ${req.body.page} }`
+                    `getOtherUsers, { username : ${req.body.username}, sessionToken : ${req.body.sessionToken}, itemsPerPage : ${req.body.itemsPerPage}, page : ${req.body.page}, filter : ${req.body.filter }`
                 );
                 if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken)){
-                    await accountFriends.getOtherUsers(req.body.username, req.body.itemsPerPage,  req.body.page, res);
+                    await accountFriends.getOtherUsers(req.body.username, req.body.itemsPerPage,  req.body.page, req.body.filter, res);
                 }
                 else{
                     await res.json({status: 0});
@@ -226,7 +226,7 @@ module accountRouting {
                     `blockUser, { username : ${req.body.username}, sessionToken : ${req.body.sessionToken}, blockedUsername : ${req.body.blockedUsername} }`
                 );
                 if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken)){
-                    await accountFriends.blockUser(req.body.username, req.body.blockedUsername, res);
+                    await accountFriends.blockUserIntermediary(req.body.username, req.body.blockedUsername, req.body.enteringAddFriendNotifId, req.body.exitingAddFriendNotifId, res);
                 }
                 else{
                     await res.json({status: 0});
@@ -255,10 +255,10 @@ module accountRouting {
         app.post('/getBlockedUsers', async function (req: Request, res: Response, next : NextFunction): Promise<void> {
             try {
                 logger.logger.info(
-                    `getBlockedUsers, { username : ${req.body.username}, sessionToken : ${req.body.sessionToken}, itemsPerPage : ${req.body.itemsPerPage}, page : ${req.body.page} }`
+                    `getBlockedUsers, { username : ${req.body.username}, sessionToken : ${req.body.sessionToken}, itemsPerPage : ${req.body.itemsPerPage}, page : ${req.body.page}, filter : ${req.body.filter }`
                 );
                 if(await accountSignIn.checkSession(req.body.username, req.body.sessionToken)){
-                    await accountFriends.getBlockedUsers(req.body.username, req.body.itemsPerPage, req.body.page, res);
+                    await accountFriends.getBlockedUsers(req.body.username, req.body.itemsPerPage, req.body.page, req.body.filter, res);
                 }
                 else{
                     await res.json({status: 0});
@@ -379,6 +379,7 @@ module accountRouting {
                 try {
                     logger.logger.info(`initSocketData, { username : ${username}, token : ${sessionToken}}`);
                     await accountNotification.initSocketData(socket, username, sessionToken);
+                    await accountFriends.userConnected(username);
                 } catch (error) {
                     logger.logger.error(error);
                     socket.emit('error');
@@ -441,6 +442,7 @@ module accountRouting {
 
             socket.on('disconnect', async (): Promise<void> => {
                 logger.logger.info('client déconnecté');
+                await accountFriends.userDisconnected(socket.data.username);
             });
         });
         return;

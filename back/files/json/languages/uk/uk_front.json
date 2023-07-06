@@ -67,6 +67,7 @@
         "blocked": "Blocked"
       },
       "sidebar": {
+        "search": "Search",
         "friends": "Friends"
       },
       "add": {
@@ -81,6 +82,9 @@
       "blocked": {
         "unblock": "Unblock",
         "search": "Search"
+      },
+      "notifications": {
+        "addFriend": "<USERNAME> wants to be your friend"
       }
     },
     "services": {}

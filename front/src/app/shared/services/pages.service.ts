@@ -12,11 +12,13 @@ export class PagesService {
   private commonCurrentPage: number = 1;
   private friendsTotalPages: number = 0;
   private friendsCurrentPage: number = 1;
-  public filter: string = '';
+  public commonFilter: string = '';
+  public friendsFilter: string = '';
   public waiting: boolean = false;
   private other: Array<any> = [];
   private friends: Array<any> = [];
   private blocked: Array<any> = [];
+  public currentComponent: string = '';
 
   constructor(
     private requestService: RequestService,
@@ -66,7 +68,8 @@ export class PagesService {
       await this.cookieService.getCookie('username'),
       await this.cookieService.getCookie('sessionToken'),
       this.devicePlatformService.itemsPerPage,
-      page
+      page,
+      this.commonFilter
     );
   }
 
@@ -82,7 +85,8 @@ export class PagesService {
       await this.cookieService.getCookie('username'),
       await this.cookieService.getCookie('sessionToken'),
       this.devicePlatformService.itemsPerPage,
-      page
+      page,
+      this.commonFilter
     );
   }
 
@@ -98,7 +102,8 @@ export class PagesService {
       await this.cookieService.getCookie('username'),
       await this.cookieService.getCookie('sessionToken'),
       this.devicePlatformService.itemsPerPage,
-      page
+      page,
+      this.friendsFilter
     );
   }
 
@@ -107,6 +112,14 @@ export class PagesService {
       await this.cookieService.getCookie('username'),
       await this.cookieService.getCookie('sessionToken')
     );
+  }
+
+  public updateFriendStatus(friend: string, connected: boolean): void {
+    this.friends.forEach((item: any): void => {
+      if(item.username === friend) {
+        item.online = connected;
+      }
+    });
   }
 
   public getCommonTotalPages(): number {

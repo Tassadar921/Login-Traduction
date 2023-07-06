@@ -12,6 +12,7 @@ import accountFriendsRequest from './accountFriendsRequest';
 import createClient, { Client } from 'edgedb';
 import {DefaultEventsMap} from 'socket.io/dist/typed-events';
 import {Response} from 'express';
+import accountNotificationRequest from '../notification/accountNotificationRequest';
 
 export class AccountFriends{
     private accountNotification: AccountNotification;
@@ -36,6 +37,7 @@ export class AccountFriends{
             return;
         } else {
             await accountFriendsRequest.removePendingFriendsRequests(username, usernameReceiver, this.client);
+            await this.updateDisplay(usernameReceiver, 'AddComponent');
             res.json({ status: 1 });
         }
     }
@@ -49,12 +51,13 @@ export class AccountFriends{
             return;
         } else {
             await accountFriendsRequest.removePendingFriendsRequests(usernameSender, username, this.client);
+            await this.updateDisplay(usernameSender, 'AddComponent');
             res.json({ status: 1 });
             return;
         }
     }
 
-    public async blockUser(usernameSender: string, usernameReceiver: string, res: Response): Promise<void> {
+    public async blockUserIntermediary(usernameSender: string, usernameReceiver: string, enteringAddFriendNotifId: string, exitingAddFriendNotifId: string, res: Response): Promise<void> {
         if (usernameSender === usernameReceiver) {
             res.json({ status: -1 });
             return;
@@ -64,32 +67,34 @@ export class AccountFriends{
         } else if ((await accountFriendsRequest.getFriendByBothUsernames(usernameSender, usernameReceiver, this.client)).length) {
             await accountFriendsRequest.removeFriend(usernameSender, usernameReceiver, this.client);
             await accountFriendsRequest.removeFriend(usernameReceiver, usernameSender, this.client);
-            await accountFriendsRequest.addBlockedUser(usernameSender, usernameReceiver, this.client);
-            await accountFriendsRequest.addBlockedBy(usernameSender, usernameReceiver, this.client);
-            res.json({ status: 1 });
+            await this.blockUser(usernameSender, usernameReceiver, res);
             return;
         } else if((await accountFriendsRequest.getPendingFriendsRequestByBothUsernames(usernameSender, usernameReceiver, this.client)).length){
             await accountFriendsRequest.removePendingFriendsRequests(usernameReceiver, usernameSender, this.client);
-            await accountFriendsRequest.addBlockedUser(usernameSender, usernameReceiver, this.client);
-            await accountFriendsRequest.addBlockedBy(usernameSender, usernameReceiver, this.client);
-            res.json({ status: 1 });
+            await accountNotificationRequest.deleteNotification(enteringAddFriendNotifId, this.client);
+            await this.blockUser(usernameSender, usernameReceiver, res);
             return;
         } else if((await accountFriendsRequest.getPendingFriendsRequestByBothUsernames(usernameReceiver, usernameSender, this.client)).length) {
             await accountFriendsRequest.removePendingFriendsRequests(usernameSender, usernameReceiver, this.client);
-            await accountFriendsRequest.addBlockedUser(usernameSender, usernameReceiver, this.client);
-            await accountFriendsRequest.addBlockedBy(usernameSender, usernameReceiver, this.client);
-            res.json({ status: 1 });
+            await accountNotificationRequest.deleteNotification(exitingAddFriendNotifId, this.client);
+            await this.blockUser(usernameSender, usernameReceiver, res);
             return;
         } else {
-            await accountFriendsRequest.addBlockedUser(usernameSender, usernameReceiver, this.client);
-            await accountFriendsRequest.addBlockedBy(usernameSender, usernameReceiver, this.client);
-            res.json({ status: 1 });
+            await this.blockUser(usernameSender, usernameReceiver, res);
             return;
         }
     }
 
-    public async getBlockedUsers(username: string, itemsPerPage: number, page: number, res: Response): Promise<void> {
-        const blockedUsers: Array<unknown> = await accountFriendsRequest.getBlockedUsers(username, itemsPerPage, page, this.client);
+    private async blockUser(usernameSender: string, usernameReceiver: string, res: Response): Promise<void> {
+        await accountFriendsRequest.addBlockedUser(usernameSender, usernameReceiver, this.client);
+        await accountFriendsRequest.addBlockedBy(usernameSender, usernameReceiver, this.client);
+        await this.updateDisplay(usernameSender, 'AddComponent');
+        await this.updateDisplay(usernameReceiver, 'AddComponent');
+        res.json({ status: 1 });
+    }
+
+    public async getBlockedUsers(username: string, itemsPerPage: number, page: number, filter: string, res: Response): Promise<void> {
+        const blockedUsers: Array<unknown> = await accountFriendsRequest.getBlockedUsers(username, itemsPerPage, page, filter, this.client);
         res.json({ status: 1, data: blockedUsers });
     }
 
@@ -108,6 +113,9 @@ export class AccountFriends{
         } else if ((await accountFriendsRequest.getFriendByBothUsernames(usernameSender, usernameReceiver, this.client)).length) {
             await accountFriendsRequest.removeFriend(usernameSender, usernameReceiver, this.client);
             await accountFriendsRequest.removeFriend(usernameReceiver, usernameSender, this.client);
+            await this.updateDisplay(usernameSender, 'AddComponent');
+            await this.updateDisplay(usernameReceiver, 'AddComponent');
+            console.log('ici')
             res.json({ status: 1 });
             return;
         } else {
@@ -126,6 +134,8 @@ export class AccountFriends{
         } else if (await accountFriendsRequest.getBlockedUserByBothUsernames(usernameSender, usernameReceiver, this.client)) {
             await accountFriendsRequest.removeBlockedUser(usernameSender, usernameReceiver, this.client);
             await accountFriendsRequest.removeBlockedBy(usernameReceiver, usernameSender, this.client);
+            await this.updateDisplay(usernameReceiver, 'AddComponent');
+            await this.updateDisplay(usernameSender, 'BlockedComponent');
             res.json({ status: 1 });
             return;
         } else {
@@ -154,18 +164,22 @@ export class AccountFriends{
             await accountFriendsRequest.removePendingFriendsRequests(usernameReceiver, usernameSender, this.client);
             await accountFriendsRequest.addFriend(usernameSender, usernameReceiver, this.client);
             await accountFriendsRequest.addFriend(usernameReceiver, usernameSender, this.client);
+            await this.updateDisplay(usernameSender, 'AddComponent');
+            await this.updateDisplay(usernameReceiver, 'AddComponent');
             res.json({ status: 10 });
             return;
         } else {
             await accountFriendsRequest.addPendingFriendsRequests(usernameSender, usernameReceiver, this.client);
             await this.accountNotification.addNotificationAskFriend(usernameReceiver, usernameSender);
+            await this.updateDisplay(usernameSender, 'AddComponent');
+            await this.updateDisplay(usernameReceiver, 'AddComponent');
             res.json({ status: 11 });
             return;
         }
     }
 
-    public async getFriendUsers(username: string, itemsPerPage: number, page: number, res: Response): Promise<void>{
-        const friends: any[] = await accountFriendsRequest.getFriendUsers(username, itemsPerPage, page, this.client);
+    public async getFriendUsers(username: string, itemsPerPage: number, page: number, filter: string, res: Response): Promise<void> {
+        const friends: any[] = await accountFriendsRequest.getFriendUsers(username, itemsPerPage, page, filter, this.client);
         for(const friend of friends){
             if(await this.accountNotification.findSocketOfUsername(friend.username)){
                 friend.online = true;
@@ -175,28 +189,60 @@ export class AccountFriends{
         return;
     }
 
-    public async getFriendUsersNumber(username: string, itemsPerPage: number, page: number, res: Response): Promise<void>{
+    public async getFriendUsersNumber(username: string, itemsPerPage: number, page: number, res: Response): Promise<void> {
         const friends: any[] = await accountFriendsRequest.getFriendUsersNumber(username, this.client);
         res.json({ status: 1, data: friends[0] });
         return;
     }
 
-    public async getEnteringPendingFriendsRequests(username: string, itemsPerPage: number, page: number, res: Response): Promise<void>{
+    public async getEnteringPendingFriendsRequests(username: string, itemsPerPage: number, page: number, res: Response): Promise<void> {
         const pendingFriendsRequests: any[] = await accountFriendsRequest.getEnteringPendingFriendsRequests(username, itemsPerPage, page, this.client);
         res.json({ status: 1, data: pendingFriendsRequests });
         return;
     }
 
-    public async getExitingPendingFriendsRequests(username: string, itemsPerPage: number, page: number, res: Response): Promise<void>{
+    public async getExitingPendingFriendsRequests(username: string, itemsPerPage: number, page: number, res: Response): Promise<void> {
         const pendingFriendsRequests: any[] = await accountFriendsRequest.getExitingPendingFriendsRequests(username, itemsPerPage, page, this.client);
         res.json({ status: 1, data: pendingFriendsRequests });
         return;
     }
 
-    public async getOtherUsers(username: string, itemsPerPage: number, page: number, res: Response): Promise<void>{
-        const otherUsers: any[] = await accountFriendsRequest.getOtherUsers(username, itemsPerPage, page, this.client);
+    public async getOtherUsers(username: string, itemsPerPage: number, page: number, filter: string, res: Response): Promise<void> {
+        const otherUsers: any[] = await accountFriendsRequest.getOtherUsers(username, itemsPerPage, page, filter, this.client);
         res.json({ status: 1, data: otherUsers });
         return;
+    }
+
+    public async userConnected(username: string): Promise<void> {
+        await this.updateMyStatus(username, 'Connected', 1);
+        return;
+    }
+
+    public async userDisconnected(username: string): Promise<void> {
+        await this.updateMyStatus(username, 'Disconnected', 1);
+        return;
+    }
+
+    private async updateMyStatus(username: string, status: string, page: number): Promise<void> {
+        let rtrn: any[] = await accountFriendsRequest.getFriendUsers(username, 100, page, '', this.client);
+        for(const friend of rtrn){
+            const socket: RemoteSocket<DefaultEventsMap, any> | undefined = await this.accountNotification.findSocketOfUsername(friend.username);
+            if(socket) {
+                socket.emit(`user${status}`, username);
+            }
+        }
+        while(rtrn.length === 100) {
+            await this.updateMyStatus(username, status, page+1);
+        }
+        return;
+    }
+
+    public async updateDisplay(username: string, component: string): Promise<void> {
+        const socket: RemoteSocket<DefaultEventsMap, any> | undefined = await this.accountNotification.findSocketOfUsername(username);
+        if(socket){
+            await this.accountNotification.synchronizeNotificationsWithRemoteSocket(socket);
+            socket.emit(`update${component}`);
+        }
     }
 
     public async sendMessage(username : string, message : string, socket : Socket): Promise<void> {

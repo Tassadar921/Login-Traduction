@@ -17,7 +17,7 @@ module AccountNotificationRequest {
                 SELECT User {
                     notifications: {
                         id,
-                        component,
+                        type,
                         date,
                         seen,
                         object : {
@@ -51,14 +51,14 @@ module AccountNotificationRequest {
         });
     }
 
-    export async function addNotificationMessage(username: string, component: string, date: string, idMessage: string, client: Client): Promise<unknown[]> {
+    export async function addNotificationMessage(username: string, type: string, date: string, idMessage: string, client: Client): Promise<unknown[]> {
         return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 UPDATE User 
                 filter .username = "${username}"
                 SET {
                     notifications += (INSERT Notification {
-                        component := "${component}",
+                        type := "${type}",
                         date := <datetime>"${date}",
                         object := (SELECT Message FILTER .id = <uuid>"${idMessage}"),
                     })
@@ -67,14 +67,14 @@ module AccountNotificationRequest {
         });
     }
 
-    export async function addNotificationAskFriend(receiverUsername: string, component: string, date: string, client: Client): Promise<unknown[]> {
+    export async function addNotificationAskFriend(receiverUsername: string, type: string, date: string, client: Client): Promise<unknown[]> {
         return new Promise<any[]>((resolve): void => {
             resolve(client.query(`
                 SELECT ( UPDATE User 
                 filter .username = "${receiverUsername}"
                 SET {
                     notifications += (INSERT Notification {
-                        component := "${component}",
+                        type := "${type}",
                         date := <datetime>"${date}",
                     })
                 }).notifications ORDER BY .date DESC LIMIT 1
@@ -90,6 +90,27 @@ module AccountNotificationRequest {
                 SET {
                     object := (SELECT User FILTER .username = "${senderUsername}"),
                 }
+            `));
+        });
+    }
+
+    export async function getNotificationInformations(id: string, client: Client): Promise<unknown[]> {
+        return new Promise<any[]>((resolve): void => {
+            resolve(client.query(`
+                SELECT Notification {
+                    type,
+                    object
+                } FILTER .id = <uuid>"${id}"
+            `));
+        });
+    }
+
+    export async function getUsernameAttachedToNotification(id: string, client: Client): Promise<unknown[]> {
+        return new Promise<any[]>((resolve): void => {
+            resolve(client.query(`
+                SELECT User {
+                    username
+                } filter .notifications.id = <uuid>"${id}"
             `));
         });
     }

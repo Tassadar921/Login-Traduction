@@ -4,6 +4,7 @@ import {CookieService} from '../../shared/services/cookie.service';
 import {ActionSheetController} from '@ionic/angular';
 import {DevicePlatformService} from '../../shared/services/device-platform.service';
 import {PagesService} from '../../shared/services/pages.service';
+import {LanguageService} from '../../shared/services/language.service';
 
 @Component({
   selector: 'app-blocked',
@@ -17,10 +18,12 @@ export class BlockedComponent implements OnInit {
     private cookieService: CookieService,
     private actionSheetController: ActionSheetController,
     public devicePlatformService: DevicePlatformService,
-    public pagesService: PagesService
+    public pagesService: PagesService,
+    public languageService: LanguageService
   ) {}
 
   async ngOnInit(): Promise<void> {
+    this.pagesService.currentComponent = 'blocked';
     window.addEventListener(('resize'), async (): Promise<void> => {
       await this.pagesService.onChangeAndInit('Blocked');
     });
@@ -55,9 +58,6 @@ export class BlockedComponent implements OnInit {
       blockedUser
     );
     this.pagesService.waiting = false;
-    if(Object(rtrn).status){
-      await this.pagesService.onChangeAndInit('Blocked');
-    }
   }
 
 }

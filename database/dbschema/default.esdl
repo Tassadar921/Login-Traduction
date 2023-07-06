@@ -42,7 +42,7 @@ module default {
     }
 
     type Notification {
-        required property component -> str;
+        required property type -> str;
         multi link object -> Subject {
             on target delete allow;
         };

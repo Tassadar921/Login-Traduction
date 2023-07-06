@@ -1,8 +1,7 @@
 <ion-searchbar
-  [(ngModel)]="pagesService.filter"
-  (ionChange)="pagesService.setUsers('Others', 1)"
+  [(ngModel)]="pagesService.commonFilter"
+  (ionChange)="pagesService.setUsers('Other', 1)"
   [placeholder]="languageService.dictionary.data?.components.add.search">
-
 </ion-searchbar>
 
 <div *ngFor="let user of pagesService.getOther()" class="user">
@@ -15,7 +14,7 @@
       && !user.boolExitingFriendRequest[0]
       && !user.boolEnteringFriendRequest[0]">
         <ion-button fill="clear"
-                    (click)="addFriend(user.username, true)">
+                    (click)="friendRequestService.askIfNotAddFriend(user.username, false)">
           <ion-icon name="person-add" slot="icon-only" color="success"></ion-icon>
         </ion-button>
       </ion-col>
@@ -29,23 +28,23 @@
 
     <ion-col *ngIf="user.boolExitingFriendRequest[0]">
       <p>{{languageService.dictionary.data?.components.add.requestSent}}</p>
-      <ion-button fill="clear" (click)="cancelFriendRequest(user.username)">
+      <ion-button fill="clear" (click)="friendRequestService.cancelFriendRequest(user.username, user.exitingAddFriendNotifId[0].id)">
         <ion-icon name="close" slot="icon-only" color="danger"></ion-icon>
       </ion-button>
     </ion-col>
 
     <ion-col *ngIf="user.boolEnteringFriendRequest[0]">
       <p>{{languageService.dictionary.data?.components.add.answerRequest}}</p>
-      <ion-button fill="clear" (click)="addFriend(user.username, false)">
+      <ion-button fill="clear" (click)="friendRequestService.askIfNotAddFriend(user.username, false, user.enteringAddFriendNotifId[0].id)">
         <ion-icon name="checkmark" slot="icon-only" color="success"></ion-icon>
       </ion-button>
-      <ion-button fill="clear" (click)="refuseFriendRequest(user.username)">
+      <ion-button fill="clear" (click)="friendRequestService.refuseFriendRequest(user.username, false, user.enteringAddFriendNotifId[0].id)">
         <ion-icon name="close" slot="icon-only" color="danger"></ion-icon>
       </ion-button>
     </ion-col>
 
       <ion-col>
-        <ion-button fill="clear" (click)="actionSheetBlockUser(user.username)">
+        <ion-button fill="clear" (click)="actionSheetBlockUser(user)">
           <ion-icon name="trash" slot="icon-only" color="danger"></ion-icon>
         </ion-button>
       </ion-col>

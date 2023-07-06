@@ -1,9 +1,28 @@
 <ion-grid>
   <ion-row *ngFor="let notification of notificationsService.getNotifications()">
     <ion-col>
-      <ion-item>
-        <ion-label>Item</ion-label>
+      <ion-item *ngIf="notification.type === 'addFriend'">
+        <ion-row>
+          <ion-col>
+            {{getAddFriendText(notification.object[0].username)}}
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-button fill="clear" (click)="friendRequestService.askIfNotAddFriend(notification.object[0].username, true, notification.id)">
+              <ion-icon name="checkmark" slot="icon-only" color="success"></ion-icon>
+            </ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button fill="clear" (click)="friendRequestService.refuseFriendRequest(notification.object[0].username, true, notification.id)">
+              <ion-icon name="close" slot="icon-only" color="danger"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
       </ion-item>
     </ion-col>
+  </ion-row>
+  <ion-row *ngIf="!notificationsService.getNotifications().length">
+    <p>pas de notif</p>
   </ion-row>
 </ion-grid>

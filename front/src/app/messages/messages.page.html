@@ -1,35 +1,36 @@
 <app-menu></app-menu>
 
 <ion-grid>
-  <ion-row style="height:100%;">
-    <ion-col size="3" id="sideBar">
-      <app-side-bar></app-side-bar>
-    </ion-col>
-    <ion-col>
-      <ion-button size="large" shape="round" color="success" id="add">
-        {{languageService.dictionary.data?.components.messages.add}}
-      </ion-button>
-      <ion-button size="large" shape="round" color="danger" id="blocked">
-        {{languageService.dictionary.data?.components.messages.blocked}}
-      </ion-button>
+  <ion-row *ngIf="devicePlatformService.currentPlatform==='large'">
+    <ion-col size="3">
+      <ion-row>
+        <ion-col>
+          <app-add-friend-button [modalClosed]="modalClosed"></app-add-friend-button>
+        </ion-col>
+        <ion-col>
+          <app-blocked-users-button [modalClosed]="modalClosed"></app-blocked-users-button>
+        </ion-col>
+      </ion-row>
+      <ion-row style="height:100vh">
+        <ion-col>
+          <app-side-bar></app-side-bar>
+        </ion-col>
+      </ion-row>
     </ion-col>
   </ion-row>
+  <ion-row *ngIf="devicePlatformService.currentPlatform==='small'">
+    <ion-row>
+      <ion-col>
+        <app-add-friend-button [modalClosed]="modalClosed"></app-add-friend-button>
+      </ion-col>
+      <ion-col>
+        <app-blocked-users-button [modalClosed]="modalClosed"></app-blocked-users-button>
+      </ion-col>
+    </ion-row>
+    <ion-row style="height: 100vh;">
+      <ion-col>
+        <app-side-bar></app-side-bar>
+      </ion-col>
+    </ion-row>
+  </ion-row>
 </ion-grid>
-
-<ion-modal trigger="blocked">
-  <ng-template>
-    <ion-content [color]="devicePlatformService.getDeviceTheme()==='dark'?'':'dark'">
-      <app-blocked></app-blocked>
-    </ion-content>
-    <app-modal-close-button></app-modal-close-button>
-  </ng-template>
-</ion-modal>
-
-<ion-modal trigger="add">
-  <ng-template>
-    <ion-content [color]="devicePlatformService.getDeviceTheme()==='dark'?'':'dark'">
-      <app-add></app-add>
-    </ion-content>
-    <app-modal-close-button></app-modal-close-button>
-  </ng-template>
-</ion-modal>
