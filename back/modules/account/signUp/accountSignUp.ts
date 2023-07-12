@@ -3,21 +3,19 @@
 //This class is used to manage the creation of the user's account
 //Version log :
 //1.0.0 - 15/03/2023 - Iémélian RAMBEAU - Creation of the first version
+//1.1.0 - 09/07/2023 - Iémélian RAMBEAU - Going from edgeDB to Prisma
 //--------------------------------------------------------------------------------------
 
-import {Response} from 'express';
+import { Response } from 'express';
 import accountSignInRequest from './accountSignUpRequest';
-// @ts-ignore
-import SMTPTransport from 'nodemailer/lib/smtp-transport';
-import regexRequest from 'modules/common/regex/regexRequest';
-import {CommonAccount} from "../commonAccount";
-import { Client } from 'edgedb';
-import logger from 'modules/common/logger/logger';
+import regexRequest from '../../common/regex/regexRequest';
+import { CommonAccount } from "../commonAccount";
+import logger from '../../common/logger/logger';
 
 export class AccountSignUp {
     private commonAccount = new CommonAccount();
 
-    constructor() {}
+    constructor() { }
 
     public async createUserCreation(
         username: string,
@@ -26,75 +24,56 @@ export class AccountSignUp {
         language: string,
         res: Response): Promise<void> {
         if (!regexRequest.checkRegexEmail(email)) {
-            res.json({status: -20});
+            res.json({ status: -20 });
             return;
         } else if (!regexRequest.checkRegexPassword(password)) {
-            res.json({status: -21});
+            res.json({ status: -21 });
             return;
         } else if (!regexRequest.checkRegexUsername(username)) {
-            res.json({status: -22});
+            res.json({ status: -22 });
             return;
         }
 
-        let result : any[] = await accountSignInRequest.getUsernameAndEmailByUsernameAndEmail(
-            username,
-            email,
-            this.commonAccount.client
-        );
-        if (result[0]) {
-            if (result[0].username === username) {
-                res.json({status: -40});
-                return;
-            } else {
-                res.json({status: -41});
-                return;
+        {
+            let result = await accountSignInRequest.getUsernameAndEmailByUsernameAndEmail(
+                username,
+                email
+            );
+            if (result != undefined) {
+                if (result.username === username) {
+                    res.json({ status: -40 });
+                    return;
+                } else {
+                    res.json({ status: -41 });
+                    return;
+                }
             }
         }
 
-        result = await accountSignInRequest.getUrlTokenByEmail(
-            email,
-            this.commonAccount.client
-        );
-        if (result.length) {
-            await accountSignInRequest.deleteUserCreationByUrlToken(
-                result[0].urlToken,
-                this.commonAccount.client
-            );
+        await accountSignInRequest.deleteTokenByEmail(email);
+
+        let urlToken: string = this.commonAccount.generateToken(this.commonAccount.urlTokenLength);
+        let result = await accountSignInRequest.checkUrlToken(urlToken);
+        while (result != null) {
+            urlToken = this.commonAccount.generateToken(this.commonAccount.urlTokenLength);
+            result = await accountSignInRequest.checkUrlToken(urlToken);
         }
 
-        let urlToken : string = this.commonAccount.generateToken(this.commonAccount.urlTokenLength);
-        result = await accountSignInRequest.getUsernameAndEmailAndPasswordByUrlToken(
-            urlToken,
-            this.commonAccount.client
-        );
-        while (result.length > 0) {
-            urlToken =
-                this.commonAccount.generateToken(
-                    this.commonAccount.urlTokenLength
-                );
-            result =
-                await accountSignInRequest.getUsernameAndEmailAndPasswordByUrlToken(
-                    urlToken,
-                    this.commonAccount.client
-                );
-        }
-
-        await accountSignInRequest.createUserCreation(
+        await accountSignInRequest.createUserInCreation(
             urlToken,
             username,
             email,
             await this.commonAccount.hashSha256(
                 await this.commonAccount.hashSha256(password)
-            ),
-            this.commonAccount.client
+            )
         );
 
         this.deleteUserCreation(urlToken);
 
         const languageFile =
             Object(await import('./files/json/languages/'
-            + language + '/' + language + '_back.json',
-                {assert: {type: 'json'}})).default;
+                + language + '/' + language + '_back.json',
+                { assert: { type: 'json' } })).default;
 
         this.commonAccount.mailOptions.to = email;
         this.commonAccount.mailOptions.subject =
@@ -113,72 +92,55 @@ export class AccountSignUp {
         this.commonAccount.transporter.sendMail(
             this.commonAccount.mailOptions,
             async function (error) {
-            if (error) {
-                logger.logger.error(error);
-                res.json({status: -1});
-                return;
-            } else {
-                res.json({status: 1});
-                return;
-            }
-        });
+                if (error) {
+                    logger.logger.error(error);
+                    res.json({ status: -1 });
+                    return;
+                } else {
+                    res.json({ status: 1 });
+                    return;
+                }
+            });
     };
 
     //creates the account with datas in the queue linked to token
     public async createUser(urlToken: string, res: Response): Promise<void> {
-        let resultInfosUser =
-            Object(await accountSignInRequest.getUsernameAndEmailAndPasswordByUrlToken(
-                urlToken,
-                this.commonAccount.client
-            ));
 
-        if (resultInfosUser.length > 0) {
-            await accountSignInRequest.deleteUserCreationByUrlToken(
-                urlToken,
-                this.commonAccount.client
-            );
+        let resultInfosUser = await accountSignInRequest.getUsernameAndEmailAndPasswordByUrlToken(urlToken);
 
-            let token : string = this.commonAccount.generateToken(this.commonAccount.sessionTokenLength);
-            let resultExistingSessionToken =
-                await accountSignInRequest.getUsernameBySessionToken(
-                    token,
-                    this.commonAccount.client
-                );
-            while (resultExistingSessionToken.length > 0) {
-                token = this.commonAccount.generateToken(this.commonAccount.sessionTokenLength);
-                resultExistingSessionToken =
-                    await accountSignInRequest.getUsernameBySessionToken(
-                        token,
-                        this.commonAccount.client
-                    );
+        if (resultInfosUser != null) {
+            await accountSignInRequest.deleteUserCreationByUrlToken(urlToken);
+
+            let sessionToken: string = this.commonAccount.generateToken(this.commonAccount.sessionTokenLength);
+            let resultExistingSessionToken = await accountSignInRequest.checkSessionToken(sessionToken);
+            while (resultExistingSessionToken != null) {
+                sessionToken = this.commonAccount.generateToken(this.commonAccount.sessionTokenLength);
+                resultExistingSessionToken = await accountSignInRequest.checkSessionToken(sessionToken);
             }
 
             await accountSignInRequest.createUser(
-                resultInfosUser[0].username,
-                resultInfosUser[0].email,
-                resultInfosUser[0].password,
-                token,
-                this.commonAccount.client);
+                resultInfosUser.username,
+                resultInfosUser.email,
+                resultInfosUser.password,
+                sessionToken);
 
             res.json({
                 status: 1,
-                sessionToken: token,
-                username: resultInfosUser[0].username,
+                sessionToken: sessionToken,
+                username: resultInfosUser.username,
                 permission: undefined
             });
             return;
         } else {
-            res.json({status: 0});
+            res.json({ status: 0 });
             return;
         }
     }
 
     //sends an email containing a unique token to create the account, effective for 10 minutes
     public deleteUserCreation(urlToken: string): void {
-        const client : Client = this.commonAccount.client;
-
         setTimeout(async () => {
-            await accountSignInRequest.deleteUserCreationByUrlToken(urlToken, client);
+            await accountSignInRequest.deleteTokenByToken(urlToken)
         }, this.commonAccount.urlTokenExpiration);
         return;
     }

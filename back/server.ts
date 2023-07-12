@@ -1,4 +1,4 @@
-import express, {Express, Request, Response, NextFunction} from 'express';
+import express, { Express, Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import * as dotenv from 'dotenv';
@@ -12,13 +12,26 @@ import languagesRouting from './modules/languages/languagesRouting';
 import ioServer from './modules/common/socket/socket';
 import logger from './modules/common/logger/logger';
 import errorHandler from './modules/common/errorHandler/errorHandler';
+import { prisma } from './modules/common/prisma/prismaClient';
+
+prisma.$on('warn', (event) => {
+    logger.logger.warn(event)
+})
+
+prisma.$on('info', (event) => {
+    logger.logger.info(event)
+})
+
+prisma.$on('error', (event) => {
+    logger.logger.error(event)
+})
 
 dotenv.config();
 
 const app: Express = express();
 
 app.use(bodyParser.json());
-app.use(cors({origin: process.env.URL_FRONT}));
+app.use(cors({ origin: process.env.URL_FRONT }));
 app.use('/files', express.static('files'));
 
 if (app.get('env') === 'production') {
@@ -38,7 +51,7 @@ boot.start().then((): void => {
     languagesRouting.init(app);
     accountRouting.init(app);
 
-    app.use((err: Error,req: Request,res: Response,next: NextFunction) => {
+    app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
         errorHandler.logErrorMiddleware(err, req, res, next);
     });
 

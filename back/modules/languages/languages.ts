@@ -11,7 +11,7 @@ export class Languages{
     constructor() {}
     //sends the json index of languages
     async getLanguagesList(res : Response){
-        // @ts-ignore
+        //@ts-ignore
         const languagesList = await import('@files/json/languages/languagesList.json', {assert: {type: 'json'}});
         await res.json(languagesList.default.data);
         return;

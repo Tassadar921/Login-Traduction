@@ -5,347 +5,401 @@
 //1.0.0 - 15/03/2023 - Iémélian RAMBEAU - Creation of the first version
 //---------------------------------------------------------------------------------------
 
-import { Client } from "edgedb";
+import { prisma } from "../../common/prisma/prismaClient";
 
 module accountFriendsRequest {
-    export async function newMessage(sender : string, receiver : string, message : string, date : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve): void => {
-            resolve(client.query(`
-                INSERT Message {
-                    sender := (SELECT User FILTER .username = "${sender}" limit 1),
-                    receiver := (SELECT User FILTER .username = "${receiver}"),
-                    date := <datetime>"${date}",
-                    text := "${message}"
+    export async function newMessage(sender: string, receiver: string, message: string, date: Date) {
+        return await prisma.message.create({
+            data: {
+                text: message,
+                date: date,
+                seen: false,
+                sender: {
+                    connect: {
+                        username: sender
+                    }
+                },
+                receiver: {
+                    connect: {
+                        username: receiver
+                    }
                 }
-            `));
+            }
         });
     }
 
-    export async function getMessage(receiver : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve): void => {
-            resolve(client.query(`
-                SELECT Message {
-                    sender : {
-                        username,
+    export async function getMessage(receiver: string) {
+        return await prisma.message.findMany({
+            select: {
+                messageId: true,
+                text: true,
+                seen: true,
+                date: true,
+                sender: {
+                    select: {
+                        username: true,
+                        userId: true,
+                    }
+                }
+            },
+            where: {
+                receiver: {
+                    username: receiver
+                }
+            },
+            orderBy: {
+                date: "asc"
+            }
+        });
+    }
+
+    export async function getEnteringPendingFriendsRequests(username: string, itemsPerPage: number, page: number) {
+        return await prisma.user.findMany({
+            select: {
+                username: true,
+                userId: true,
+            },
+            where: {
+                pendingFriendsRequestsRelation: {
+                    some: {
+                        username: username
+                    }
+                }
+            },
+            orderBy: {
+                username: "asc"
+            },
+            skip: itemsPerPage * (page - 1),
+            take: itemsPerPage,
+        });
+    }
+
+    export async function getExitingPendingFriendsRequests(username: string, itemsPerPage: number, page: number) {
+        return await prisma.user.findMany({
+            select: {
+                username: true,
+                userId: true,
+            },
+            where: {
+                pendingFriendsRequests: {
+                    some: {
+                        username: username
+                    }
+                }
+            },
+            orderBy: {
+                username: "asc"
+            },
+            skip: itemsPerPage * (page - 1),
+            take: itemsPerPage,
+        });
+    }
+
+    export async function addPendingFriendsRequests(usernameSender: string, usernameReceiver: string) {
+        return await prisma.user.update({
+            where: {
+                username: usernameReceiver
+            },
+            data: {
+                pendingFriendsRequests: {
+                    connect: {
+                        username: usernameSender
+                    }
+                }
+            }
+        });
+    }
+
+    export async function getFriendByBothUsernames(usernameSender: string, usernameReceiver: string) {
+        return await prisma.user.findFirst({
+            where: {
+                username: usernameSender,
+                friends: {
+                    some: {
+                        username: usernameReceiver
+                    }
+                }
+            }
+        });
+    }
+
+    export async function getFriendUsers(username: string, itemsPerPage: number, page: number, filter: string) {
+        return await prisma.user.findMany({
+            select: {
+                username: true,
+                userId: true,
+            },
+            where: {
+                friendsRelation: {
+                    some: {
+                        username: username
+                    }
+                },
+                username: {
+                    contains: filter
+                }
+            },
+            orderBy: {
+                username: "asc"
+            },
+            skip: itemsPerPage * (page - 1),
+            take: itemsPerPage,
+        });
+    }
+
+    export async function getPendingFriendsRequestByBothUsernames(usernameSender: string, usernameReceiver: string) {
+        return await prisma.user.findFirst({
+            where: {
+                username: usernameSender,
+                pendingFriendsRequestsRelation: {
+                    some: {
+                        username: usernameReceiver
+                    }
+                }
+            }
+        });
+    }
+
+    export async function removePendingFriendsRequests(usernameSender: string, usernameReceiver: string) {
+        return await prisma.user.update({
+            where: {
+                username: usernameReceiver
+            },
+            data: {
+                pendingFriendsRequests: {
+                    disconnect: {
+                        username: usernameSender
+                    }
+                }
+            }
+        });
+    }
+
+    export async function addFriend(username1: string, username2: string) {
+        return await prisma.user.update({
+            where: {
+                username: username1
+            },
+            data: {
+                friends: {
+                    connect: {
+                        username: username2
+                    }
+                }
+            }
+        });
+    }
+
+    export async function removeFriend(username1: string, username2: string) {
+        return await prisma.user.update({
+            where: {
+                username: username1
+            },
+            data: {
+                friends: {
+                    disconnect: {
+                        username: username2
+                    }
+                }
+            }
+        });
+    }
+
+    export async function getUserByUsername(username: string) {
+        return await prisma.user.findUnique({
+            where: {
+                username: username
+            }
+        });
+    }
+
+    export async function getOtherUsers(username: string, itemsPerPage: number, page: number, filter: string) {
+        const query1 = prisma.user.findMany({
+            select: {
+                username: true,
+                userId: true,
+            },
+            where: {
+                username: {
+                    contains: filter
+                },
+                NOT: {
+                    username: username
+                },
+                blockedUsers: {
+                    none: {
+                        username: username
+                    }
+                },
+                blockedByUsers: {
+                    none: {
+                        username: username
+                    }
+                }
+            },
+            orderBy: {
+                username: "asc"
+            },
+            skip: itemsPerPage * (page - 1),
+            take: itemsPerPage,
+        });
+        const query2 = prisma.user.findUnique({
+            select: {
+                friends: {
+                    select: {
+                        username: true
+                    }
+                },
+                pendingFriendsRequests: {
+                    select: {
+                        username: true
+                    }
+                },
+                pendingFriendsRequestsRelation: {
+                    select: {
+                        username: true
+                    }
+                }
+            },
+            where: {
+                username: username,
+            }
+        });
+
+        return {users : await query1, relations : await query2};
+    }
+
+    export async function addBlockedUser(usernameSender: string, usernameReceiver: string) {
+        return await prisma.user.update({
+            where: {
+                username: usernameSender
+            },
+            data: {
+                blockedUsers: {
+                    connect: {
+                        username: usernameReceiver
+                    }
+                }
+            }
+        });
+    }
+
+    export async function removeBlockedUser(usernameSender: string, usernameReceiver: string) {
+        return await prisma.user.update({
+            where: {
+                username: usernameSender
+            },
+            data: {
+                blockedUsers: {
+                    disconnect: {
+                        username: usernameReceiver
+                    }
+                }
+            }
+        });
+    }
+
+    export async function getBlockedUsers(username: string, itemsPerPage: number, page: number, filter: string) {
+        return await prisma.user.findMany({
+            where: {
+                AND: [
+                    {
+                        username: username
                     },
-                    seen,
-                    date,
-                    text,
-                } FILTER .receiver.username = "${receiver}"
-            `));
-        });
-    }
-
-    export async function getEnteringPendingFriendsRequests(username : string, itemsPerPage : number, page : number, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve): void => {
-            resolve(client.query(`
-                Select (Select User {
-                    pendingFriendsRequests : {
-                        id,
-                        username
+                    {
+                        blockedUsers: {
+                            some: {
+                                username: {
+                                    contains: filter
+                                }
+                            }
+                        }
                     }
-                } Filter .username = "${username}").pendingFriendsRequests
-                order by .username
-                offset ${itemsPerPage}*(${page}-1)
-                limit ${itemsPerPage}
-            `));
-        });
-    }
-
-    export async function getExitingPendingFriendsRequests(username : string, itemsPerPage : number, page : number, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve): void => {
-            resolve(client.query(`
-                Select User {
-                    id,
-                    username
-                } Filter User.pendingFriendsRequests.username = "${username}"
-                order by .username
-                offset ${itemsPerPage}*(${page}-1)
-                limit ${itemsPerPage}
-            `));
-        });
-    }
-
-    export async function addPendingFriendsRequests(usernameSender : string, usernameReceiver : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve): void => {
-            resolve(client.query(`
-                Update User 
-                Filter .username = "${usernameReceiver}"
-                Set {
-                    pendingFriendsRequests += (Select detached User Filter .username = "${usernameSender}"),
-                }
-            `));
-        });
-    }
-
-    export async function getFriendByBothUsernames(usernameSender : string, usernameReceiver : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve): void => {
-            resolve(client.query(`
-                Select User {}
-                Filter .friends.username = "${usernameSender}" AND .username = "${usernameReceiver}"
-            `));
-        });
-    }
-
-    export async function getFriendUsers(username : string, itemsPerPage : number, page : number, filter: string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve): void => {
-            resolve(client.query(`
-                Select (Select (Select User {
-                    id, username
-                }filter .friends.username = "${username}")) Filter contains(str_lower(.username), str_lower("${filter}"))
-                order by .username
-                offset ${itemsPerPage}*(${page}-1)
-                limit ${itemsPerPage}
-            `));
-        });
-    }
-
-    export async function getPendingFriendsRequestByBothUsernames(usernameSender : string, usernameReceiver : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve): void => {
-            resolve(client.query(`
-                Select User {
-                    pendingFriendsRequests : {}
-                }
-                Filter .username = "${usernameSender}" and .pendingFriendsRequests.username = "${usernameReceiver}"
-            `));
-        });
-    }
-
-    export async function removePendingFriendsRequests(usernameSender : string, usernameReceiver : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve): void => {
-            resolve(client.query(`
-                Update User 
-                Filter .username = "${usernameReceiver}"
-                Set {
-                pendingFriendsRequests -= (Select detached User Filter .username = "${usernameSender}"),
-                }
-            `));
-        });
-    }
-
-    export async function addFriend(username1 : string, username2 : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve): void => {
-            resolve(client.query(`
-                Update User 
-                Filter .username = "${username1}"
-                Set {
-                friends += (Select detached User Filter .username = "${username2}"),
-                }
-            `));
-        });
-    }
-
-    export async function removeFriend(username1 : string, username2 : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve): void => {
-            resolve(client.query(`
-                Update User 
-                Filter .username = "${username1}"
-                Set {
-                friends -= (Select detached User Filter .username = "${username2}"),
-                }
-            `));
-        });
-    }
-
-    export async function getUserByUsername(username : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve): void => {
-            resolve(client.query(`
-                Select User {
-                } Filter .username = "${username}"
-            `));
-        });
-    }
-
-    export async function getOtherUsers(username : string, itemsPerPage : number, page : number, filter: string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve): void => {
-            resolve(client.query(`
-            Select (Select (with
-                usernameId := (Select User {id} Filter .username = '${username}'),
-                x := (Select User {
-                    id,
-                    username,
-                } Filter .username != '${username}'),
-                y := ((Select User {
-                    friends : {
-                        id,
-                        username
+                ]
+            },
+            select: {
+                blockedUsers: {
+                    select: {
+                        username: true,
+                        userId: true
+                    },
+                    skip: itemsPerPage * (page - 1),
+                    take: itemsPerPage,
+                    orderBy: {
+                        username: 'asc'
                     }
-                } Filter .username = '${username}').friends),
-                enteringAddFriendNotifId := (Select Notification {
-                    id
-                } Filter .type = 'addFriend' AND .object.id = x.id),
-                exitingAddFriendNotifId := (Select Notification {
-                    id
-                } Filter .type = 'addFriend' AND .object.id = usernameId.id),
-                zexit := (Select User {
-                    id,
-                    username
-                } Filter User.pendingFriendsRequests.username = '${username}'),
-                zenter := (Select User {
-                    pendingFriendsRequests : {
-                        id,
-                        username
+                }
+            }
+        });
+    }
+
+    export async function getBlockedUserByBothUsernames(username1: string, username2: string) {
+        return await prisma.user.findFirst({
+            where: {
+                username: username1,
+                blockedUsers: {
+                    some: {
+                        username: username2
                     }
-                } Filter .username = '${username}').pendingFriendsRequests,
-                w1 := (Select User {
-                    blockedUsers : {
-                        id,
-                        username
+                }
+            }
+        });
+    }
+
+    export async function getBlockedByByBothUsernames(username1: string, username2: string) {
+        return await prisma.user.findFirst({
+            where: {
+                username: username1,
+                blockedByUsers : {
+                    some: {
+                        username: username2
                     }
-                } Filter .username = '${username}').blockedUsers,
-                w2 := (Select User {
-                    blockedBy : {
-                        id,
-                        username
+                }
+            }
+        });
+    }
+
+    export async function getNumberOfOtherUser(username: string) {
+        return await prisma.user.count({
+            where: {
+                username: {
+                    not: username
+                },
+                blockedByUsers: {
+                    none: {
+                        username: username
                     }
-                } Filter .username = '${username}').blockedBy,
-                Select {(
-                x {
-                    username,
-                    id,
-                    enteringAddFriendNotifId := (Select enteringAddFriendNotifId),
-                    exitingAddFriendNotifId := (Select exitingAddFriendNotifId),
-                    boolFriend := (Select y filter y.username = x.username) = x,
-                    boolEnteringFriendRequest := (Select zenter filter zenter.username = x.username) = x,
-                    boolExitingFriendRequest := (Select zexit filter zexit.username = x.username) = x,
-                    c1 := ((Select w1 filter w1.username = x.username) = x),
-                    c2 := (Select w2 filter w2.username = x.username) = x,
-                    })
-                })
-                {
-                    username,
-                    id,
-                    enteringAddFriendNotifId,
-                    exitingAddFriendNotifId,
-                    boolFriend := exists .boolFriend,
-                    boolEnteringFriendRequest := exists .boolEnteringFriendRequest,
-                    boolExitingFriendRequest := exists .boolExitingFriendRequest,
-                }
-                filter exists .c1 != true and exists .c2 != true)
-                filter contains(str_lower(.username), str_lower('${filter}'))
-                order by .username
-                offset ${itemsPerPage}*(${page}-1)
-                limit ${itemsPerPage}
-            `));
-        });
-    }
-
-    export async function addBlockedUser(usernameSender : string, usernameReceiver : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve): void => {
-            resolve(client.query(`
-                Update User 
-                Filter .username = "${usernameSender}"
-                Set {
-                blockedUsers += (Select detached User Filter .username = "${usernameReceiver}"),
-                }
-            `));
-        });
-    }
-
-    export async function addBlockedBy(usernameSender : string, usernameReceiver : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve): void => {
-            resolve(client.query(`
-                Update User
-                Filter .username = "${usernameReceiver}"
-                Set {
-                blockedBy += (Select detached User Filter .username = "${usernameSender}"),
-                }
-            `));
-        });
-    }
-
-    export async function removeBlockedUser(usernameSender : string, usernameReceiver : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve): void => {
-            resolve(client.query(`
-                Update User 
-                Filter .username = "${usernameSender}"
-                Set {
-                blockedUsers -= (Select detached User Filter .username = "${usernameReceiver}"),
-                }
-            `));
-        });
-    }
-
-    export async function removeBlockedBy(usernameSender : string, usernameReceiver : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve): void => {
-            resolve(client.query(`
-                Update User 
-                Filter .username = "${usernameSender}"
-                Set {
-                blockedBy -= (Select detached User Filter .username = "${usernameReceiver}"),
-                }
-            `));
-        });
-    }
-
-    export async function getBlockedUsers(username : string, itemsPerPage : number, page : number, filter: string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve): void => {
-            resolve(client.query(`
-                Select (Select (Select User {
-                    blockedUsers : {
-                        id,
-                        username
+                },
+                blockedUsers: {
+                    none: {
+                        username: username
                     }
-                } Filter .username = "${username}").blockedUsers) Filter contains(str_lower(.username), str_lower("${filter}"))
-                order by .username
-                offset ${itemsPerPage}*(${page}-1)
-                limit ${itemsPerPage}
-            `));
+                },
+            }
         });
     }
 
-    export async function getBlockedUserByBothUsernames(username1 : string, username2 : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve): void => {
-            resolve(client.query(`
-                Select User {
-                    blockedUsers : {}
+    export async function getNumberOfBlockedUsers(username: string) {
+        return await prisma.user.count({
+            where: {
+                blockedByUsers: {
+                    some: {
+                        username: username
+                    }
                 }
-                Filter .username = "${username1}" and .blockedUsers.username = "${username2}"
-            `));
+            }
         });
     }
 
-    export async function getBlockedByByBothUsernames(username1 : string, username2 : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve): void => {
-            resolve(client.query(`
-                Select User {
-                    blockedBy : {}
+    export async function getFriendUsersNumber(username: string) {
+        return await prisma.user.count({
+            where: {
+                friendsRelation: {
+                    some: {
+                        username: username
+                    }
                 }
-                Filter .username = "${username1}" and .blockedBy.username = "${username2}"
-            `));
-        });
-    }
-
-    export async function getOtherUsersNumber(username : string, client : Client) : Promise<number[]> {
-        return new Promise<any[]>((resolve): void => {
-            resolve(client.query(`
-                with x := (Select User Filter .username != "${username}"),
-                     y := (Select User {
-                     blockedBy
-                     } Filter .username = "${username}").blockedBy,
-                     z := (Select User {
-                     blockedUsers
-                     } Filter .username = "${username}").blockedUsers,
-                Select { count(x) - count(y) - count(z)}
-            `));
-        });
-    }
-
-    export async function getBlockedUsersNumber(username : string, client : Client) : Promise<number[]> {
-        return new Promise<any[]>((resolve): void => {
-            resolve(client.query(`
-                with x := (Select User Filter .blockedBy.username = "${username}"),
-                Select { count(x) }
-            `));
-        });
-    }
-
-    export async function getFriendUsersNumber(username : string, client : Client) : Promise<number[]> {
-        return new Promise<any[]>((resolve): void => {
-            resolve(client.query(`
-                with x := (Select User Filter .friends.username = "${username}"),
-                Select { count(x) }
-            `));
+            }
         });
     }
 }

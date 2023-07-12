@@ -3,27 +3,25 @@
 //This module manage the request to the database for resetTablesRequest.ts
 //Version log :
 //1.0.0 - 15/03/2023 - Iémélian RAMBEAU - Creation of the first version
+//1.1.0 - 15/03/2023 - Iémélian RAMBEAU - Going from edgeDB to Prisma
 //--------------------------------------------------------------------------------------
 
-import { Client } from "edgedb";
+import { prisma } from "../../common/prisma/prismaClient";
 
 module resetTablesRequest {
-    export async function getUrlTokenFromResetPassword(client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve) => {
-            resolve(client.query(`
-                SELECT Reset_Password {
-                    urlToken
-                };
-            `));
+    export async function getUrlTokenFromResetPassword() {
+        return await prisma.user_In_Reset_Password.findMany({
+            select: {
+                urlToken: true
+            }
         });
     }
-    export async function getUrlTokenFromUserCreation(client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve) => {
-            resolve(client.query(`
-                SELECT User_Creation {
-                    urlToken
-                };
-            `));
+
+    export async function getUrlTokenFromUserCreation() {
+        return await prisma.user_In_Creation.findMany({
+            select: {
+                urlToken: true
+            }
         });
     }
 }

@@ -4,11 +4,12 @@ import { CookieService } from './cookie.service';
 import { NotificationsService } from './notifications.service';
 import { PagesService } from './pages.service';
 import { Router } from '@angular/router';
+import { socketTypes } from '../../../../../back/modules/common/socket/socketTypes';
 
 @Injectable({
   providedIn: 'root'
 })
-export class SocketService implements OnInit{
+export class SocketService implements OnInit {
 
   constructor(
     private socket: Socket,
@@ -26,36 +27,36 @@ export class SocketService implements OnInit{
       this.synchronizeNotifications();
     });
 
-    this.socket.on('synchronizeNotifications', (data : any): void => {
-        this.notificationsService.setNotifications(data.map((notification : any) => {notification.date = new Date(notification.date); return notification;}));
+    this.socket.on('synchronizeNotifications', (data: socketTypes.synchronizeNotificationsDataType): void => {
+      if(data) this.notificationsService.setNotifications(data.notifications.map((notification: any) => { notification.date = new Date(notification.date); return notification; }));
     });
 
     this.socket.on('updateAddComponent', async (): Promise<void> => {
-      if(this.router.url === '/messages') {
+      if (this.router.url === '/messages') {
         await this.pagesService.onChangeAndInit('Friends');
-        if(this.pagesService.currentComponent === 'add'){
+        if (this.pagesService.currentComponent === 'add') {
           await this.pagesService.onChangeAndInit('Other');
         }
       }
     });
 
     this.socket.on('updateBlockedComponent', async (): Promise<void> => {
-      if(this.router.url === '/messages') {
+      if (this.router.url === '/messages') {
         await this.pagesService.onChangeAndInit('Friends');
-        if(this.pagesService.currentComponent === 'blocked'){
+        if (this.pagesService.currentComponent === 'blocked') {
           await this.pagesService.onChangeAndInit('Blocked');
         }
       }
     });
 
     this.socket.on('userConnected', async (username: string): Promise<void> => {
-      if(this.router.url==='/messages'){
+      if (this.router.url === '/messages') {
         await this.pagesService.updateFriendStatus(username, true);
       }
     });
 
     this.socket.on('userDisconnected', async (username: string): Promise<void> => {
-      if(this.router.url==='/messages'){
+      if (this.router.url === '/messages') {
         await this.pagesService.updateFriendStatus(username, false);
       }
     });

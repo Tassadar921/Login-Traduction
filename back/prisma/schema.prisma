@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Permission {
+  permissionId Int    @id
+  name         String
+  users        User[]
+
+  @@map("permissions")
+}
+
+model User {
+  userId       Int          @id @default(autoincrement())
+  username     String       @unique
+  password     String
+  email        String       @unique
+  sessionToken String
+  permission   Permission[]
+
+  friends         User[] @relation(name: "friends")
+  friendsRelation User[] @relation(name: "friends")
+
+  blockedUsers   User[] @relation(name: "blockedUsers")
+  blockedByUsers User[] @relation(name: "blockedUsers")
+
+  pendingFriendsRequests         User[] @relation(name: "pendingFriendsRequests")
+  pendingFriendsRequestsRelation User[] @relation(name: "pendingFriendsRequests")
+
+  notifications    Notification[] @relation(name: "notificationForUser")
+  notificationsFor Notification[] @relation(name: "subjectOfNotificationUser")
+
+  messagesSend     Message[] @relation(name: "sender")
+  messagesReceived Message[] @relation(name: "receiver")
+
+  @@map("users")
+}
+
+model User_In_Creation {
+  urlToken String @id
+  username String @unique
+  email    String @unique
+  password String
+
+  @@map("users_in_creation")
+}
+
+model User_In_Reset_Password {
+  urlToken String @id
+  email    String @unique
+
+  @@map("users_in_reset_password")
+}
+
+model Notification {
+  notificationsId   Int      @id @default(autoincrement())
+  type String
+  date DateTime @default(now())
+  seen Boolean  @default(false)
+
+  userId Int
+  user   User @relation(name: "notificationForUser", fields: [userId], references: [userId], onDelete: Cascade)
+
+  objectUserId Int?
+  objectUser   User? @relation(name: "subjectOfNotificationUser", fields: [objectUserId], references: [userId], onDelete: Cascade)
+
+  objectMessageId Int? @unique
+  objectMessage   Message? @relation(name: "subjectOfNotificationMessage", fields: [objectMessageId], references: [messageId], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+model Message {
+  messageId         Int      @id @default(autoincrement())
+  text       String
+  date       DateTime @default(now())
+  seen       Boolean  @default(false)
+  senderId   Int
+  sender     User     @relation(name: "sender", fields: [senderId], references: [userId], onDelete: Cascade)
+  receiverId Int
+  receiver   User     @relation(name: "receiver", fields: [receiverId], references: [userId], onDelete: Cascade)
+
+  linkedNotificationId Int? @unique
+  linkedNotification   Notification? @relation(name: "subjectOfNotificationMessage")
+
+  @@map("messages")
+}

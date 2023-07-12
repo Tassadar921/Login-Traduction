@@ -2,11 +2,11 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
-    "storeLogs":"run-script-os",
-    "storeLogs:win32":"",
-    "storeLogs:linux":"touch ./logs/combined.log && touch ./logs/error.log && cp -a ./logs/*.log ./logs/old/ && mkdir ./logs/old/$(date +%d-%m-%Y-%H:%M:%S)/ && mv ./logs/old/combined.log ./logs/old/$(date +%d-%m-%Y-%H:%M:%S)/combined_$(date +%d-%m-%Y-%H:%M:%S).log && mv ./logs/old/error.log ./logs/old/$(date +%d-%m-%Y-%H:%M:%S)/error_$(date +%d-%m-%Y-%H:%M:%S).log",
+    "storeLogs": "run-script-os",
+    "storeLogs:win32": "",
+    "storeLogs:linux": "mkdir -p ./logs/ && touch ./logs/combined.log && touch ./logs/error.log && mkdir ./logs/old/$(date +%d-%m-%Y-%H:%M:%S)/ -p && mv ./logs/combined.log ./logs/old/$(date +%d-%m-%Y-%H:%M:%S)/combined_$(date +%d-%m-%Y-%H:%M:%S).log && mv ./logs/error.log ./logs/old/$(date +%d-%m-%Y-%H:%M:%S)/error_$(date +%d-%m-%Y-%H:%M:%S).log",
     "deleteFilesfolder": "npm run storeLogs && run-script-os",
     "deleteFilesfolder:win32": "if exist build rmdir build /q /s",
     "deleteFilesfolder:linux": "rm -rf build",
@@ -14,11 +14,13 @@
     "copyFilesFolder:win32": "xcopy /E files build\\files\\",
     "copyFilesFolder:linux": "mkdir ./build/files/ -p && cp -a ./files/. ./build/files/",
     "build": "npm run copyFilesFolder && esbuild server.ts --platform=node --bundle --outdir=build/ --external:/files/*",
-    "start": "npm run build && node build/server.js"
+    "start": "npm run build && node build/server.js",
+    "dev": "nodemon --watch ./ -e js,ts,json --exec \"ts-node-esm server.ts\""
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^4.16.2",
     "@types/cors": "^2.8.13",
     "body-parser": "^1.20.1",
     "cors": "^2.8.5",
@@ -30,10 +32,11 @@
     "fs": "^0.0.1-security",
     "node-fetch": "^3.3.0",
     "nodemailer": "^6.9.1",
-    "nodemon": "^2.0.19",
+    "nodemon": "^1.14.9",
     "python-shell": "^5.0.0",
     "run-script-os": "^1.1.6",
     "socket.io": "^4.6.0",
+    "ts-node": "^10.9.1",
     "typescript": "^4.9.5",
     "winston": "^3.8.2"
   },
@@ -41,6 +44,7 @@
     "@types/body-parser": "^1.19.2",
     "@types/express": "^4.17.16",
     "@types/node": "^18.14.6",
-    "@types/nodemailer": "^6.4.7"
+    "@types/nodemailer": "^6.4.7",
+    "prisma": "^4.16.2"
   }
 }

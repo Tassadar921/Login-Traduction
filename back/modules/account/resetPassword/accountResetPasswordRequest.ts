@@ -3,73 +3,78 @@
 //This module manage the request to the database for accountResetPassword.ts
 //Version log :
 //1.0.0 - 15/03/2023 - Iémélian RAMBEAU - Creation of the first version
+//1.1.0 - 09/07/2023 - Iémélian RAMBEAU - Going from edgeDB to Prisma
 //--------------------------------------------------------------------------------------------
 
-import { Client } from "edgedb";
+import { prisma } from "../../common/prisma/prismaClient";
 
 module accountResetPasswordRequest {
-    export async function getUsernameByEmail(email : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve) => {
-            resolve(client.query(`
-                SELECT User {
-                    username,
-                }
-                FILTER .email = "${email}"
-            `));
+    export async function getUsernameByEmail(email: string) {
+        return await prisma.user.findFirst({
+            select: {
+                username: true
+            },
+            where: {
+                email: email
+            }
         });
     }
 
-    export async function getUrlTokenByEmail(email : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve) => {
-            resolve(client.query(`
-                SELECT Reset_Password {
-                    urlToken
-                }
-                FILTER .email = "${email}"
-            `));
+    export async function deleteResetPasswordByEmail(email: string) {
+        return await prisma.user_In_Reset_Password.deleteMany({
+            where: {
+                email: email
+            }
         });
     }
 
-    export async function getEmailByUrlToken(urlToken : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve) => {
-            resolve(client.query(`
-                SELECT Reset_Password {
-                    email
-                }
-                FILTER .urlToken = "${urlToken}"
-            `));
+    export async function checkUrlToken(urlToken: string) {
+        return prisma.user_In_Reset_Password.findFirst({
+            select: {
+                urlToken: true
+            },
+            where: {
+                urlToken: urlToken
+            }
         });
     }
 
-    export async function deleteResetPasswordByUrlToken(urlToken : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve) => {
-            resolve(client.query(`
-                delete Reset_Password
-                    filter .urlToken = "${urlToken}";
-            `));
+    export async function getEmailByUrlToken(urlToken: string) {
+        return prisma.user_In_Reset_Password.findFirst({
+            select: {
+                email: true
+            },
+            where: {
+                urlToken: urlToken
+            }
         });
     }
 
-    export async function createResetPassword(urlToken : string, email : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve) => {
-            resolve(client.query(`
-                insert Reset_Password {
-                    urlToken := "${urlToken}",
-                    email := "${email}"
-                }
-            `));
+    export async function deleteResetPasswordByUrlToken(urlToken: string) {
+        return await prisma.user_In_Reset_Password.deleteMany({
+            where: {
+                urlToken: urlToken
+            }
         });
     }
 
-    export async function resetPassword(email : string, password : string, client : Client) : Promise<unknown[]> {
-        return new Promise<any[]>((resolve) => {
-            resolve(client.query(`
-                UPDATE User
-                FILTER .email = "${email}"
-                SET {
-                    password := "${password}",
-                }
-            `));
+    export async function createResetPassword(urlToken: string, email: string) {
+        return await prisma.user_In_Reset_Password.create({
+            data: {
+                urlToken: urlToken,
+                email: email
+            }
+        });
+    }
+
+    export async function resetPassword(email: string, password: string) {
+        return await prisma.user.update({
+            where: {
+                email: email
+            },
+            data: {
+                password: password
+            }
         });
     }
 }
